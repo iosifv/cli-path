@@ -1,0 +1,26 @@
+{
+  "name": "clip",
+  "version": "0.0.1",
+  "description": "Answer to the simple question: Should I stay or should I go?",
+  "author": "iosifv",
+  "license": "MIT",
+  "keywords": [
+    "cli"
+  ],
+  "main": "index.js",
+  "type": "module",
+  "bin": "./bin/clip.js",
+  "scripts": {
+    "set-executable": "watch cat ~/.config/configstore/clip.json",
+    "whatch-configstore": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
+    "start": "node ."
+  },
+  "dependencies": {
+    "commander": "^9.4.1",
+    "configstore": "^6.0.0",
+    "inquirer": "^9.1.4"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
+}
