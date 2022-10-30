@@ -15,7 +15,7 @@ export async function set() {
       }
     ])
     .then((answers) => {
-      const key = keyManager.setKey(answers.key);
+      const key = keyManager.setToken(answers.key);
 
       if (key) {
           console.log('API Key Set');
@@ -33,7 +33,7 @@ export async function set() {
 export function show() {
   try {
     const keyManager = new KeyManager();
-    const key = keyManager.getKey();
+    const key = keyManager.getToken();
 
     console.log('Current API Key: ', key);
 
@@ -46,7 +46,7 @@ export function show() {
 export function remove() {
   try {
     const keyManager = new KeyManager();
-    keyManager.deleteKey();
+    keyManager.deleteToken();
 
     console.log('Key Removed');
 

@@ -11,11 +11,12 @@
   "type": "module",
   "bin": "./bin/clip.js",
   "scripts": {
-    "set-executable": "watch cat ~/.config/configstore/clip.json",
-    "whatch-configstore": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
+    "whatch-configstore": "watch cat ~/.config/configstore/clip.json",
+    "set-executable": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
     "start": "node ."
   },
   "dependencies": {
+    "chalk": "^5.1.2",
     "commander": "^9.4.1",
     "configstore": "^6.0.0",
     "inquirer": "^9.1.4"
