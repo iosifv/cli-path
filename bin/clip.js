@@ -10,8 +10,7 @@ import * as locationCommand from '../commands/location.js';
 import * as keyCommand from '../commands/key.js';
 
 const program = new Command();
-const packageJson = JSON.parse(fs.readFileSync('../package.json', 'utf8'));
-let action;
+const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
 /**
  * Inquiry => Check the user's initial desired action when entering interactive mode
@@ -37,26 +36,24 @@ async function questionInterativeInitial() {
 
 
 // If we have no args, we enter interactive mode
-if (noArgs()) {
-  // validateToken();
-  
-  action = await questionInterativeInitial();
+if (noArgs()) {  
+  const action = await questionInterativeInitial();
 
   switch (action.desired_action_initial) {
     case 'Quick Path Search': 
-      directionCommand.quick
+    await directionCommand.quick()
       break;
     case 'New Path Search': 
-      directionCommand.newDirection
+    await directionCommand.newDirection()
       break;
     case 'Show Locations': 
-      locationCommand.show
+    await locationCommand.show()
       break;
     case 'Add Location': 
-      locationCommand.add
+      await locationCommand.add()
       break;
     case 'Set Google API Token': 
-      keyCommand.set
+      await keyCommand.set()
       break;
   
     default:

@@ -3,7 +3,6 @@ import { KeyManager } from '../lib/KeyManager.js';
 import { MapsClient } from '../utils/googleMapsClient.js';
 
 const keyManager = new KeyManager();
-const mapsClient = new MapsClient();
 
 async function questionNewLocation() {
   const questions = [{
@@ -50,6 +49,7 @@ export async function add() {
   show()
   console.log()
   const newLocation = await questionNewLocation()
+  const mapsClient = new MapsClient();
   const formattedAddress = await mapsClient.location(newLocation.query)
   const confirm = await questionConfirmLocation(newLocation.name, formattedAddress)
 

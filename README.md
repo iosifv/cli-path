@@ -1,4 +1,4 @@
-# sisosig
+# cli-path
 My first attempt at building a CLI tool
 
 ## Todo

@@ -1,7 +1,6 @@
 import { Client } from "@googlemaps/google-maps-services-js";
 import { KeyManager, ERROR_MESSAGE_NO_KEY } from '../lib/KeyManager.js';
 
-
 const keyManager = new KeyManager();
 let apiToken;
 
@@ -17,13 +16,14 @@ export class MapsClient {
      */
     validateToken() {
         try {
-        apiToken = keyManager.getToken()
+            apiToken = keyManager.getToken()
         } catch (error) {
-        console.log(error.message)
-        if (error.message === ERROR_MESSAGE_NO_KEY) {
-            console.log('use "clip set key"')
-        }
-        process.exit(1)  
+            console.log(error.message)
+            if (error.message === ERROR_MESSAGE_NO_KEY) {
+                console.log(error)
+                console.log('use "clip set key"')
+            }
+            process.exit(1)  
         }
     }
 
@@ -47,7 +47,6 @@ export class MapsClient {
             })
             .catch((e) => {
                 console.log(e)
-                // console.log(e.response.data.error_message);
             });
     }
 
@@ -62,7 +61,6 @@ export class MapsClient {
                 }
             })
             .then((res) => {
-                // console.log(res.data)
                 return res.data.candidates[0].formatted_address
             })
             .catch((e) => {
