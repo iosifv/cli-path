@@ -2,22 +2,22 @@
 
 import { Command } from 'commander';
 const program = new Command();
-import * as key from '../commands/key.js';
+import * as keyCommand from '../commands/key.js';
 
 program
   .command('set')
   .description('Set Google API Key')
-  .action(key.set);
+  .action(keyCommand.set);
 
 program
   .command('show')
   .description('Show Google API Key')
-  .action(key.show);
+  .action(keyCommand.show);
 
 
 program
   .command('remove')
   .description('Show Google API Key')
-  .action(key.remove);
+  .action(keyCommand.remove);
 
 program.parse(process.argv);

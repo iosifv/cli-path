@@ -11,7 +11,8 @@
   "type": "module",
   "bin": "./bin/clip.js",
   "scripts": {
-    "whatch-configstore": "watch cat ~/.config/configstore/clip.json",
+    "configstore-watch": "watch cat ~/.config/configstore/clip.json",
+    "configstore-edit": "code ~/.config/configstore/clip.json",
     "set-executable": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
     "start": "node ."
   },
@@ -20,7 +21,8 @@
     "chalk": "^5.1.2",
     "commander": "^9.4.1",
     "configstore": "^6.0.0",
-    "inquirer": "^9.1.4"
+    "inquirer": "^9.1.4",
+    "underscore": "^1.13.6"
   },
   "devDependencies": {
     "prettier": "^2.7.1"

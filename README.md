@@ -1,6 +1,10 @@
 # sisosig
 My first attempt at building a CLI tool
 
+## Todo
+- add some noderc
+- switch to yarn
+
 ## Notes
 - change permissions of index.js to 777 so that you can run it directly with ```./index.js```
 - 📟
