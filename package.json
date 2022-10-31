@@ -16,6 +16,7 @@
     "start": "node ."
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.16",
     "chalk": "^5.1.2",
     "commander": "^9.4.1",
     "configstore": "^6.0.0",
