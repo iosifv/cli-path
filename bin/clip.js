@@ -5,8 +5,12 @@ import fs from 'fs'
 import { Command } from 'commander';
 import { noArgs } from '../utils/validation.js';
 
+import * as directionCommand from '../commands/direction.js';
+import * as locationCommand from '../commands/location.js';
+import * as keyCommand from '../commands/key.js';
+
 const program = new Command();
-const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+const packageJson = JSON.parse(fs.readFileSync('../package.json', 'utf8'));
 let action;
 
 /**
@@ -20,10 +24,11 @@ async function questionInterativeInitial() {
       type: 'list',
       message: 'What would you like to do\n',
       choices: [
-        'Quick Search',
-        'New Search',
-        'Manage Locations',
-        'Manage Token',
+        'Quick Path Search',
+        'New Path Search',
+        'Show Locations',
+        'Add Location',
+        'Set Google API Token',
       ],
     });
 
@@ -38,17 +43,20 @@ if (noArgs()) {
   action = await questionInterativeInitial();
 
   switch (action.desired_action_initial) {
-    case 'Quick Search': 
-
+    case 'Quick Path Search': 
+      directionCommand.quick
       break;
-    case 'New Search': 
-      
+    case 'New Path Search': 
+      directionCommand.newDirection
       break;
-    case 'Manage Locations': 
-
+    case 'Show Locations': 
+      locationCommand.show
       break;
-    case 'Manage Token': 
-
+    case 'Add Location': 
+      locationCommand.add
+      break;
+    case 'Set Google API Token': 
+      keyCommand.set
       break;
   
     default:
