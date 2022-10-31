@@ -16,7 +16,7 @@
     "configstore-watch": "watch cat ~/.config/configstore/clip.json",
     "configstore-edit": "code ~/.config/configstore/clip.json",
     "set-executable": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
-    "publish": "npm version patch && npm publish",
+    "pub": "npm version patch && npm publish",
     "start": "node ."
   },
   "dependencies": {
