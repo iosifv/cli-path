@@ -9,11 +9,14 @@
   ],
   "main": "index.js",
   "type": "module",
-  "bin": "./bin/clip.js",
+  "bin": {
+    "clip": "./bin/clip.js"
+  },
   "scripts": {
     "configstore-watch": "watch cat ~/.config/configstore/clip.json",
     "configstore-edit": "code ~/.config/configstore/clip.json",
     "set-executable": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
+    "publish": "npm version patch && npm publish",
     "start": "node ."
   },
   "dependencies": {
