@@ -1,4 +1,4 @@
-# cli-path 📟
+# 📟 cli-path 
 [![npm version](https://img.shields.io/npm/v/cli-path.svg)](https://www.npmjs.com/package/cli-path)
 [![Build Status](https://github.com/iosifv/cli-path/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/iosifv/cli-path/actions/workflows/test.yml)
 
