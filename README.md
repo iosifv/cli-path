@@ -1,4 +1,7 @@
 # cli-path
+[![npm version](https://img.shields.io/npm/v/cli-path.svg)](https://www.npmjs.com/package/cli-path)
+[![Build Status](https://github.com/iosifv/cli-path/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/iosifv/cli-path/actions/workflows/test.yml)
+
 A simple CLI tool to search paths on google maps. The intent is to use this on your most often taken paths to quickly get the grasp of the time needed for your travel - like going home from the office every day.
 
 ## Install
@@ -26,10 +29,22 @@ Standard steps could be
 3. Add a few Locations like home, office, park, pub
 4. Then use Quick Path Search
 
+## Online links for this project
+- [github](https://github.com/iosifv/cli-path)
+- [npm](https://www.npmjs.com/package/cli-path)
+
+## Dependencies
+- [google-maps-services](https://github.com/googlemaps/google-maps-services-js)
+- [commander](https://www.npmjs.com/package/commander)
+- [configstore](https://www.npmjs.com/package/configstore)
+- [inquirer](https://www.npmjs.com/package/inquirer)
+- [chalk](https://www.npmjs.com/package/chalk)
+- [underscore](https://underscorejs.org/)
 
 ## Todo list
 - add some noderc
 - switch to yarn
+- create git-tag on publish
 
 ## Notes
 - change permissions of index.js to 777 so that you can run it directly with ```./index.js```
