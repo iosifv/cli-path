@@ -8,9 +8,10 @@ import { noArgs } from '../utils/validation.js';
 import * as directionCommand from '../commands/direction.js';
 import * as locationCommand from '../commands/location.js';
 import * as keyCommand from '../commands/key.js';
+import path from 'path';
 
 const program = new Command();
-const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'));
 
 /**
  * Inquiry => Check the user's initial desired action when entering interactive mode
