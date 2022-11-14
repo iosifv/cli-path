@@ -16,8 +16,8 @@
     "configstore-watch": "watch cat ~/.config/configstore/cli-path.json",
     "configstore-edit": "code ~/.config/configstore/cli-path.json",
     "set-executable": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
-    "pub": "npm version patch && npm publish",
-    "start": "node ."
+    "npm-publish": "git add . && git commit -m 'publishing new version' &&npm version patch &&  git push && npm publish",
+    "start": "node ./bin/clip.js"
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.16",
