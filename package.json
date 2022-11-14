@@ -16,7 +16,7 @@
     "configstore-watch": "watch cat ~/.config/configstore/cli-path.json",
     "configstore-edit": "code ~/.config/configstore/cli-path.json",
     "set-executable": "chmod 777 ./bin/clip.js && ls ./bin -lisa",
-    "npm-publish": "git add . && git commit -m 'publishing new version' &&npm version patch &&  git push && npm publish",
+    "npm-publish": "git add . && git commit -m 'publishing new version' && npm version patch &&  git push && npm publish",
     "start": "node ./bin/clip.js"
   },
   "dependencies": {
