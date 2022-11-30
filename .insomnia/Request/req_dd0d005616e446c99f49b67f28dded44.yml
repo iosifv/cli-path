@@ -1,0 +1,28 @@
+_id: req_dd0d005616e446c99f49b67f28dded44
+type: Request
+parentId: wrk_fa086e14429f4b9991af953ebe681d09
+modified: 1669851957387
+created: 1667863400921
+url: "{{url}}dev/hello"
+name: dev/hello
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "iosif"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667863400921
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
