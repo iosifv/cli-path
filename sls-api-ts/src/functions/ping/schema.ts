@@ -1,7 +1,7 @@
 export default {
   type: "object",
   properties: {
-    super: { type: 'boolean' }
+    ping: { type: 'boolean' }
   },
-  required: []
+  required: ['ping']
 } as const;
