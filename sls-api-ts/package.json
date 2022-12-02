@@ -4,7 +4,8 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "invoke-local-hello": "sls invoke local --function=hello --path=src/functions/hello/mock.json",
+    "invoke-local-ping": "sls invoke local --function=ping --path=src/functions/ping/mock.json"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -21,6 +22,7 @@
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^3.0.0",
     "serverless-esbuild": "^1.23.3",
+    "serverless-offline": "^11.6.0",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.3"
