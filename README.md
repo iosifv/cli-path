@@ -42,11 +42,6 @@ Standard steps could be
 - [chalk](https://www.npmjs.com/package/chalk)
 - [underscore](https://underscorejs.org/)
 
-## Todo list
-- add some noderc
-- switch to yarn
-- create git-tag on publish
-
 ## Notes
 - change permissions of index.js to 777 so that you can run it directly with ```./index.js```
 
