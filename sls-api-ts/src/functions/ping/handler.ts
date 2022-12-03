@@ -5,9 +5,10 @@ import { middyfy } from '@libs/lambda';
 import schema from './schema';
 
 const ping: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  let message = 'No Pong :('
+  let message = '0 No Pong :('
+  console.log(event)
   if (event.body != null && 'ping' in event.body && event.body.ping == true) {
-    message = 'Pong!'
+    message = '1 Pong!'
   }
   return formatJSONResponse({
     message: message,

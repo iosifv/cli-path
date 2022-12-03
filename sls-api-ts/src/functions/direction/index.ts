@@ -6,8 +6,8 @@ export default {
   events: [
     {
       http: {
-        method: 'GET',
-        path: 'ping',
+        method: 'post',
+        path: 'direction',
         request: {
           schemas: {
             'application/json': schema,

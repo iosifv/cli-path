@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 
 import hello from '@functions/hello';
 import ping  from '@functions/ping';
+import direction  from '@functions/direction';
 
 const serverlessConfiguration: AWS = {
   service: 'sls-api-ts',
@@ -9,7 +10,9 @@ const serverlessConfiguration: AWS = {
   plugins: [ 
     'serverless-offline',
     'serverless-esbuild',
+    'serverless-dotenv-plugin',
   ],
+  useDotenv: true,
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -25,7 +28,8 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: { 
     hello,
-    ping 
+    ping,
+    direction,
   },
   package: { individually: true },
   custom: {
@@ -39,6 +43,11 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
+    	
+  dotenv: {
+    required: ['GOOGLE_MAPS_API_KEY']
+  }
+  
   },
 };
 

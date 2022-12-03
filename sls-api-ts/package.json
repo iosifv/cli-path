@@ -5,12 +5,14 @@
   "main": "serverless.ts",
   "scripts": {
     "invoke-local-hello": "sls invoke local --function=hello --path=src/functions/hello/mock.json",
-    "invoke-local-ping": "sls invoke local --function=ping --path=src/functions/ping/mock.json"
+    "invoke-local-ping": "sls invoke local --function=ping --path=src/functions/ping/mock.json",
+    "invoke-local-direction": "sls invoke local --function=direction --path=src/functions/direction/mock.json"
   },
   "engines": {
     "node": ">=14.15.0"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.16",
     "@middy/core": "^3.4.0",
     "@middy/http-json-body-parser": "^3.4.0"
   },
@@ -21,6 +23,7 @@
     "esbuild": "^0.14.11",
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^3.0.0",
+    "serverless-dotenv-plugin": "^4.0.2",
     "serverless-esbuild": "^1.23.3",
     "serverless-offline": "^11.6.0",
     "ts-node": "^10.4.0",
