@@ -1,0 +1,30 @@
+_id: req_a5cfee53e0564f61a8f221a2b47229b2
+type: Request
+parentId: wrk_fa086e14429f4b9991af953ebe681d09
+modified: 1670358741466
+created: 1670219512910
+url: https://iosifv.eu.auth0.com/oauth/device/code
+name: auth-request-device-code
+description: ""
+method: POST
+body:
+  mimeType: application/x-www-form-urlencoded
+  params:
+    - id: pair_003f1a967a1f47908a4d9b4a5e18d7a2
+      name: client_id
+      value: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
+      description: ""
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/x-www-form-urlencoded
+    id: pair_077660c4681348bdbf3a3b416dcc1768
+authentication: {}
+metaSortKey: -1667863400821
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

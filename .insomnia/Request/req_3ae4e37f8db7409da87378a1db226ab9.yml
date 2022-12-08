@@ -1,0 +1,38 @@
+_id: req_3ae4e37f8db7409da87378a1db226ab9
+type: Request
+parentId: wrk_fa086e14429f4b9991af953ebe681d09
+modified: 1670501345835
+created: 1670220678795
+url: https://iosifv.eu.auth0.com/oauth/token
+name: auth-request-token
+description: ""
+method: POST
+body:
+  mimeType: application/x-www-form-urlencoded
+  params:
+    - id: pair_003f1a967a1f47908a4d9b4a5e18d7a2
+      name: grant_type
+      value: urn:ietf:params:oauth:grant-type:device_code
+      description: ""
+    - id: pair_9e1179ed0df64b56a93efb453ae27ea5
+      name: client_id
+      value: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
+      description: ""
+    - id: pair_8c6b0428749141308ff2a78a19ecf2c8
+      name: device_code
+      value: -WssDHB7wJsMVZIlC9Lj03Z1
+      description: ""
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/x-www-form-urlencoded
+    id: pair_077660c4681348bdbf3a3b416dcc1768
+authentication: {}
+metaSortKey: -1667863400771
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

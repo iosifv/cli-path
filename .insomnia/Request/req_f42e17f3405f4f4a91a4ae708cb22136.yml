@@ -1,25 +1,27 @@
-_id: req_dd0d005616e446c99f49b67f28dded44
+_id: req_f42e17f3405f4f4a91a4ae708cb22136
 type: Request
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670358023677
-created: 1667863400921
-url: "{{url}}dev/hello"
-name: dev/hello
+modified: 1670252124650
+created: 1670251715920
+url: "{{url}}dev/auth"
+name: dev/auth
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"name": "iosif"
+    	"auth0_token": "iosif"
     }
 parameters: []
 headers:
   - name: Content-Type
     value: application/json
     id: pair_1f14c046162b48d1934d1120c14a3443
-authentication: {}
-metaSortKey: -1667863400921
+authentication:
+  type: bearer
+  token: dasdasdasdsadas
+metaSortKey: -1667863400908.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

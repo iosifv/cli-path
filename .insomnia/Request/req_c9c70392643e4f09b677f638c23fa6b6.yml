@@ -1,0 +1,27 @@
+_id: req_c9c70392643e4f09b677f638c23fa6b6
+type: Request
+parentId: wrk_fa086e14429f4b9991af953ebe681d09
+modified: 1670501386136
+created: 1670501214834
+url: https://iosifv.eu.auth0.com/userinfo
+name: auth-userinfo
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - id: pair_d1ba1b67f35c40c283c8470b821e9cb9
+    name: Content-Type
+    value: application/json
+    description: ""
+authentication:
+  type: bearer
+  token: eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9pb3NpZnYuZXUuYXV0aDAuY29tLyJ9..WP1gTMJFo33fikmc.nI77n51pyLrQ_k4OzwdAitGt_2sYfbqnGCUGMmfdjaNhnjQkMh1hStWMmTXQEtc5P820rNB3BrjKFSHBuEm7Ez23SpJ32OXj30HuDSnIk2bSdUC1ZIsFRQbvFfCVyXI8xWaRelUMA-4G9H_bp32iSTGpzNEcBCOq_-3sCiuGt4dDyBAWyvc_P5etCx-5ev0xF8-8RZWDD5bS1SR_R5gA7EtS1YGNpxno7bDOY4DPZ2Vk5Xc2TW0X2evBgVAkeXrnhQgyN7pc_DWmFQ.tAZSiQsJJrRPQkjuDtC5IQ
+metaSortKey: -1667863400721
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

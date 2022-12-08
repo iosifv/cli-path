@@ -1,17 +1,18 @@
-_id: req_dd0d005616e446c99f49b67f28dded44
+_id: req_b19413e3c133472192dbae90794bc4b9
 type: Request
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670358023677
-created: 1667863400921
-url: "{{url}}dev/hello"
-name: dev/hello
+modified: 1670251707318
+created: 1670049858497
+url: "{{url}}dev/direction"
+name: dev/direction
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"name": "iosif"
+    	"origin": "Amsterdam",
+    	"destination": "Berlin"
     }
 parameters: []
 headers:
@@ -19,7 +20,7 @@ headers:
     value: application/json
     id: pair_1f14c046162b48d1934d1120c14a3443
 authentication: {}
-metaSortKey: -1667863400921
+metaSortKey: -1667863400896
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
