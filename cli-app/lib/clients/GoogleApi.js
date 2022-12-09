@@ -3,12 +3,12 @@ import {
   KeyManager,
   ERROR_MESSAGE_NO_KEY,
   KEY_NAME_GOOGLE_TOKEN,
-} from './KeyManager.js'
+} from '../KeyManager.js'
 
 const keyManager = new KeyManager()
 let apiToken
 
-export class MapsClient {
+export class GoogleClient {
   constructor() {
     this.client = new Client({})
     this.validateToken()

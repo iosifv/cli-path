@@ -1,4 +1,4 @@
-import { KeyManager } from './KeyManager.js'
+import { KeyManager } from '../KeyManager.js'
 
 const keyManager = new KeyManager()
 let apiToken
@@ -13,7 +13,7 @@ export class ClipClient {
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: '{"origin":"Amsterdam","destination":"Berlin"}',
+      body: JSON.stringify({ origin: origin, destination: destination }),
     }
 
     await fetch('http://localhost:3000/dev/direction', options)
@@ -23,20 +23,20 @@ export class ClipClient {
   }
 
   async location(query) {
-    return await this.client
-      .findPlaceFromText({
-        params: {
-          input: query,
-          inputtype: `textquery`,
-          fields: ['formatted_address'],
-          key: apiToken,
-        },
-      })
-      .then((res) => {
-        return res.data.candidates[0].formatted_address
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    // return await this.client
+    //   .findPlaceFromText({
+    //     params: {
+    //       input: query,
+    //       inputtype: `textquery`,
+    //       fields: ['formatted_address'],
+    //       key: apiToken,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     return res.data.candidates[0].formatted_address
+    //   })
+    //   .catch((e) => {
+    //     console.log(e)
+    //   })
   }
 }

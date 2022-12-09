@@ -1,6 +1,6 @@
 import inquirer from 'inquirer'
 import { KeyManager } from '../lib/KeyManager.js'
-import { MapsClient } from '../lib/googleMapsClient.js'
+// import { MapsClient } from '../lib/googleMapsClient.js'
 
 const keyManager = new KeyManager()
 
@@ -47,8 +47,8 @@ export async function add() {
   show()
   console.log()
   const newLocation = await questionNewLocation()
-  const mapsClient = new MapsClient()
-  const formattedAddress = await mapsClient.location(newLocation.query)
+  // const mapsClient = new MapsClient()
+  // const formattedAddress = await mapsClient.location(newLocation.query)
   const confirm = await questionConfirmLocation(
     newLocation.name,
     formattedAddress

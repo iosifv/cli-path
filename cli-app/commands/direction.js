@@ -1,7 +1,8 @@
 import inquirer from 'inquirer'
 import { KeyManager } from '../lib/KeyManager.js'
-import { MapsClient } from '../lib/googleMapsClient.js'
-import { ClipClient } from '../lib/clipApiClient.js'
+import { PathController } from '../lib/PathController.js'
+// import { MapsClient } from '../lib/googleMapsClient.js'
+// import { ClipClient } from '../lib/clipApiClient.js'
 import _, { pluck, where } from 'underscore'
 
 /**
@@ -63,14 +64,24 @@ async function questionNewDirection() {
 
 export async function quick() {
   const direction = await questionQuickDirection()
+  const pathController = new PathController()
+  pathController.direction(direction.origin, direction.destination)
+
   // const mapsClient = new MapsClient();
   // await mapsClient.direction(direction.origin, direction.destination)
-  const mapsClient = new ClipClient()
-  await mapsClient.direction(direction.origin, direction.destination)
+  // const mapsClient = new ClipClient()
+  // await mapsClient.direction(direction.origin, direction.destination)
 }
 
 export async function newDirection() {
   const direction = await questionNewDirection()
-  const mapsClient = new MapsClient()
-  await mapsClient.direction(direction.origin, direction.destination)
+  const pathController = new PathController()
+  const directionResult = await pathController.direction(
+    direction.origin,
+    direction.destination
+  )
+
+  console.log(directionResult)
+  // const mapsClient = new MapsClient()
+  // await mapsClient.direction(direction.origin, direction.destination)
 }
