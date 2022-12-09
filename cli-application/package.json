@@ -25,6 +25,7 @@
     "commander": "^9.4.1",
     "configstore": "^6.0.0",
     "inquirer": "^9.1.4",
+    "ora": "^6.1.2",
     "underscore": "^1.13.6"
   },
   "devDependencies": {
