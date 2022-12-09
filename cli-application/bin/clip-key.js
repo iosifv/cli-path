@@ -1,23 +1,22 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
-const program = new Command();
-import * as keyCommand from '../commands/key.js';
+import { Command } from 'commander'
+const program = new Command()
+import * as keyCommand from '../commands/key.js'
 
-program
+program // force new line
   .command('set')
   .description('Set Google API Key')
-  .action(keyCommand.set);
+  .action(keyCommand.set)
 
 program
   .command('show')
   .description('Show Google API Key')
-  .action(keyCommand.show);
-
+  .action(keyCommand.show)
 
 program
   .command('remove')
   .description('Show Google API Key')
-  .action(keyCommand.remove);
+  .action(keyCommand.remove)
 
-program.parse(process.argv);
+program.parse(process.argv)
