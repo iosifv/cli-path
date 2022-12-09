@@ -1,5 +1,9 @@
 import { Client } from '@googlemaps/google-maps-services-js'
-import { KeyManager, ERROR_MESSAGE_NO_KEY } from './KeyManager.js'
+import {
+  KeyManager,
+  ERROR_MESSAGE_NO_KEY,
+  KEY_NAME_GOOGLE_TOKEN,
+} from './KeyManager.js'
 
 const keyManager = new KeyManager()
 let apiToken
@@ -16,7 +20,7 @@ export class MapsClient {
    */
   validateToken() {
     try {
-      apiToken = keyManager.getToken()
+      apiToken = keyManager.get(KEY_NAME_GOOGLE_TOKEN)
     } catch (error) {
       console.log(error.message)
       if (error.message === ERROR_MESSAGE_NO_KEY) {

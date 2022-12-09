@@ -10,11 +10,47 @@ import * as directionCommand from '../commands/direction.js'
 import * as locationCommand from '../commands/location.js'
 import * as keyCommand from '../commands/key.js'
 import path from 'path'
+import {
+  KeyManager,
+  KEY_NAME_AUTH0_ACCESS_TOKEN,
+  KEY_NAME_ENGINE,
+  KEY_NAME_GOOGLE_TOKEN,
+  KEY_NAME_LOCATIONS,
+} from '../lib/KeyManager.js'
+import chalk from 'chalk'
+import { statement, status } from '../utils/style.js'
 
+const keyManager = new KeyManager()
 const program = new Command()
 const packageJson = JSON.parse(
   fs.readFileSync(path.resolve('./package.json'), 'utf8')
 )
+
+async function printStatus() {
+  statement('Performing standard checks:')
+  status(
+    'Directions Engine',
+    keyManager.exists(KEY_NAME_ENGINE),
+    '{' + keyManager.get(KEY_NAME_ENGINE) + '}'
+  )
+  status(
+    'Clip API Token',
+    keyManager.exists(KEY_NAME_AUTH0_ACCESS_TOKEN),
+    'Use Authenticate options to get or refresh'
+  )
+  status(
+    'Google API Token',
+    keyManager.exists(KEY_NAME_GOOGLE_TOKEN),
+    'Needed in case you want to bypass our API'
+  )
+  const savedLocations = keyManager.get(KEY_NAME_LOCATIONS).length
+  status(
+    'Saved Locations',
+    savedLocations,
+    savedLocations == 0 ? 'Nothing saved yet' : savedLocations
+  )
+  console.log()
+}
 
 /**
  * Inquiry => Check the user's initial desired action when entering interactive mode
@@ -42,6 +78,8 @@ async function questionInterativeInitial() {
 
 // If we have no args, we enter interactive mode
 if (noArgs()) {
+  await printStatus()
+
   const action = await questionInterativeInitial()
 
   switch (action.desired_action_initial) {

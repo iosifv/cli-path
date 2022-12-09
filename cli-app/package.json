@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.16",
-    "chalk": "^5.1.2",
+    "chalk": "^5.2.0",
     "commander": "^9.4.1",
     "configstore": "^6.0.0",
     "inquirer": "^9.1.4",

@@ -1,4 +1,8 @@
-import { KeyManager } from '../lib/KeyManager.js'
+import {
+  KeyManager,
+  KEY_NAME_AUTH0_ACCESS_TOKEN,
+  KEY_NAME_AUTH0_DEVICE_CODE,
+} from '../lib/KeyManager.js'
 import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
 import * as c from '../utils/constants.js'
@@ -15,7 +19,8 @@ export async function authenticate() {
   })
     .then((response) => response.json())
     .then((response) => {
-      keyManager.setAuthDeviceCode(response.device_code)
+      keyManager.set(KEY_NAME_AUTH0_DEVICE_CODE, response.device_code)
+      // Todo: change this to a style function
       console.log(
         `\nOpen the following url to authenticate: \n ↪ ${response.verification_uri_complete}\n`
       )
@@ -37,7 +42,7 @@ export async function authenticate() {
         body: new URLSearchParams({
           grant_type: c.AUTH0_CLIP_GRANT_TYPE,
           client_id: c.AUTH0_CLIP_CLIENT_ID,
-          device_code: keyManager.getAuthDeviceCode(),
+          device_code: keyManager.get(KEY_NAME_AUTH0_DEVICE_CODE),
         }),
       })
         .then((response) => response.json())
@@ -57,7 +62,7 @@ export async function authenticate() {
             spinner.stop()
 
             authenticated = true
-            keyManager.setAuthToken(response.access_token)
+            keyManager.set(KEY_NAME_AUTH0_ACCESS_TOKEN, response.access_token)
           }
         })
         .catch((err) => console.error(err))
@@ -74,7 +79,7 @@ export async function authenticate() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + keyManager.getAuthToken(),
+      Authorization: 'Bearer ' + keyManager.get(KEY_NAME_AUTH0_ACCESS_TOKEN),
     },
     body: '{}',
   })
@@ -84,5 +89,15 @@ export async function authenticate() {
       spinner.succeed()
       spinner.stop()
     })
-    .catch((err) => console.error(err))
+    .catch((err) => {
+      spinner.text =
+        'Failed to authenticate against our own clip-api (probably is offline)'
+      spinner.fail()
+      spinner.stop()
+
+      // if (DEBUG) {
+      //   console.log()
+      //   console.error(err.code)
+      // }
+    })
 }

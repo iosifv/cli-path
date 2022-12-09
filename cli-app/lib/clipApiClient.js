@@ -1,4 +1,4 @@
-import { KeyManager, ERROR_MESSAGE_NO_KEY } from './KeyManager.js'
+import { KeyManager } from './KeyManager.js'
 
 const keyManager = new KeyManager()
 let apiToken

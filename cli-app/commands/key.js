@@ -1,5 +1,5 @@
 import inquirer from 'inquirer'
-import { KeyManager } from '../lib/KeyManager.js'
+import { KeyManager, KEY_NAME_GOOGLE_TOKEN } from '../lib/KeyManager.js'
 import { isRequired } from '../utils/validation.js'
 
 export async function set() {
@@ -15,7 +15,7 @@ export async function set() {
       },
     ])
     .then((answers) => {
-      const key = keyManager.setToken(answers.key)
+      const key = keyManager.set(KEY_NAME_GOOGLE_TOKEN, answers.key)
 
       if (key) {
         console.log('API Key Set')
@@ -33,7 +33,7 @@ export async function set() {
 export function show() {
   try {
     const keyManager = new KeyManager()
-    const key = keyManager.getToken()
+    const key = keyManager.get(KEY_NAME_GOOGLE_TOKEN)
 
     console.log('Current API Key: ', key)
 
