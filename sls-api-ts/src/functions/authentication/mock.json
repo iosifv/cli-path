@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"auth0_token\": \"eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9pb3NpZnYuZXUuYXV0aDAuY29tLyJ9..NzO23rhbtWnNBipb.w1PqrqRZdEojpCw8izCIbMDk7anBh97F2DRd9KnH-0nZVLIjj9umUzggHonOqvugGn-XiC_wH88dKba1X02b6XHMjP08r8Xcth_kJJ2iczNwXGe7iVS9QefdqEsrt7g9zknyITWC-tbxv-EouAHuV-QaD8DYz_Hd-iFizk4Z852Mhvl9HUzbm45ctMT3i9FenAKTlyHgC1aUqbTDFg5cBmcU2797ecAhnmniqxzES5TT2PXkZQ8eGAMeHA5fCi7IjESEuj_3YAtsVw.SX-c51bofd7URmPTulgIow\"}"
+}

@@ -14,7 +14,8 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.16",
     "@middy/core": "^3.4.0",
-    "@middy/http-json-body-parser": "^3.4.0"
+    "@middy/http-json-body-parser": "^3.4.0",
+    "axios": "^1.2.1"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",

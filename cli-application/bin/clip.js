@@ -5,6 +5,7 @@ import fs from 'fs'
 import { Command } from 'commander';
 import { noArgs } from '../utils/validation.js';
 
+import * as authenticateCommand from '../commands/authenticate.js';
 import * as directionCommand from '../commands/direction.js';
 import * as locationCommand from '../commands/location.js';
 import * as keyCommand from '../commands/key.js';
@@ -18,18 +19,21 @@ const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), '
  * @returns answer
  */
 async function questionInterativeInitial() {
-  const answers = await inquirer.prompt(
-    {
-      name: 'desired_action_initial',
-      type: 'list',
-      message: 'What would you like to do\n',
-      choices: [
+  let availableChoices = [
         'Quick Path Search',
         'New Path Search',
         'Show Locations',
         'Add Location',
         'Set Google API Token',
-      ],
+      ]
+  
+  availableChoices.unshift('Authenticate')
+  const answers = await inquirer.prompt(
+    {
+      name: 'desired_action_initial',
+      type: 'list',
+      message: 'What would you like to do\n',
+      choices: availableChoices,
     });
 
   return answers;
@@ -41,6 +45,9 @@ if (noArgs()) {
   const action = await questionInterativeInitial();
 
   switch (action.desired_action_initial) {
+    case 'Authenticate': 
+    await authenticateCommand.authenticate()
+      break;
     case 'Quick Path Search': 
     await directionCommand.quick()
       break;

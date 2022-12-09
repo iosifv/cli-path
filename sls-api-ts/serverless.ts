@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 
 import hello from '@functions/hello';
 import ping  from '@functions/ping';
+import authentication  from '@functions/authentication';
 import direction  from '@functions/direction';
 
 const serverlessConfiguration: AWS = {
@@ -29,6 +30,7 @@ const serverlessConfiguration: AWS = {
   functions: { 
     hello,
     ping,
+    authentication,
     direction,
   },
   package: { individually: true },
