@@ -1,7 +1,7 @@
 import { KeyManager } from '../lib/KeyManager.js'
 import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
-import * as c from '../lib/constants.js'
+import * as c from '../utils/constants.js'
 
 export async function authenticate() {
   const keyManager = new KeyManager()

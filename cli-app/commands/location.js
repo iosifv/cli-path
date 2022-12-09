@@ -1,6 +1,6 @@
 import inquirer from 'inquirer'
 import { KeyManager } from '../lib/KeyManager.js'
-import { MapsClient } from '../utils/googleMapsClient.js'
+import { MapsClient } from '../lib/googleMapsClient.js'
 
 const keyManager = new KeyManager()
 

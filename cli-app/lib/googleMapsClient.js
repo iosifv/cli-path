@@ -1,5 +1,5 @@
 import { Client } from '@googlemaps/google-maps-services-js'
-import { KeyManager, ERROR_MESSAGE_NO_KEY } from '../lib/KeyManager.js'
+import { KeyManager, ERROR_MESSAGE_NO_KEY } from './KeyManager.js'
 
 const keyManager = new KeyManager()
 let apiToken

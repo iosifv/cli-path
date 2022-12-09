@@ -1,8 +1,8 @@
 import inquirer from 'inquirer'
 import { KeyManager } from '../lib/KeyManager.js'
-import { MapsClient } from '../utils/googleMapsClient.js'
+import { MapsClient } from '../lib/googleMapsClient.js'
+import { ClipClient } from '../lib/clipApiClient.js'
 import _, { pluck, where } from 'underscore'
-import { ClipClient } from '../utils/clipApiClient.js'
 
 /**
  * Inquiry => Get new origin/destination parameters
