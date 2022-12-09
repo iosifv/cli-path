@@ -1,26 +1,17 @@
 import { KeyManager } from '../lib/KeyManager.js'
 import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
-
-const AUTH0_CLIP_CLIENT_ID = 'CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS'
-const AUTH0_CLIP_URL_DEVICE_CODE =
-  'https://iosifv.eu.auth0.com/oauth/device/code'
-const AUTH0_CLIP_URL_TOKEN = 'https://iosifv.eu.auth0.com/oauth/token'
-const AUTH0_CLIP_GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:device_code'
-const AUTH0_CLIP_DEFAULT_HEADERS = {
-  'Content-Type': 'application/x-www-form-urlencoded',
-}
-const CLIP_SLS_API = 'http://localhost:3000/dev/auth'
+import * as c from '../lib/constants.js'
 
 export async function authenticate() {
   const keyManager = new KeyManager()
 
   // for some reason, if I use axios, I get back an encoded response...
 
-  await fetch(AUTH0_CLIP_URL_DEVICE_CODE, {
+  await fetch(c.AUTH0_CLIP_URL_DEVICE_CODE, {
     method: 'POST',
-    headers: AUTH0_CLIP_DEFAULT_HEADERS,
-    body: new URLSearchParams({ client_id: AUTH0_CLIP_CLIENT_ID }),
+    headers: c.AUTH0_CLIP_DEFAULT_HEADERS,
+    body: new URLSearchParams({ client_id: c.AUTH0_CLIP_CLIENT_ID }),
   })
     .then((response) => response.json())
     .then((response) => {
@@ -32,6 +23,7 @@ export async function authenticate() {
     .catch((err) => console.error(err))
 
   let spinner = ora().start()
+  spinner.spinner = 'bouncingBall'
 
   let authenticated = false
   const cycleLength = 5
@@ -39,12 +31,12 @@ export async function authenticate() {
 
   do {
     if (cycle == 0) {
-      const responseToken = await fetch(AUTH0_CLIP_URL_TOKEN, {
+      const responseToken = await fetch(c.AUTH0_CLIP_URL_TOKEN, {
         method: 'POST',
-        headers: AUTH0_CLIP_DEFAULT_HEADERS,
+        headers: c.AUTH0_CLIP_DEFAULT_HEADERS,
         body: new URLSearchParams({
-          grant_type: AUTH0_CLIP_GRANT_TYPE,
-          client_id: AUTH0_CLIP_CLIENT_ID,
+          grant_type: c.AUTH0_CLIP_GRANT_TYPE,
+          client_id: c.AUTH0_CLIP_CLIENT_ID,
           device_code: keyManager.getAuthDeviceCode(),
         }),
       })
@@ -78,7 +70,7 @@ export async function authenticate() {
 
   spinner.text = 'Validating with clip-api...'
   spinner.start()
-  await fetch(CLIP_SLS_API, {
+  await fetch(c.CLIP_SLS_API, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

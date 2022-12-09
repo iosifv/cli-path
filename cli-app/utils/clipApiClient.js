@@ -20,27 +20,6 @@ export class ClipClient {
       .then((response) => response.json())
       .then((response) => console.log(response))
       .catch((err) => console.error(err))
-
-    // await this.client
-    //     .directions({
-    //         params: {
-    //             origin: origin,
-    //             destination: destination,
-    //             key: apiToken
-    //         },
-    //         timeout: 1000, // milliseconds
-    //     })
-    //     .then((res) => {
-    //         console.log('Start:    ' + res.data.routes[0].legs[0].start_address)
-    //         console.log('End:      ' + res.data.routes[0].legs[0].end_address)
-    //         console.log('')
-    //         console.log('Summary:  ' + res.data.routes[0].summary)
-    //         console.log('Distance: ' + res.data.routes[0].legs[0].distance.text)
-    //         console.log('Duration: ' + res.data.routes[0].legs[0].duration.text)
-    //     })
-    //     .catch((e) => {
-    //         console.log(e)
-    //     });
   }
 
   async location(query) {
