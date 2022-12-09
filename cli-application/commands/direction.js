@@ -2,6 +2,7 @@ import inquirer from 'inquirer';
 import { KeyManager } from '../lib/KeyManager.js';
 import { MapsClient } from '../utils/googleMapsClient.js';
 import _, { pluck, where } from 'underscore';
+import { ClipClient } from '../utils/clipApiClient.js';
 
 /**
  * Inquiry => Get new origin/destination parameters
@@ -60,7 +61,9 @@ import _, { pluck, where } from 'underscore';
 
 export async function quick() {
   const direction = await questionQuickDirection();
-  const mapsClient = new MapsClient();
+  // const mapsClient = new MapsClient();
+  // await mapsClient.direction(direction.origin, direction.destination)
+  const mapsClient = new ClipClient();
   await mapsClient.direction(direction.origin, direction.destination)
 }
 
