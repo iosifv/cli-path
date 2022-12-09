@@ -1,6 +1,7 @@
 import inquirer from 'inquirer'
 import { KeyManager } from '../lib/KeyManager.js'
 // import { MapsClient } from '../lib/googleMapsClient.js'
+import { PathController } from '../lib/PathController.js'
 
 const keyManager = new KeyManager()
 
@@ -49,6 +50,9 @@ export async function add() {
   const newLocation = await questionNewLocation()
   // const mapsClient = new MapsClient()
   // const formattedAddress = await mapsClient.location(newLocation.query)
+  const pathController = new PathController()
+  const formattedAddress = await pathController.location(newLocation.query)
+  console.log(formattedAddress)
   const confirm = await questionConfirmLocation(
     newLocation.name,
     formattedAddress

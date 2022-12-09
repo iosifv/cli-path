@@ -5,8 +5,7 @@ let apiToken
 
 export class ClipClient {
   constructor() {
-    // this.client = new Client({})
-    // this.validateToken()
+    // Todo: maybe validate tokens?
   }
 
   async direction(origin, destination) {
@@ -23,20 +22,15 @@ export class ClipClient {
   }
 
   async location(query) {
-    // return await this.client
-    //   .findPlaceFromText({
-    //     params: {
-    //       input: query,
-    //       inputtype: `textquery`,
-    //       fields: ['formatted_address'],
-    //       key: apiToken,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     return res.data.candidates[0].formatted_address
-    //   })
-    //   .catch((e) => {
-    //     console.log(e)
-    //   })
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query }),
+    }
+
+    return await fetch('http://localhost:3000/dev/location', options)
+      .then((response) => response.json())
+      .then((response) => response.locationResult)
+      .catch((err) => console.error(err))
   }
 }
