@@ -8,6 +8,7 @@ const AUTH0_CLIP_URL_DEVICE_CODE = 'https://iosifv.eu.auth0.com/oauth/device/cod
 const AUTH0_CLIP_URL_TOKEN = 'https://iosifv.eu.auth0.com/oauth/token'
 const AUTH0_CLIP_GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:device_code'
 const AUTH0_CLIP_DEFAULT_HEADERS = { 'Content-Type': 'application/x-www-form-urlencoded' }
+const CLIP_SLS_API = 'http://localhost:3000/dev/auth'
 
 export async function authenticate() {
   const keyManager = new KeyManager();
@@ -62,7 +63,7 @@ export async function authenticate() {
         } else {
           // console.log(response)
           
-          spinner.text = 'Authorized!'
+          spinner.text = 'Device Authorized!'
           spinner.succeed()
           spinner.stop()
           
@@ -78,11 +79,29 @@ export async function authenticate() {
       cycle--;
     }
 
-
-
   } while (!authenticated);
 
-  console.log('You reached the end...')
+spinner.text = 'Validating with clip-api...'
+spinner.start()
+  await fetch(
+    CLIP_SLS_API, 
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + keyManager.getAuthToken()
+      },
+      body: '{}'
+    }
+  )
+  .then(response => response.json())
+  .then(response => {
+    spinner.text = 'Authenticated against our own clip-api!'
+    spinner.succeed()
+    spinner.stop()
+  })
+  .catch(err => console.error(err))
+  ;
 }
 
 
