@@ -1,14 +1,15 @@
-import type { AWS } from '@serverless/typescript';
+import type { AWS } from '@serverless/typescript'
 
-import hello from '@functions/hello';
-import ping  from '@functions/ping';
-import authentication  from '@functions/authentication';
-import direction  from '@functions/direction';
+import hello from '@functions/hello'
+import ping from '@functions/ping'
+import authentication from '@functions/authentication'
+import direction from '@functions/direction'
+import location from '@functions/location'
 
 const serverlessConfiguration: AWS = {
   service: 'sls-api-ts',
   frameworkVersion: '3',
-  plugins: [ 
+  plugins: [
     'serverless-offline',
     'serverless-esbuild',
     'serverless-dotenv-plugin',
@@ -27,11 +28,12 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { 
+  functions: {
     hello,
     ping,
     authentication,
     direction,
+    location,
   },
   package: { individually: true },
   custom: {
@@ -45,12 +47,11 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
-    	
-  dotenv: {
-    required: ['GOOGLE_MAPS_API_KEY']
-  }
-  
-  },
-};
 
-module.exports = serverlessConfiguration;
+    dotenv: {
+      required: ['GOOGLE_MAPS_API_KEY'],
+    },
+  },
+}
+
+module.exports = serverlessConfiguration
