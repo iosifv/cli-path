@@ -1,11 +1,18 @@
 _id: req_3ae4e37f8db7409da87378a1db226ab9
 type: Request
-parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670501345835
+parentId: fld_f1d61b50bbf04eb9bce05bca40d778e2
+modified: 1670677792358
 created: 1670220678795
 url: https://iosifv.eu.auth0.com/oauth/token
-name: auth-request-token
-description: ""
+name: cli-request-token
+description: |
+  Used on the "device flow" (in the CLI App)
+
+  This will send a request to Auth0 containing 
+  - Auth0 Client ID: {{ _.auth0.client_id }}
+  - Device ID
+
+  The response will contain a valid `access_token`.
 method: POST
 body:
   mimeType: application/x-www-form-urlencoded
@@ -16,11 +23,17 @@ body:
       description: ""
     - id: pair_9e1179ed0df64b56a93efb453ae27ea5
       name: client_id
-      value: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
+      value: "{{ _.auth0.client_id }}"
       description: ""
-    - id: pair_8c6b0428749141308ff2a78a19ecf2c8
+      disabled: false
+    - id: pair_24ea6d74295744e0903aecb715bbcf42
       name: device_code
-      value: -WssDHB7wJsMVZIlC9Lj03Z1
+      value: "{{ _.auth0.device_code }}"
+      description: ""
+      disabled: true
+    - id: pair_b9ec0924a7fc4210b618e1157b2c3b1d
+      name: device_code
+      value: iOc6enYBZfN88dO_K48GwCkQ
       description: ""
 parameters: []
 headers:
@@ -28,10 +41,10 @@ headers:
     value: application/x-www-form-urlencoded
     id: pair_077660c4681348bdbf3a3b416dcc1768
 authentication: {}
-metaSortKey: -1667863400771
+metaSortKey: -1669182415951.5
 isPrivate: false
-settingStoreCookies: true
-settingSendCookies: true
+settingStoreCookies: false
+settingSendCookies: false
 settingDisableRenderRequestBody: false
 settingEncodeUrl: true
 settingRebuildPath: true

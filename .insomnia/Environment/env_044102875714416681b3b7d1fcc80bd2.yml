@@ -1,14 +1,25 @@
 _id: env_044102875714416681b3b7d1fcc80bd2
 type: Environment
 parentId: env_1a35c2c824e04ff890b9e3b33f9cd09e3655148c
-modified: 1670296648026
+modified: 1670677866225
 created: 1669851841292
-name: localhost
+name: localhost-dev
 data:
-  url: http://localhost:3000/
+  url: http://localhost:3000/dev/
+  auth0:
+    client_id: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
+    device_code: ""
+    user_code: ""
+    access_token: ""
 dataPropertyOrder:
   "&":
     - url
+    - auth0
+  "&~|auth0":
+    - client_id
+    - device_code
+    - user_code
+    - access_token
 color: "#00c220"
 isPrivate: false
 metaSortKey: 1669851841292

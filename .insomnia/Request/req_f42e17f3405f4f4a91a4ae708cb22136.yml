@@ -1,27 +1,24 @@
 _id: req_f42e17f3405f4f4a91a4ae708cb22136
 type: Request
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670252124650
+modified: 1670677470014
 created: 1670251715920
-url: "{{url}}dev/auth"
-name: dev/auth
+url: "{{ _.url }}authentication"
+name: /authentication
 description: ""
 method: POST
 body:
   mimeType: application/json
-  text: |-
-    {
-    	"auth0_token": "iosif"
-    }
+  text: "{}"
 parameters: []
 headers:
   - name: Content-Type
     value: application/json
-    id: pair_1f14c046162b48d1934d1120c14a3443
+    id: pair_4a79cb1e4088402792fc67bc3fb73779
 authentication:
   type: bearer
-  token: dasdasdasdsadas
-metaSortKey: -1667863400908.5
+  token: eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9pb3NpZnYuZXUuYXV0aDAuY29tLyJ9..C0qCtw06V6BngCsB.mxq1w4zWxPKBWRR0lXpu4d7rIkR53isXgOPWiVKCXy32enHK-EpEuAU7Lz8wKaBZA_c0XB-vhTMHEAWxI2QTYi2tQfARUShzP5YsmdGWlDDy2EfQXugY1aPa0v8NeBRgtqOi3QqvclUwwqBGCQrrbZGx-fNgOZD1EUJdP4N6OrXgQklvdY2TSWBZeb8QNcoAMKiCUJRG8saiP3SAI8oKxyZ54yzKO3YU5Mjqo4YjOd-5yzn6mHChOyENLsCfiLoIyUqYnZ5qxnMZkA._vA2Ka5F4hrOmogeZMQI2g
+metaSortKey: -1669182416001.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

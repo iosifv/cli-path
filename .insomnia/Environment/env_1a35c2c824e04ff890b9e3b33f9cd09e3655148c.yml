@@ -1,11 +1,11 @@
 _id: env_1a35c2c824e04ff890b9e3b33f9cd09e3655148c
 type: Environment
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1669851890492
+modified: 1670677851453
 created: 1667863400919
 name: Base Environment
 data:
-  url: http://localhost:3000/
+  url: http://localhost:3000/dev/
 dataPropertyOrder:
   "&":
     - url

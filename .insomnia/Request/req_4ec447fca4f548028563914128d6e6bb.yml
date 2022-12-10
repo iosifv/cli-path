@@ -1,10 +1,11 @@
-_id: req_a5cfee53e0564f61a8f221a2b47229b2
+_id: req_4ec447fca4f548028563914128d6e6bb
 type: Request
 parentId: fld_f1d61b50bbf04eb9bce05bca40d778e2
-modified: 1670677870193
-created: 1670219512910
-url: https://iosifv.eu.auth0.com/oauth/device/code
-name: cli-request-code
+modified: 1670677786771
+created: 1670541095229
+url: "{% response 'body', 'req_a5cfee53e0564f61a8f221a2b47229b2',
+  'b64::JC52ZXJpZmljYXRpb25fdXJpX2NvbXBsZXRl::46b', 'never', 60 %}"
+name: browser-validate-device
 description: >
   ### Used on the "device flow" (in the CLI App)
 
@@ -27,7 +28,7 @@ headers:
     value: application/x-www-form-urlencoded
     id: pair_077660c4681348bdbf3a3b416dcc1768
 authentication: {}
-metaSortKey: -1669182416001.5
+metaSortKey: -1669182415976.5
 isPrivate: false
 settingStoreCookies: false
 settingSendCookies: false

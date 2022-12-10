@@ -1,14 +1,25 @@
 _id: env_9e096c585e1b45019c76d81e7441fc84
 type: Environment
 parentId: env_1a35c2c824e04ff890b9e3b33f9cd09e3655148c
-modified: 1670296650958
+modified: 1670677869960
 created: 1669995808016
 name: aws-dev
 data:
-  url: https://br80yl2l5a.execute-api.us-east-1.amazonaws.com/
+  url: https://ri3kz3u55a.execute-api.us-east-1.amazonaws.com/dev/
+  auth0:
+    client_id: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
+    device_code: ""
+    user_code: ""
+    access_token: ""
 dataPropertyOrder:
   "&":
     - url
+    - auth0
+  "&~|auth0":
+    - client_id
+    - device_code
+    - user_code
+    - access_token
 color: "#98c200"
 isPrivate: false
 metaSortKey: 1669851841342
