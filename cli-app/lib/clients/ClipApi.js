@@ -1,7 +1,6 @@
+import { CLIP_SLS_API } from '../../utils/constants.js'
 import { KeyManager } from '../KeyManager.js'
-
 const keyManager = new KeyManager()
-let apiToken
 
 export class ClipClient {
   constructor() {
@@ -15,7 +14,7 @@ export class ClipClient {
       body: JSON.stringify({ origin: origin, destination: destination }),
     }
 
-    await fetch('http://localhost:3000/dev/direction', options)
+    await fetch(CLIP_SLS_API + 'direction', options)
       .then((response) => response.json())
       .then((response) => console.log(response))
       .catch((err) => console.error(err))
@@ -28,7 +27,7 @@ export class ClipClient {
       body: JSON.stringify({ query: query }),
     }
 
-    return await fetch('http://localhost:3000/dev/location', options)
+    return await fetch(CLIP_SLS_API + 'location', options)
       .then((response) => response.json())
       .then((response) => response.data)
       .catch((err) => console.error(err))
