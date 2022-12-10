@@ -2,11 +2,9 @@ import Configstore from 'configstore'
 import fs from 'fs'
 import path from 'path'
 
-const packageJson = JSON.parse(
-  fs.readFileSync(path.resolve('./package.json'), 'utf8')
-)
+const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
 
-const KEY_NAME_VERSION = 'version' // Reserved key, don't change
+export const KEY_NAME_VERSION = 'version' // Reserved key, don't change
 export const KEY_NAME_ENGINE = 'setting_engine'
 export const KEY_NAME_AUTH0_DEVICE_CODE = 'setting_auth0_device_code'
 export const KEY_NAME_AUTH0_ACCESS_TOKEN = 'setting_auth0_access_token'
@@ -117,29 +115,6 @@ export class KeyManager {
 
     return
   }
-
-  // setToken(key) {
-  //   return this.set(KEY_NAME_TOKEN_GOOGLE, key)
-  // }
-  // getToken() {
-  //   return this.get(KEY_NAME_TOKEN_GOOGLE)
-  // }
-  // deleteToken() {
-  //   this.delete(KEY_NAME_TOKEN_GOOGLE)
-  // }
-
-  // setAuthDeviceCode(code) {
-  //   return this.set(KEY_NAME_AUTH0_DEVICE_CODE, code)
-  // }
-  // getAuthDeviceCode() {
-  //   return this.get(KEY_NAME_AUTH0_DEVICE_CODE)
-  // }
-  // setAuthToken(value) {
-  //   return this.set(KEY_NAME_AUTH0_TOKEN, value)
-  // }
-  // getAuthToken() {
-  //   return this.get(KEY_NAME_AUTH0_TOKEN)
-  // }
 
   /**
    * Not used yet

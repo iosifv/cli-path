@@ -16,40 +16,33 @@ import {
   KEY_NAME_ENGINE,
   KEY_NAME_GOOGLE_TOKEN,
   KEY_NAME_LOCATIONS,
+  KEY_NAME_VERSION,
 } from '../lib/KeyManager.js'
-import chalk from 'chalk'
-import { statement, status } from '../utils/style.js'
+import * as print from '../utils/style.js'
 
 const keyManager = new KeyManager()
 const program = new Command()
-const packageJson = JSON.parse(
-  fs.readFileSync(path.resolve('./package.json'), 'utf8')
-)
+const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
 
 async function printStatus() {
-  statement('Performing standard checks:')
-  status(
-    'Directions Engine',
-    keyManager.exists(KEY_NAME_ENGINE),
-    '{' + keyManager.get(KEY_NAME_ENGINE) + '}'
-  )
-  status(
+  print.line()
+  print.value('Version', 'v' + keyManager.get(KEY_NAME_VERSION))
+  print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
+  print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)
+
+  print.line()
+  print.statement('Performing standard checks:')
+  print.status(
     'Clip API Token',
     keyManager.exists(KEY_NAME_AUTH0_ACCESS_TOKEN),
     'Use Authenticate options to get or refresh'
   )
-  status(
+  print.status(
     'Google API Token',
     keyManager.exists(KEY_NAME_GOOGLE_TOKEN),
     'Needed in case you want to bypass our API'
   )
-  const savedLocations = keyManager.get(KEY_NAME_LOCATIONS).length
-  status(
-    'Saved Locations',
-    savedLocations,
-    savedLocations == 0 ? 'Nothing saved yet' : savedLocations
-  )
-  console.log()
+  print.line()
 }
 
 /**
@@ -107,7 +100,7 @@ if (noArgs()) {
   }
 
   console.log('============================')
-  process.exit(1)
+  process.exit(0)
 }
 
 /**
