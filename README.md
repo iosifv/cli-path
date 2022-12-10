@@ -42,11 +42,6 @@ Standard steps could be
 - [chalk](https://www.npmjs.com/package/chalk)
 - [underscore](https://underscorejs.org/)
 
-## Todo list
-- add some noderc
-- switch to yarn
-- create git-tag on publish
-
 ## Notes
 - change permissions of index.js to 777 so that you can run it directly with ```./index.js```
 
@@ -55,3 +50,4 @@ Standard steps could be
 - [Youtube - Easy Way to Create CLI Scripts with JavaScript and Node](https://www.youtube.com/watch?v=dfTpFFZwazI)
 - [Youtube - Node.js CLI For Cryptocurrency Prices](https://www.youtube.com/watch?v=-6OAHsde15E)
 - https://github.com/bradtraversy/coindex-cli
+- https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-device-authorization-flow#call-api

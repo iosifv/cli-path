@@ -1,0 +1,35 @@
+{
+  "name": "clip-sls-api",
+  "version": "1.0.0",
+  "description": "Serverless aws-nodejs-typescript app for the cli-path application",
+  "main": "serverless.ts",
+  "scripts": {
+    "invoke-local-healthcheck": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
+    "invoke-local-direction": "sls invoke local --function=direction --path=src/functions/direction/mock.json"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.16",
+    "@middy/core": "^3.4.0",
+    "@middy/http-json-body-parser": "^3.4.0",
+    "axios": "^1.2.1"
+  },
+  "devDependencies": {
+    "@serverless/typescript": "^3.0.0",
+    "@types/aws-lambda": "^8.10.71",
+    "@types/node": "^14.14.25",
+    "esbuild": "^0.14.11",
+    "json-schema-to-ts": "^1.5.0",
+    "serverless": "^3.0.0",
+    "serverless-dotenv-plugin": "^4.0.2",
+    "serverless-esbuild": "^1.23.3",
+    "serverless-offline": "^11.6.0",
+    "ts-node": "^10.4.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.3"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
+}
