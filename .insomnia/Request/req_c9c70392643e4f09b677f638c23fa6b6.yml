@@ -1,9 +1,9 @@
 _id: req_c9c70392643e4f09b677f638c23fa6b6
 type: Request
 parentId: fld_f1d61b50bbf04eb9bce05bca40d778e2
-modified: 1670542389237
+modified: 1670708574074
 created: 1670501214834
-url: https://iosifv.eu.auth0.com/userinfo
+url: "{{ _.auth0_url }}userinfo"
 name: sls-request-userinfo
 description: ""
 method: GET

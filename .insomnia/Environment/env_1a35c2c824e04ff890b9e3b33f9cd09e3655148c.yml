@@ -1,14 +1,16 @@
 _id: env_1a35c2c824e04ff890b9e3b33f9cd09e3655148c
 type: Environment
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670677851453
+modified: 1670708530499
 created: 1667863400919
 name: Base Environment
 data:
   url: http://localhost:3000/dev/
+  auth0_url: https://iosifv.eu.auth0.com/
 dataPropertyOrder:
   "&":
     - url
+    - auth0_url
 color: null
 isPrivate: false
 metaSortKey: 1667863400919
