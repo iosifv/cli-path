@@ -1,11 +1,10 @@
 {
-  "name": "sls-api-ts",
+  "name": "clip-sls-api",
   "version": "1.0.0",
-  "description": "Serverless aws-nodejs-typescript template",
+  "description": "Serverless aws-nodejs-typescript app for the cli-path application",
   "main": "serverless.ts",
   "scripts": {
-    "invoke-local-hello": "sls invoke local --function=hello --path=src/functions/hello/mock.json",
-    "invoke-local-ping": "sls invoke local --function=ping --path=src/functions/ping/mock.json",
+    "invoke-local-healthcheck": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
     "invoke-local-direction": "sls invoke local --function=direction --path=src/functions/direction/mock.json"
   },
   "engines": {

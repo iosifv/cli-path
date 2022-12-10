@@ -66,11 +66,6 @@ export async function quick() {
   const direction = await questionQuickDirection()
   const pathController = new PathController()
   pathController.direction(direction.origin, direction.destination)
-
-  // const mapsClient = new MapsClient();
-  // await mapsClient.direction(direction.origin, direction.destination)
-  // const mapsClient = new ClipClient()
-  // await mapsClient.direction(direction.origin, direction.destination)
 }
 
 export async function newDirection() {
@@ -82,6 +77,4 @@ export async function newDirection() {
   )
 
   console.log(directionResult)
-  // const mapsClient = new MapsClient()
-  // await mapsClient.direction(direction.origin, direction.destination)
 }

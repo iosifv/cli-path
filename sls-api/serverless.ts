@@ -1,13 +1,12 @@
 import type { AWS } from '@serverless/typescript'
 
-import hello from '@functions/hello'
-import ping from '@functions/ping'
-import authentication from '@functions/authentication'
+import healthcheck from '@functions/healthcheck'
+// import authentication from '@functions/authentication'
 import direction from '@functions/direction'
 import location from '@functions/location'
 
 const serverlessConfiguration: AWS = {
-  service: 'sls-api-ts',
+  service: 'clip-sls-api',
   frameworkVersion: '3',
   plugins: [
     'serverless-offline',
@@ -29,9 +28,8 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: {
-    hello,
-    ping,
-    authentication,
+    healthcheck,
+    // authentication,
     direction,
     location,
   },

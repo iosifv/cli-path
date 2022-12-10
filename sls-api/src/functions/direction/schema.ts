@@ -1,8 +1,8 @@
 export default {
-  type: "object",
+  type: 'object',
   properties: {
     origin: { type: 'string' },
-    destination: { type: 'string' }
+    destination: { type: 'string' },
   },
-  required: ['origin', 'destination']
-} as const;
+  required: ['origin', 'destination'],
+} as const

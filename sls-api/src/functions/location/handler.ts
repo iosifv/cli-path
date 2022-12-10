@@ -1,7 +1,7 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
 import { formatJSONResponse } from '@libs/api-gateway'
 import { middyfy } from '@libs/lambda'
-import { Client } from '@googlemaps/google-maps-services-js'
+import { Client, PlaceInputType } from '@googlemaps/google-maps-services-js'
 import * as dotenv from 'dotenv'
 
 import schema from './schema'
@@ -17,7 +17,7 @@ const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     .findPlaceFromText({
       params: {
         input: event.body.query,
-        inputtype: `textquery`,
+        inputtype: PlaceInputType.textQuery,
         fields: ['formatted_address'],
         key: process.env.GOOGLE_MAPS_API_KEY,
       },
@@ -31,7 +31,7 @@ const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
   return formatJSONResponse({
     message: 'Success!',
-    locationResult,
+    data: locationResult,
   })
 }
 

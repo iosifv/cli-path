@@ -30,7 +30,7 @@ export class ClipClient {
 
     return await fetch('http://localhost:3000/dev/location', options)
       .then((response) => response.json())
-      .then((response) => response.locationResult)
+      .then((response) => response.data)
       .catch((err) => console.error(err))
   }
 }

@@ -1,17 +1,17 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { formatJSONResponse } from '@libs/api-gateway';
-import { middyfy } from '@libs/lambda';
-import { Client } from "@googlemaps/google-maps-services-js";
-import * as dotenv from "dotenv"
+import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
+import { formatJSONResponse } from '@libs/api-gateway'
+import { middyfy } from '@libs/lambda'
+import { Client } from '@googlemaps/google-maps-services-js'
+import * as dotenv from 'dotenv'
 
-import schema from './schema';
+import schema from './schema'
 
 dotenv.config()
 
-
-
-const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const client = new Client({});
+const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+  event
+) => {
+  const client = new Client({})
 
   const directionsResult = await client
     .directions({
@@ -23,13 +23,6 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
       timeout: 1000, // milliseconds
     })
     .then((res) => {
-      // console.log('Start:    ' + res.data.routes[0].legs[0].start_address)
-      // console.log('End:      ' + res.data.routes[0].legs[0].end_address)
-      // console.log('')
-      // console.log('Summary:  ' + res.data.routes[0].summary)
-      // console.log('Distance: ' + res.data.routes[0].legs[0].distance.text)
-      // console.log('Duration: ' + res.data.routes[0].legs[0].duration.text)
-
       return {
         start: res.data.routes[0].legs[0].start_address,
         end: res.data.routes[0].legs[0].end_address,
@@ -37,15 +30,15 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
         distance: res.data.routes[0].legs[0].distance.text,
         duration: res.data.routes[0].legs[0].duration.text,
       }
-  })
-  .catch((e) => {
+    })
+    .catch((e) => {
       console.log(e)
-  });
-  
-  return formatJSONResponse({
-    message: "Success!",
-    directionsResult,
-  });
-};
+    })
 
-export const main = middyfy(direction);
+  return formatJSONResponse({
+    message: 'Success!',
+    data: directionsResult,
+  })
+}
+
+export const main = middyfy(direction)

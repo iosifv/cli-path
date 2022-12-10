@@ -1,45 +1,43 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { formatJSONResponse, formatJSONError } from '@libs/api-gateway';
-import { middyfy } from '@libs/lambda';
-import axios from "axios";
+import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
+import { formatJSONResponse, formatJSONError } from '@libs/api-gateway'
+import { AUTH0_URL_USERINFO } from '@libs/constants'
+import { middyfy } from '@libs/lambda'
+import axios from 'axios'
 
-import schema from './schema';
+import schema from './schema'
 
-const authentication: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  
-  // console.log(event.headers.Authorization)
-
-
+const authentication: ValidatedEventAPIGatewayProxyEvent<
+  typeof schema
+> = async (event) => {
   const options = {
     method: 'POST',
-    url: 'https://iosifv.eu.auth0.com/userinfo',
+    url: AUTH0_URL_USERINFO,
     headers: {
-      'Content-Type': 'application/json', 
-      Authorization: event.headers.Authorization
+      'Content-Type': 'application/json',
+      Authorization: event.headers.Authorization,
     },
-    data: {}
-  };
-  
-  return await axios.request(options)
-  .then(function (response) {
-    // console.log(response.data);
-    return formatJSONResponse({
-      status: "Success!",
-      data: response.data
+    data: {},
+  }
+
+  return await axios
+    .request(options)
+    .then(function (response) {
+      return formatJSONResponse({
+        message: 'Success!',
+        data: response.data,
+      })
     })
-  }).catch(function (error) {
+    .catch(function (error) {
+      console.log(error.response)
 
-   console.log(error.response)
-    
-    return formatJSONError({
-      status: error.response.statusText,
-      data: {
-        message: error.message,
-        status: error.response.status,
-      }
+      return formatJSONError({
+        status: error.response.statusText,
+        data: {
+          message: error.message,
+          status: error.response.status,
+        },
+      })
     })
-  });
+}
 
-};
-
-export const main = middyfy(authentication);
+export const main = middyfy(authentication)

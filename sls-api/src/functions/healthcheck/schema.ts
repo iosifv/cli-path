@@ -1,7 +1,7 @@
 export default {
   type: 'object',
   properties: {
-    payload: { type: 'string' },
+    name: { type: 'string' },
   },
-  required: [],
+  required: ['name'],
 } as const
