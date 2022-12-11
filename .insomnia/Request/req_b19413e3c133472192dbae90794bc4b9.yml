@@ -1,7 +1,7 @@
 _id: req_b19413e3c133472192dbae90794bc4b9
 type: Request
 parentId: fld_f51937a7d0594c41a07f9f5963b48983
-modified: 1670717932463
+modified: 1670761832454
 created: 1670049858497
 url: "{{ _.url }}direction"
 name: /direction
@@ -12,7 +12,7 @@ body:
   text: |-
     {
     	"origin": "Amsterdam",
-    	"destination": "Berlin"
+    	"destination": "Cluj"
     }
 parameters: []
 headers:

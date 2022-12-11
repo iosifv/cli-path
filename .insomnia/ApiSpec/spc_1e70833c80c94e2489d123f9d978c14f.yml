@@ -1,7 +1,7 @@
 _id: spc_1e70833c80c94e2489d123f9d978c14f
 type: ApiSpec
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670718209188
+modified: 1670763062751
 created: 1667863400916
 fileName: cli-path
 contents: "openapi: 3.0.0
@@ -26,21 +26,21 @@ contents: "openapi: 3.0.0
 
   tags:
 
-  \  - name: query
-
-  \    description: Fuzzy address search
-
-  \  - name: direction
-
-  \    description: Find the path from origin to destination
-
-  \  - name: authentication
+  \  - name: Authentication
 
   \    description: Authentication Test
 
-  \  - name: healthcheck
+  \  - name: Healthcheck
 
   \    description: Check application\ 
+
+  \  - name: PathSearch
+
+  \    description: Fuzzy address search
+
+  \  - name: Directions
+
+  \    description: Find the path from origin to destination
 
   paths:
 
@@ -50,7 +50,7 @@ contents: "openapi: 3.0.0
 
   \      tags:
 
-  \        - authentication
+  \        - Authentication
 
   \      summary: Authenticates a user
 
@@ -74,7 +74,7 @@ contents: "openapi: 3.0.0
 
   \      tags:
 
-  \        - healthcheck
+  \        - Healthcheck
 
   \      summary: Healthcheck API
 
@@ -82,33 +82,23 @@ contents: "openapi: 3.0.0
 
   \      operationId: heatlhcheck
 
+  \      requestBody:
+
+  \        $ref: \"#/components/requestBodies/Name\"
+
   \      responses:
 
   \        \"200\":
 
-  \          description: successful operation
+  \          description: OK
 
   \          content:
-
-  \            application/xml:
-
-  \              schema:
-
-  \                type: array
-
-  \                items:
-
-  \                  $ref: '#/components/schemas/Direction'
 
   \            application/json:
 
   \              schema:
 
-  \                type: array
-
-  \                items:
-
-  \                  $ref: \"#/components/schemas/Direction\"
+  \                $ref: \"#/components/schemas/HealthcheckResponse\"
 
   \        \"400\":
 
@@ -120,7 +110,7 @@ contents: "openapi: 3.0.0
 
   \      tags:
 
-  \        - direction
+  \        - Directions
 
   \      summary: Provides a direction for a user
 
@@ -140,12 +130,6 @@ contents: "openapi: 3.0.0
 
   \          content:
 
-  \            application/xml:
-
-  \              schema:
-
-  \                $ref: '#/components/schemas/DirectionResponse'
-
   \            application/json:
 
   \              schema:
@@ -162,7 +146,7 @@ contents: "openapi: 3.0.0
 
   \      tags:
 
-  \        - query
+  \        - PathSearch
 
   \      summary: Provides a location for a user
 
@@ -202,7 +186,30 @@ contents: "openapi: 3.0.0
 
   components:
 
+  \  securitySchemes:
+
+  \    bearerAuth:            # arbitrary name for the security scheme
+
+  \      type: http
+
+  \      scheme: bearer
+
+  \      bearerFormat: JWT    # optional, arbitrary value for documentation
+  purposes
+
   \  requestBodies:
+
+  \    Name:
+
+  \     content:
+
+  \        application/json:
+
+  \          schema:
+
+  \            $ref: \"#/components/schemas/Name\"
+
+  \     description: The request body contains the name as a JSON object
 
   \    Direction:
 
@@ -233,6 +240,20 @@ contents: "openapi: 3.0.0
   \      required: true
 
   \  schemas:
+
+  \    Name:
+
+  \      type: object
+
+  \      properties:\ 
+
+  \        name:
+
+  \          type: string
+
+  \          description: The user's greeting name
+
+  \          example: Iosif
 
   \    Direction:
 
@@ -278,6 +299,25 @@ contents: "openapi: 3.0.0
 
   \        name: Location
 
+  \    HealthcheckResponse:\ 
+
+  \      type: object
+
+  \      properties:\ 
+
+  \        message:
+
+  \          type: string
+
+  \          example: Hello Iosif, welcome to the exciting clip App!
+
+  \        event:\ 
+
+  \          type: object
+
+  \          description: an object containing information relevant for the
+  users context
+
   \    DirectionResponse:\ 
 
   \      type: object
@@ -315,6 +355,10 @@ contents: "openapi: 3.0.0
   \            duration:\ 
 
   \              type: string
+
+  security:
+
+  \  - bearerAuth: [] \ 
 
 
   \  "
