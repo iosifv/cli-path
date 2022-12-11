@@ -25,13 +25,11 @@ const program = new Command()
 const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
 
 async function printStatus() {
-  print.line()
+  print.line('🌎')
+  print.statement('Startup checks:')
   print.value('Version', 'v' + keyManager.get(KEY_NAME_VERSION))
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)
-
-  print.line()
-  print.statement('Performing standard checks:')
   print.status(
     'Clip API Token',
     keyManager.exists(KEY_NAME_AUTH0_ACCESS_TOKEN),

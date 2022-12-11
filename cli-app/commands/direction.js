@@ -1,8 +1,6 @@
 import inquirer from 'inquirer'
 import { KeyManager } from '../lib/KeyManager.js'
 import { PathController } from '../lib/PathController.js'
-// import { MapsClient } from '../lib/googleMapsClient.js'
-// import { ClipClient } from '../lib/clipApiClient.js'
 import _, { pluck, where } from 'underscore'
 
 /**
@@ -71,10 +69,7 @@ export async function quick() {
 export async function newDirection() {
   const direction = await questionNewDirection()
   const pathController = new PathController()
-  const directionResult = await pathController.direction(
-    direction.origin,
-    direction.destination
-  )
+  const directionResult = await pathController.direction(direction.origin, direction.destination)
 
   console.log(directionResult)
 }
