@@ -8,11 +8,7 @@ import location from '@functions/location'
 const serverlessConfiguration: AWS = {
   service: 'clip-sls-api',
   frameworkVersion: '3',
-  plugins: [
-    'serverless-offline',
-    'serverless-esbuild',
-    'serverless-dotenv-plugin',
-  ],
+  plugins: ['serverless-offline', 'serverless-esbuild', 'serverless-dotenv-plugin'],
   useDotenv: true,
   provider: {
     name: 'aws',

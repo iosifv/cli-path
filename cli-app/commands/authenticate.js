@@ -75,7 +75,7 @@ export async function authenticate() {
 
   spinner.text = 'Validating with clip-api...'
   spinner.start()
-  await fetch(c.CLIP_SLS_API, {
+  await fetch(c.CLIP_SLS_API + 'authenticate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
