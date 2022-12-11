@@ -5,7 +5,7 @@
   "author": "iosifv",
   "license": "MIT",
   "keywords": [
-    "cli"
+    "cli", "maps", "googlemaps"
   ],
   "main": "index.js",
   "type": "module",
