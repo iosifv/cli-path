@@ -1,7 +1,7 @@
 _id: req_dd0d005616e446c99f49b67f28dded44
 type: Request
-parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670677492030
+parentId: fld_f51937a7d0594c41a07f9f5963b48983
+modified: 1670717928089
 created: 1667863400921
 url: "{{ _.url }}healthcheck"
 name: /healthcheck
@@ -20,8 +20,8 @@ headers:
     id: pair_1f14c046162b48d1934d1120c14a3443
 authentication:
   type: bearer
-  token: eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9pb3NpZnYuZXUuYXV0aDAuY29tLyJ9..C0qCtw06V6BngCsB.mxq1w4zWxPKBWRR0lXpu4d7rIkR53isXgOPWiVKCXy32enHK-EpEuAU7Lz8wKaBZA_c0XB-vhTMHEAWxI2QTYi2tQfARUShzP5YsmdGWlDDy2EfQXugY1aPa0v8NeBRgtqOi3QqvclUwwqBGCQrrbZGx-fNgOZD1EUJdP4N6OrXgQklvdY2TSWBZeb8QNcoAMKiCUJRG8saiP3SAI8oKxyZ54yzKO3YU5Mjqo4YjOd-5yzn6mHChOyENLsCfiLoIyUqYnZ5qxnMZkA._vA2Ka5F4hrOmogeZMQI2g
-metaSortKey: -1667863400921
+  token: pula
+metaSortKey: -1669182415951.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

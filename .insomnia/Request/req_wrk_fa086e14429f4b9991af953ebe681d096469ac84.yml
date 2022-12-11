@@ -1,26 +1,24 @@
-_id: req_b19413e3c133472192dbae90794bc4b9
+_id: req_wrk_fa086e14429f4b9991af953ebe681d096469ac84
 type: Request
-parentId: fld_f51937a7d0594c41a07f9f5963b48983
-modified: 1670717932463
-created: 1670049858497
-url: "{{ _.url }}direction"
-name: /direction
+parentId: fld_wrk_fa086e14429f4b9991af953ebe681d097cd9148e
+modified: 1670718040201
+created: 1670718040201
+url: "{{ base_url }}/location"
+name: Provides a location for a user
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"origin": "Amsterdam",
-    	"destination": "Berlin"
+      "query": "eroilor cluj"
     }
 parameters: []
 headers:
   - name: Content-Type
     value: application/json
-    id: pair_1f14c046162b48d1934d1120c14a3443
 authentication: {}
-metaSortKey: -1669182415901.5
+metaSortKey: -1670718040201
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

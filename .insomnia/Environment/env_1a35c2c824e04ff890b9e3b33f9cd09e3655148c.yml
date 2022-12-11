@@ -5,6 +5,7 @@ modified: 1670708530499
 created: 1667863400919
 name: Base Environment
 data:
+  base_url: "{{ scheme }}://{{ host }}{{ base_path }}"
   url: http://localhost:3000/dev/
   auth0_url: https://iosifv.eu.auth0.com/
 dataPropertyOrder:

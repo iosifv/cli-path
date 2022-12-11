@@ -1,8 +1,321 @@
 _id: spc_1e70833c80c94e2489d123f9d978c14f
 type: ApiSpec
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670587640916
+modified: 1670718209188
 created: 1667863400916
 fileName: cli-path
-contents: ""
+contents: "openapi: 3.0.0
+
+  info:
+
+  \  description: \"Serverless API used by cli-path application\"
+
+  \  version: 0.1.14
+
+  \  title: Cli-Path
+
+  \  contact:
+
+  \    email: dev@iosifv.com
+
+  \  license:
+
+  \    name: Apache 2.0
+
+  \    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+  tags:
+
+  \  - name: query
+
+  \    description: Fuzzy address search
+
+  \  - name: direction
+
+  \    description: Find the path from origin to destination
+
+  \  - name: authentication
+
+  \    description: Authentication Test
+
+  \  - name: healthcheck
+
+  \    description: Check application\ 
+
+  paths:
+
+  \  /authentication:
+
+  \    post:
+
+  \      tags:
+
+  \        - authentication
+
+  \      summary: Authenticates a user
+
+  \      description: \"\"
+
+  \      operationId: auth
+
+  \      responses:
+
+  \        \"200\":
+
+  \          description: Successfull operation
+
+  \        \"403\":
+
+  \          description: Forbidden
+
+  \  /heathcheck:
+
+  \    post:
+
+  \      tags:
+
+  \        - healthcheck
+
+  \      summary: Healthcheck API
+
+  \      description: Healthcheck description
+
+  \      operationId: heatlhcheck
+
+  \      responses:
+
+  \        \"200\":
+
+  \          description: successful operation
+
+  \          content:
+
+  \            application/xml:
+
+  \              schema:
+
+  \                type: array
+
+  \                items:
+
+  \                  $ref: '#/components/schemas/Direction'
+
+  \            application/json:
+
+  \              schema:
+
+  \                type: array
+
+  \                items:
+
+  \                  $ref: \"#/components/schemas/Direction\"
+
+  \        \"400\":
+
+  \          description: Invalid status value
+
+  \  /direction:
+
+  \    post:
+
+  \      tags:
+
+  \        - direction
+
+  \      summary: Provides a direction for a user
+
+  \      description: \"\"
+
+  \      operationId: direction
+
+  \      requestBody:
+
+  \        $ref: \"#/components/requestBodies/Direction\"
+
+  \      responses:
+
+  \        \"200\":
+
+  \          description: successful operation
+
+  \          content:
+
+  \            application/xml:
+
+  \              schema:
+
+  \                $ref: '#/components/schemas/DirectionResponse'
+
+  \            application/json:
+
+  \              schema:
+
+  \                $ref: '#/components/schemas/DirectionResponse'
+
+  \        \"403\":
+
+  \          description: Forbidden
+
+  \  /location:
+
+  \    post:
+
+  \      tags:
+
+  \        - query
+
+  \      summary: Provides a location for a user
+
+  \      description: \"\"
+
+  \      operationId: location
+
+  \      requestBody:
+
+  \        $ref: \"#/components/requestBodies/Location\"
+
+  \      responses:
+
+  \        \"200\":
+
+  \          description: succesful operation
+
+  \        \"403\":
+
+  \          description: Forbidden
+
+  externalDocs:
+
+  \  description: Find out more about Cli-Path on GitHub
+
+  \  url: https://github.com/iosifv/cli-path
+
+  servers:
+
+  \  - url: https://ri3kz3u55a.execute-api.us-east-1.amazonaws.com/dev/
+
+  \    description: AWS Server for Development
+
+  \  - url: http://localhost:3000/
+
+  \    description: Local development Server
+
+  components:
+
+  \  requestBodies:
+
+  \    Direction:
+
+  \      content:
+
+  \        application/json:
+
+  \          schema:
+
+  \            $ref: \"#/components/schemas/Direction\"
+
+  \      description: Direction object description here
+
+  \      required: true
+
+  \    Location:\ 
+
+  \      content:
+
+  \        application/json:
+
+  \          schema:
+
+  \            $ref: \"#/components/schemas/Location\"
+
+  \      description: Location object description here
+
+  \      required: true
+
+  \  schemas:
+
+  \    Direction:
+
+  \      type: object
+
+  \      properties:
+
+  \        origin:
+
+  \          type: string
+
+  \          example: Amsterdam
+
+  \        destination:
+
+  \          type: string
+
+  \          example: Berlin
+
+  \      xml:
+
+  \        name: Direction
+
+  \    Location:
+
+  \      type: object
+
+  \      required:
+
+  \        - query
+
+  \      properties:
+
+  \        query:
+
+  \          type: string
+
+  \          example: eroilor cluj
+
+  \          description: a location on a map\ 
+
+  \      xml:
+
+  \        name: Location
+
+  \    DirectionResponse:\ 
+
+  \      type: object
+
+  \      properties:\ 
+
+  \        message:\ 
+
+  \          type: string
+
+  \          example: Succes!
+
+  \        data:\ 
+
+  \          type: object
+
+  \          properties:\ 
+
+  \            start:
+
+  \               type: string
+
+  \            end:\ 
+
+  \              type: string
+
+  \            summary:\ 
+
+  \              type: string
+
+  \            distance:\ 
+
+  \              type: string
+
+  \            duration:\ 
+
+  \              type: string
+
+
+  \  "
 contentType: yaml
