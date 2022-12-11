@@ -6,7 +6,7 @@ import {
 import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
 import * as c from '../utils/constants.js'
-import { line, statement } from '../utils/style.js'
+import { line, statement, value } from '../utils/style.js'
 
 export async function authenticate() {
   const keyManager = new KeyManager()
@@ -22,7 +22,9 @@ export async function authenticate() {
     .then((response) => {
       keyManager.set(KEY_NAME_AUTH0_DEVICE_CODE, response.device_code)
 
-      statement('\nOpen the following url to authenticate:')
+      line()
+      value('Verification CODE:', response.user_code)
+      statement('Open to authenticate')
       line(` ↪ ${response.verification_uri_complete}\n`)
     })
     .catch((err) => console.error(err))
