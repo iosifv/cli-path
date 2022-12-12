@@ -1,5 +1,6 @@
 import { CLIP_SLS_API_URL } from '../../utils/constants.js'
 import { KeyManager, KEY_NAME_ENVIRONMENT } from '../KeyManager.js'
+import axios from 'axios'
 
 const keyManager = new KeyManager()
 
@@ -15,19 +16,25 @@ export class ClipClient {
   async direction(origin, destination) {
     const options = {
       method: 'POST',
+      url: getClipUrl('direction'),
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ origin: origin, destination: destination }),
+      data: { origin: origin, destination: destination },
     }
 
-    console.log(options)
-    await fetch(getClipUrl('direction'), options)
-      .then((response) => {
-        console.log(12312)
-        console.log(response)
-        return response.json()
+    return await axios
+      .request(options)
+      .then(function (response) {
+        // console.log(response)
+        if (response.data.status_code != 'OK') {
+          console.error(response.data)
+          process.exit(0)
+        }
+        return response.data.direction
       })
-      .then((response) => console.log(response))
-      .catch((err) => console.error(err))
+      .catch(function (error) {
+        console.error(error.response.data)
+        process.exit(0)
+      })
   }
 
   async location(query) {
@@ -39,7 +46,16 @@ export class ClipClient {
 
     return await fetch(getClipUrl('location'), options)
       .then((response) => response.json())
-      .then((response) => response.data)
-      .catch((err) => console.error(err))
+      .then((response) => {
+        if (response.status_code != 'OK') {
+          console.log(response)
+          process.exit(0)
+        }
+        return response.formatted_address
+      })
+      .catch((err) => {
+        console.error(err)
+        process.exit(0)
+      })
   }
 }

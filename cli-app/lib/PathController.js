@@ -2,7 +2,6 @@ import { KeyManager, KEY_NAME_ENGINE } from './KeyManager.js'
 import { ClipClient } from './clients/ClipApi.js'
 import { GoogleClient } from './clients/GoogleApi.js'
 const keyManager = new KeyManager()
-let engine
 
 export class PathController {
   constructor() {

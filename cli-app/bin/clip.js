@@ -20,7 +20,6 @@ import {
   KEY_NAME_VERSION,
 } from '../lib/KeyManager.js'
 import * as print from '../utils/style.js'
-import { getClipUrl } from '../lib/clients/ClipApi.js'
 
 const keyManager = new KeyManager()
 const program = new Command()
@@ -52,8 +51,8 @@ async function printStatus() {
  */
 async function questionInterativeInitial() {
   let availableChoices = [
-    'Quick Path Search',
-    'New Path Search',
+    'Search with saved locations',
+    'Search a blank new path',
     'Locations',
     new inquirer.Separator(),
     'Config',
@@ -77,10 +76,10 @@ if (noArgs()) {
   const action = await questionInterativeInitial()
 
   switch (action.desired_action_initial) {
-    case 'Quick Path Search':
+    case 'Search with saved locations':
       await directionCommand.quick()
       break
-    case 'New Path Search':
+    case 'Search a blank new path':
       await directionCommand.newDirection()
       break
     case 'Locations':
