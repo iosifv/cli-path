@@ -2,6 +2,9 @@ import inquirer from 'inquirer'
 import { KeyManager, KEY_NAME_GOOGLE_TOKEN } from '../lib/KeyManager.js'
 import { isRequired } from '../utils/validation.js'
 
+export async function configAll() {}
+
+/** @deprecated */
 export async function set() {
   const keyManager = new KeyManager()
 

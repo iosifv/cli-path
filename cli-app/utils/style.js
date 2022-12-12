@@ -1,7 +1,6 @@
 import chalk from 'chalk'
 import table from 'cli-table3'
 
-export const error = chalk.bold.red
 export const warning = chalk.hex('#FFA500') // Orange color
 const MAX_NAME_LENGTH = 25
 
@@ -10,7 +9,11 @@ export function line(text) {
 }
 
 export function statement(text) {
-  console.log(chalk.bold.yellow(text))
+  console.log(chalk.hex('#FFA500').bold(text))
+}
+
+export function error(text) {
+  console.log(chalk.bold.red(text))
 }
 
 export function value(name, value) {
@@ -41,5 +44,13 @@ export function locationTable(locationsArray) {
     locationsTable.push([element.name, element.address])
   })
 
+  console.log(locationsTable.toString())
+}
+
+export function locationSingle(locationName, address) {
+  let locationsTable = new table({
+    head: ['Name', 'Full Address'],
+  })
+  locationsTable.push([locationName, address])
   console.log(locationsTable.toString())
 }

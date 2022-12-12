@@ -1,6 +1,7 @@
 import Configstore from 'configstore'
 import fs from 'fs'
 import path from 'path'
+import _ from 'underscore'
 
 const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
 
@@ -67,8 +68,15 @@ export class KeyManager {
       name: locationName,
       address: locationAddress,
     }
-    console.log('Pushing new location: ' + locationObject)
+    // console.log('Pushing new location: ' + locationObject)
     location.push(locationObject)
+    this.config.set(KEY_NAME_LOCATIONS, location)
+  }
+
+  deleteLocation(locationName) {
+    location = _.reject(location, function (loc) {
+      return loc.name == locationName
+    })
     this.config.set(KEY_NAME_LOCATIONS, location)
   }
 

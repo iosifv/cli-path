@@ -4,20 +4,14 @@ import { Command } from 'commander'
 const program = new Command()
 import * as locationCommand from '../commands/location.js'
 
-program
-  .command('init')
-  .description('Init Location Object')
-  .action(locationCommand.init)
+// program
+//   .command('init')
+//   .description('Init Location Object')
+//   .action(locationCommand.init)
 
-program
-  .command('add')
-  .description('Add new Location')
-  .action(locationCommand.add)
+program.command('add').description('Add new Location').action(locationCommand.add)
 
-program
-  .command('show')
-  .description('Show all locations')
-  .action(locationCommand.show)
+program.command('show').description('Show all locations').action(locationCommand.show)
 
 // program
 //   .command('remove')
