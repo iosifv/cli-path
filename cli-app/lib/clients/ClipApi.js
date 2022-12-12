@@ -1,6 +1,11 @@
-import { CLIP_SLS_API } from '../../utils/constants.js'
-import { KeyManager } from '../KeyManager.js'
+import { CLIP_SLS_API_URL } from '../../utils/constants.js'
+import { KeyManager, KEY_NAME_ENVIRONMENT } from '../KeyManager.js'
+
 const keyManager = new KeyManager()
+
+export function getClipUrl(path) {
+  return CLIP_SLS_API_URL[keyManager.get(KEY_NAME_ENVIRONMENT)] + path
+}
 
 export class ClipClient {
   constructor() {
@@ -14,8 +19,13 @@ export class ClipClient {
       body: JSON.stringify({ origin: origin, destination: destination }),
     }
 
-    await fetch(CLIP_SLS_API + 'direction', options)
-      .then((response) => response.json())
+    console.log(options)
+    await fetch(getClipUrl('direction'), options)
+      .then((response) => {
+        console.log(12312)
+        console.log(response)
+        return response.json()
+      })
       .then((response) => console.log(response))
       .catch((err) => console.error(err))
   }
@@ -27,7 +37,7 @@ export class ClipClient {
       body: JSON.stringify({ query: query }),
     }
 
-    return await fetch(CLIP_SLS_API + 'location', options)
+    return await fetch(getClipUrl('location'), options)
       .then((response) => response.json())
       .then((response) => response.data)
       .catch((err) => console.error(err))

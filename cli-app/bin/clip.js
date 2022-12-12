@@ -14,11 +14,13 @@ import {
   KeyManager,
   KEY_NAME_AUTH0_ACCESS_TOKEN,
   KEY_NAME_ENGINE,
+  KEY_NAME_ENVIRONMENT,
   KEY_NAME_GOOGLE_TOKEN,
   KEY_NAME_LOCATIONS,
   KEY_NAME_VERSION,
 } from '../lib/KeyManager.js'
 import * as print from '../utils/style.js'
+import { getClipUrl } from '../lib/clients/ClipApi.js'
 
 const keyManager = new KeyManager()
 const program = new Command()
@@ -29,6 +31,7 @@ async function printStatus() {
   print.statement('Startup checks:')
   print.value('Version', 'v' + keyManager.get(KEY_NAME_VERSION))
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
+  print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)
   print.status(
     'Clip API Token',
@@ -94,7 +97,7 @@ if (noArgs()) {
       break
   }
 
-  console.log('============================')
+  print.line('============================')
   process.exit(0)
 }
 

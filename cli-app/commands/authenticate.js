@@ -7,6 +7,7 @@ import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
 import * as c from '../utils/constants.js'
 import { line, statement, value } from '../utils/style.js'
+import { getClipUrl } from '../lib/clients/ClipApi.js'
 
 export async function authenticate() {
   const keyManager = new KeyManager()
@@ -77,7 +78,7 @@ export async function authenticate() {
 
   spinner.text = 'Validating with clip-api...'
   spinner.start()
-  await fetch(c.CLIP_SLS_API + 'authenticate', {
+  await fetch(getClipUrl('authenticate'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

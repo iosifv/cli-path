@@ -54,3 +54,7 @@ export function locationSingle(locationName, address) {
   locationsTable.push([locationName, address])
   console.log(locationsTable.toString())
 }
+
+export function configMessage(question, currentValue) {
+  return `${question}?    ${chalk.reset.dim('currently set as')} [${chalk.yellow(currentValue)}]`
+}
