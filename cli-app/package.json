@@ -1,6 +1,6 @@
 {
   "name": "cli-path",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "description": "Tool for querying maps and direction information from the terminal",
   "author": "iosifv",
   "license": "MIT",
@@ -13,8 +13,8 @@
     "clip": "./bin/clip.js"
   },
   "scripts": {
-    "configstore-watch": "watch cat ~/.config/configstore/cli-path.json",
     "configstore-edit": "code ~/.config/configstore/cli-path.json",
+    "configstore-watch": "watch cat ~/.config/configstore/cli-path.json",
     "set-executable": "chmod 777 ./bin/clip.js && ls -lisa ./bin",
     "npm-publish": "git add . && git commit -m 'publishing new version' && npm version patch &&  git push && npm publish",
     "start": "node ./bin/clip.js"
