@@ -1,7 +1,7 @@
 _id: spc_1e70833c80c94e2489d123f9d978c14f
 type: ApiSpec
 parentId: wrk_fa086e14429f4b9991af953ebe681d09
-modified: 1670924734714
+modified: 1670931167731
 created: 1667863400916
 fileName: cli-path
 contents: "openapi: 3.0.0
@@ -24,37 +24,15 @@ contents: "openapi: 3.0.0
 
   \    url: http://www.apache.org/licenses/LICENSE-2.0.html
 
-  tags:
-
-  \  - name: Authentication
-
-  \    description: Authentication Test
-
-  \  - name: Healthcheck
-
-  \    description: Check application\ 
-
-  \  - name: PathSearch
-
-  \    description: Fuzzy address search
-
-  \  - name: Directions
-
-  \    description: Find the path from origin to destination
-
   paths:
 
   \  /authentication:
 
   \    post:
 
-  \      tags:
+  \      summary: /authentication
 
-  \        - Authentication
-
-  \      summary: Authenticates a user
-
-  \      description: \"\"
+  \      description: Authenticates a user
 
   \      operationId: auth
 
@@ -72,13 +50,7 @@ contents: "openapi: 3.0.0
 
   \    post:
 
-  \      tags:
-
-  \        - Healthcheck
-
-  \      summary: Healthcheck API
-
-  \      description: Healthcheck description
+  \      summary: /healthcheck
 
   \      operationId: heatlhcheck
 
@@ -108,13 +80,9 @@ contents: "openapi: 3.0.0
 
   \    post:
 
-  \      tags:
+  \      summary: /direction
 
-  \        - Directions
-
-  \      summary: Provides a direction for a user
-
-  \      description: \"\"
+  \      description: Provides a direction for a user
 
   \      operationId: direction
 
@@ -144,13 +112,7 @@ contents: "openapi: 3.0.0
 
   \    post:
 
-  \      tags:
-
-  \        - PathSearch
-
-  \      summary: Provides a location for a user
-
-  \      description: \"\"
+  \      summary: /location
 
   \      operationId: location
 
