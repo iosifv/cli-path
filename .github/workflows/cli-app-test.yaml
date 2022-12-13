@@ -1,4 +1,4 @@
-name: CLI-App Test
+name: CLI-App - Test
 on:
   push:
     branches: [main]
