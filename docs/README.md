@@ -7,9 +7,10 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 
 ## Online links for this project
 
-- [website](https://iosifv.github.io/cli-path/) - Simple Github Pages published
+- [website](https://iosifv.github.io/cli-path/) - Github Pages
 - [github](https://github.com/iosifv/cli-path) - Github repository
 - [npm](https://www.npmjs.com/package/cli-path) - NPM Package for the cli app
+- todo: serverless function
 
 ## Programming Concepts / Technologies used
 
