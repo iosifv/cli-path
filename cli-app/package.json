@@ -1,11 +1,13 @@
 {
   "name": "cli-path",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Tool for querying maps and direction information from the terminal",
   "author": "iosifv",
   "license": "MIT",
   "keywords": [
-    "cli", "maps", "googlemaps"
+    "cli",
+    "maps",
+    "googlemaps"
   ],
   "main": "index.js",
   "type": "module",
