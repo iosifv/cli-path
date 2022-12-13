@@ -1,12 +1,11 @@
 name: sls-api-test
-
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  deploy:
+  info:
     name: deploy
     runs-on: ubuntu-22.04
     strategy:
