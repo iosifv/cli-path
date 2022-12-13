@@ -2,8 +2,9 @@ import Configstore from 'configstore'
 import fs from 'fs'
 import path from 'path'
 import _ from 'underscore'
-
-const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
+console.log('0-----------------------')
+// const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
+const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
 
 export const KEY_NAME_VERSION = 'version' // Reserved key, don't change
 export const KEY_NAME_ENGINE = 'setting_engine'
