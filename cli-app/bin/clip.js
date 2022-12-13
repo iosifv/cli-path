@@ -29,6 +29,7 @@ async function printStatus() {
   print.line('🌎')
   print.statement('Startup checks:')
   print.value('Version', 'v' + keyManager.get(KEY_NAME_VERSION))
+  // print.value('package.json location', packageJsonLocation)
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
   print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)

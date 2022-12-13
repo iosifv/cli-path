@@ -2,10 +2,7 @@ import Configstore from 'configstore'
 import fs from 'fs'
 import path from 'path'
 import _ from 'underscore'
-console.log('0-----------------------')
-// const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
-const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
-
+import * as packageJson from './../package.json' assert { type: 'json' }
 export const KEY_NAME_VERSION = 'version' // Reserved key, don't change
 export const KEY_NAME_ENGINE = 'setting_engine'
 export const KEY_NAME_ENVIRONMENT = 'application_environment'
@@ -51,10 +48,10 @@ let location
 
 export class KeyManager {
   constructor() {
-    this.config = new Configstore(packageJson.name, {
-      version: packageJson.version,
+    this.config = new Configstore(packageJson.default.name, {
+      version: packageJson.default.version,
     })
-    this.set(KEY_NAME_VERSION, packageJson.version)
+    this.set(KEY_NAME_VERSION, packageJson.default.version)
 
     this.validateConfig()
   }
