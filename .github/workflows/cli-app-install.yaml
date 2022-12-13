@@ -19,4 +19,4 @@ jobs:
       - name: NPM Global Install
         run: npm install -g cli-path
       - name: Display clip version
-        run: clip -v
+        run: clip --version

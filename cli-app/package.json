@@ -1,6 +1,6 @@
 {
   "name": "cli-path",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Tool for querying maps and direction information from the terminal",
   "author": "iosifv",
   "license": "MIT",
