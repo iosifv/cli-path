@@ -20,5 +20,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           # cache: 'yarn'
-      - run: yarn
-      - run: yarn start --help
+      - run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn
+      - run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --help
