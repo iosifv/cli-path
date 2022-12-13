@@ -14,6 +14,7 @@ import {
   KeyManager,
   KEY_NAME_AUTH0_ACCESS_TOKEN,
   KEY_NAME_ENGINE,
+  KEY_NAME_ENVIRONMENT,
   KEY_NAME_GOOGLE_TOKEN,
   KEY_NAME_LOCATIONS,
   KEY_NAME_VERSION,
@@ -29,6 +30,7 @@ async function printStatus() {
   print.statement('Startup checks:')
   print.value('Version', 'v' + keyManager.get(KEY_NAME_VERSION))
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
+  print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)
   print.status(
     'Clip API Token',
@@ -49,14 +51,14 @@ async function printStatus() {
  */
 async function questionInterativeInitial() {
   let availableChoices = [
-    'Quick Path Search',
-    'New Path Search',
-    'Show Locations',
-    'Add Location',
-    'Set Google API Token',
+    'Search with saved locations',
+    'Search a blank new path',
+    'Locations',
+    new inquirer.Separator(),
+    'Config',
+    'Authenticate',
   ]
 
-  availableChoices.unshift('Authenticate')
   const answers = await inquirer.prompt({
     name: 'desired_action_initial',
     type: 'list',
@@ -74,30 +76,27 @@ if (noArgs()) {
   const action = await questionInterativeInitial()
 
   switch (action.desired_action_initial) {
-    case 'Authenticate':
-      await authenticateCommand.authenticate()
-      break
-    case 'Quick Path Search':
+    case 'Search with saved locations':
       await directionCommand.quick()
       break
-    case 'New Path Search':
+    case 'Search a blank new path':
       await directionCommand.newDirection()
       break
-    case 'Show Locations':
-      await locationCommand.show()
+    case 'Locations':
+      await locationCommand.dialog()
       break
-    case 'Add Location':
-      await locationCommand.add()
+    case 'Config':
+      await keyCommand.configAll()
       break
-    case 'Set Google API Token':
-      await keyCommand.set()
+    case 'Authenticate':
+      await authenticateCommand.authenticate()
       break
 
     default:
       break
   }
 
-  console.log('============================')
+  print.line('============================')
   process.exit(0)
 }
 

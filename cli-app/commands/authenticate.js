@@ -6,6 +6,8 @@ import {
 import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
 import * as c from '../utils/constants.js'
+import { line, statement, value } from '../utils/style.js'
+import { getClipUrl } from '../lib/clients/ClipApi.js'
 
 export async function authenticate() {
   const keyManager = new KeyManager()
@@ -20,10 +22,11 @@ export async function authenticate() {
     .then((response) => response.json())
     .then((response) => {
       keyManager.set(KEY_NAME_AUTH0_DEVICE_CODE, response.device_code)
-      // Todo: change this to a style function
-      console.log(
-        `\nOpen the following url to authenticate: \n ↪ ${response.verification_uri_complete}\n`
-      )
+
+      line()
+      value('Verification CODE:', response.user_code)
+      statement('Open to authenticate')
+      line(` ↪ ${response.verification_uri_complete}\n`)
     })
     .catch((err) => console.error(err))
 
@@ -75,7 +78,7 @@ export async function authenticate() {
 
   spinner.text = 'Validating with clip-api...'
   spinner.start()
-  await fetch(c.CLIP_SLS_API + 'authenticate', {
+  await fetch(getClipUrl('authenticate'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -90,8 +93,7 @@ export async function authenticate() {
       spinner.stop()
     })
     .catch((err) => {
-      spinner.text =
-        'Failed to authenticate against our own clip-api (probably is offline)'
+      spinner.text = 'Failed to authenticate against our own clip-api (probably is offline)'
       spinner.fail()
       spinner.stop()
 

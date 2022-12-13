@@ -1,7 +1,7 @@
 # 📟 cli-path
 
 [![npm version](https://img.shields.io/npm/v/cli-path.svg)](https://www.npmjs.com/package/cli-path)
-[![Build Status](https://github.com/iosifv/cli-path/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/iosifv/cli-path/actions/workflows/test.yml)
+[![cli-app-test-build](https://github.com/iosifv/cli-path/actions/workflows/cli-app-test-build.yaml/badge.svg)](https://github.com/iosifv/cli-path/actions/workflows/cli-app-test-build.yaml)
 
 A simple CLI tool to search paths on google maps. The intent is to use this on your most often taken paths to quickly get the grasp of the time needed for your travel - like going home from the office every day.
 

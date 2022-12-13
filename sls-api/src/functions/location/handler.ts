@@ -1,4 +1,4 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
+import { formatJSONError, ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
 import { formatJSONResponse } from '@libs/api-gateway'
 import { middyfy } from '@libs/lambda'
 import { Client, PlaceInputType } from '@googlemaps/google-maps-services-js'
@@ -8,12 +8,10 @@ import schema from './schema'
 
 dotenv.config()
 
-const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
-) => {
+const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const client = new Client({})
 
-  const locationResult = await client
+  return await client
     .findPlaceFromText({
       params: {
         input: event.body.query,
@@ -23,16 +21,27 @@ const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       },
     })
     .then((res) => {
-      return res.data.candidates[0].formatted_address
+      // console.log(res.data.status)
+      if (res.data.status != 'OK') {
+        return formatJSONError({
+          message: 'Error',
+          status: res.status,
+          status_code: res.data.status,
+          data: res.data,
+        })
+      }
+      return formatJSONResponse({
+        message: 'Success!',
+        status: res.status,
+        status_code: res.data.status,
+        formatted_address: res.data.candidates[0].formatted_address,
+      })
     })
     .catch((e) => {
-      console.log(e)
+      return formatJSONError({
+        error: e.response,
+      })
     })
-
-  return formatJSONResponse({
-    message: 'Success!',
-    data: locationResult,
-  })
 }
 
 export const main = middyfy(location)

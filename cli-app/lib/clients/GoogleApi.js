@@ -1,9 +1,5 @@
 import { Client } from '@googlemaps/google-maps-services-js'
-import {
-  KeyManager,
-  ERROR_MESSAGE_NO_KEY,
-  KEY_NAME_GOOGLE_TOKEN,
-} from '../KeyManager.js'
+import { KeyManager, ERROR_MESSAGE_NO_KEY, KEY_NAME_GOOGLE_TOKEN } from '../KeyManager.js'
 
 const keyManager = new KeyManager()
 let apiToken
@@ -32,7 +28,7 @@ export class GoogleClient {
   }
 
   async direction(origin, destination) {
-    await this.client
+    return await this.client
       .directions({
         params: {
           origin: origin,
@@ -42,15 +38,20 @@ export class GoogleClient {
         timeout: 1000, // milliseconds
       })
       .then((res) => {
-        console.log('Start:    ' + res.data.routes[0].legs[0].start_address)
-        console.log('End:      ' + res.data.routes[0].legs[0].end_address)
-        console.log('')
-        console.log('Summary:  ' + res.data.routes[0].summary)
-        console.log('Distance: ' + res.data.routes[0].legs[0].distance.text)
-        console.log('Duration: ' + res.data.routes[0].legs[0].duration.text)
+        // console.log(res.data.routes[0].legs[0])
+        return {
+          start: res.data.routes[0].legs[0].start_address,
+          end: res.data.routes[0].legs[0].end_address,
+          summary: res.data.routes[0].summary,
+          distance: res.data.routes[0].legs[0].distance.text,
+          duration: res.data.routes[0].legs[0].duration.text,
+        }
       })
       .catch((e) => {
-        console.log(e)
+        // console.log(e)
+        return {
+          error: e.response.data,
+        }
       })
   }
 
@@ -68,7 +69,10 @@ export class GoogleClient {
         return res.data.candidates[0].formatted_address
       })
       .catch((e) => {
-        console.log(e)
+        // console.log(e)
+        return {
+          error: e.response.data,
+        }
       })
   }
 }

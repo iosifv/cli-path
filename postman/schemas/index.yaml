@@ -1,0 +1,179 @@
+openapi: 3.0.0
+info:
+  description: "Serverless API used by cli-path application"
+  version: 0.1.14
+  title: Cli-Path
+  contact:
+    email: dev@iosifv.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: Authentication
+    description: Authentication Test
+  - name: Healthcheck
+    description: Check application 
+  - name: PathSearch
+    description: Fuzzy address search
+  - name: Directions
+    description: Find the path from origin to destination
+paths:
+  /authentication:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticates a user
+      description: ""
+      operationId: auth
+      responses:
+        "200":
+          description: Successfull operation
+        "403":
+          description: Forbidden
+  /heathcheck:
+    post:
+      tags:
+        - Healthcheck
+      summary: Healthcheck API
+      description: Healthcheck description
+      operationId: heatlhcheck
+      requestBody:
+        $ref: "#/components/requestBodies/Name"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthcheckResponse"
+        "400":
+          description: Invalid status value
+  /direction:
+    post:
+      tags:
+        - Directions
+      summary: Provides a direction for a user
+      description: ""
+      operationId: direction
+      requestBody:
+        $ref: "#/components/requestBodies/Direction"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectionResponse'
+        "403":
+          description: Forbidden
+  /location:
+    post:
+      tags:
+        - PathSearch
+      summary: Provides a location for a user
+      description: ""
+      operationId: location
+      requestBody:
+        $ref: "#/components/requestBodies/Location"
+      responses:
+        "200":
+          description: succesful operation
+        "403":
+          description: Forbidden
+externalDocs:
+  description: Find out more about Cli-Path on GitHub
+  url: https://github.com/iosifv/cli-path
+servers:
+  - url: https://ri3kz3u55a.execute-api.us-east-1.amazonaws.com/dev/
+    description: AWS Server for Development
+  - url: http://localhost:3000/
+    description: Local development Server
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  requestBodies:
+    Name:
+     content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Name"
+     description: The request body contains the name as a JSON object
+    Direction:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Direction"
+      description: Direction object description here
+      required: true
+    Location: 
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Location"
+      description: Location object description here
+      required: true
+  schemas:
+    Name:
+      type: object
+      properties: 
+        name:
+          type: string
+          description: The user's greeting name
+          example: Iosif
+    Direction:
+      type: object
+      properties:
+        origin:
+          type: string
+          example: Amsterdam
+        destination:
+          type: string
+          example: Berlin
+      xml:
+        name: Direction
+    Location:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          example: eroilor cluj
+          description: a location on a map 
+      xml:
+        name: Location
+    HealthcheckResponse: 
+      type: object
+      properties: 
+        message:
+          type: string
+          example: Hello Iosif, welcome to the exciting clip App!
+        event: 
+          type: object
+          description: an object containing information relevant for the users context
+    DirectionResponse: 
+      type: object
+      properties: 
+        message: 
+          type: string
+          example: Succes!
+        data: 
+          type: object
+          properties: 
+            start:
+               type: string
+            end: 
+              type: string
+            summary: 
+              type: string
+            distance: 
+              type: string
+            duration: 
+              type: string
+security:
+  - bearerAuth: []  
+
+  
