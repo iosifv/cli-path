@@ -10,7 +10,7 @@ jobs:
       matrix:
         # Set to the former tested version. Should probably update this
         # to reflect the release schedule. https://nodejs.org/en/about/releases/
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v2
       - name: Change Directory
@@ -20,5 +20,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-      - run: yarn install --frozen-lockfile
+      - run: yarn install
+      - run: yarn start --help
     # - run: yarn test
