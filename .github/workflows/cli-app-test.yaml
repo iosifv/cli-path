@@ -10,15 +10,15 @@ jobs:
       matrix:
         # Set to the former tested version. Should probably update this
         # to reflect the release schedule. https://nodejs.org/en/about/releases/
-        node-version: [18.x]
+        node-version: [16.x, 18.x]
     steps:
       - uses: actions/checkout@v2
-      - name: Change Directory
-        run: pwd && cd cli-app/ && pwd
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: 'yarn'
-      - run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn
-      - run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --help
+          cache: 'yarn'
+      - name: Yarn Install
+        run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn
+      - name: Display command help
+        run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --help
