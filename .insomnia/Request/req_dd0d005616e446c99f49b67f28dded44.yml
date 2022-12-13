@@ -1,7 +1,7 @@
 _id: req_dd0d005616e446c99f49b67f28dded44
 type: Request
 parentId: fld_f51937a7d0594c41a07f9f5963b48983
-modified: 1670761812293
+modified: 1670883678265
 created: 1667863400921
 url: "{{ _.url }}healthcheck"
 name: /healthcheck
@@ -20,7 +20,7 @@ headers:
     id: pair_1f14c046162b48d1934d1120c14a3443
 authentication:
   type: bearer
-  token: pula
+  token: abc_xyz
 metaSortKey: -1669182415951.5
 isPrivate: false
 settingStoreCookies: true

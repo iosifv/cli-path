@@ -1,17 +1,17 @@
-_id: req_8699e6b7a55c409c912979ee143f036d
+_id: req_77215309a98c4f3aaecbd4ae196d1cc8
 type: Request
 parentId: fld_f51937a7d0594c41a07f9f5963b48983
-modified: 1670884193805
-created: 1670623695917
+modified: 1670924733764
+created: 1670882653163
 url: "{{ _.url }}location"
-name: /location
+name: /location - error
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"query": " square"
+    	"query": "fiduhslifhuli"
     }
 parameters: []
 headers:
@@ -19,7 +19,7 @@ headers:
     value: application/json
     id: pair_1f14c046162b48d1934d1120c14a3443
 authentication: {}
-metaSortKey: -1669182415851.5
+metaSortKey: -1669182415801.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

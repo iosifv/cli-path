@@ -1,17 +1,18 @@
-_id: req_8699e6b7a55c409c912979ee143f036d
+_id: req_b0540aafad5446e4a2cf4476c2792e08
 type: Request
 parentId: fld_f51937a7d0594c41a07f9f5963b48983
-modified: 1670884193805
-created: 1670623695917
-url: "{{ _.url }}location"
-name: /location
+modified: 1670883914503
+created: 1670883314770
+url: "{{ _.url }}direction"
+name: /direction - error
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"query": " square"
+    	"origin": "cluj",
+    	"destination": "yuguyiygiugiu"
     }
 parameters: []
 headers:
@@ -19,7 +20,7 @@ headers:
     value: application/json
     id: pair_1f14c046162b48d1934d1120c14a3443
 authentication: {}
-metaSortKey: -1669182415851.5
+metaSortKey: -1669182415876.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
