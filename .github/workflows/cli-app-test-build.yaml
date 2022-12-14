@@ -19,7 +19,7 @@ jobs:
           cache: 'yarn'
       - name: Yarn Install
         run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn
-      - name: Display cli-app version
-        run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --version
+      # - name: Display cli-app version
+      #   run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --version
       - name: Display cli-app help
         run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --help

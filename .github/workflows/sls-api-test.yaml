@@ -21,7 +21,7 @@ jobs:
       - name: serverless info
         uses: serverless/github-action@v3.1
         with:
-          args: -c "cd /home/runner/work/cli-path/cli-path/sls-api && serverless info"
+          args: -c "cd /home/runner/work/cli-path/cli-path/sls-api/ && serverless info"
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           # or if using AWS credentials directly
