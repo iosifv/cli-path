@@ -23,7 +23,7 @@ export class GoogleClient {
         console.log(error)
         console.log('use "clip set key"')
       }
-      process.exit(1)
+      process.exit(0)
     }
   }
 

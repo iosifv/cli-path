@@ -1,77 +1,17 @@
 #!/usr/bin/env node
 
+// System stuff
 import inquirer from 'inquirer'
-import fs from 'fs'
 import { Command } from 'commander'
-import { noArgs } from '../utils/validation.js'
 
+// Local files
+import { noArgs } from '../utils/validation.js'
 import * as authenticateCommand from '../commands/authenticate.js'
 import * as directionCommand from '../commands/direction.js'
 import * as locationCommand from '../commands/location.js'
 import * as keyCommand from '../commands/key.js'
-import path from 'path'
-import {
-  KeyManager,
-  KEY_NAME_AUTH0_ACCESS_TOKEN,
-  KEY_NAME_ENGINE,
-  KEY_NAME_ENVIRONMENT,
-  KEY_NAME_GOOGLE_TOKEN,
-  KEY_NAME_LOCATIONS,
-} from '../lib/KeyManager.js'
-import * as print from '../utils/style.js'
-// import * as packageJson from './../package.json' assert { type: 'json' }
 
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-
-const keyManager = new KeyManager()
 const program = new Command()
-
-async function printStatus() {
-  print.line('🌎')
-  print.statement('Startup checks:')
-  try {
-    let pj
-    let locationDescription = ''
-    // Try to find the package.json file if we're in the development git folder
-    const pjLocationDevelopment = path.resolve('./package.json')
-    if (fs.existsSync(pjLocationDevelopment)) {
-      pj = JSON.parse(fs.readFileSync(pjLocationDevelopment, 'utf8'))
-      locationDescription = ' (Git folder)'
-    }
-
-    // Try to find the package.json file if the app is installed and started as a binary
-    if (pj == undefined) {
-      const __dirname = dirname(fileURLToPath(import.meta.url))
-      const pjLocationPackage = path.join(__dirname, '..', 'package.json')
-      if (fs.existsSync(pjLocationPackage)) {
-        pj = JSON.parse(fs.readFileSync(pjLocationPackage, 'utf8'))
-        locationDescription = ' (NPM folder)'
-      }
-    }
-    if (pj == undefined) {
-      throw new Error('Could not find project.json on this machine')
-    }
-    print.value('Version', pj.version + locationDescription)
-  } catch (error) {
-    console.log(error)
-    print.value('Version', `unknown (${error.message})`)
-  }
-  print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
-  print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
-  print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)
-  print.status(
-    'Clip API Token',
-    keyManager.exists(KEY_NAME_AUTH0_ACCESS_TOKEN),
-    'Use Authenticate options to get or refresh'
-  )
-  print.status(
-    'Google API Token',
-    keyManager.exists(KEY_NAME_GOOGLE_TOKEN),
-    'Needed in case you want to bypass our API'
-  )
-  print.line()
-}
 
 /**
  * Inquiry => Check the user's initial desired action when entering interactive mode
@@ -99,8 +39,6 @@ async function questionInterativeInitial() {
 
 // If we have no args, we enter interactive mode
 if (noArgs()) {
-  await printStatus()
-
   const action = await questionInterativeInitial()
 
   switch (action.desired_action_initial) {
@@ -124,7 +62,6 @@ if (noArgs()) {
       break
   }
 
-  print.line('============================')
   process.exit(0)
 }
 
@@ -136,6 +73,7 @@ program
   .command('key', 'Manage API Key -- Google Maps')
   .command('location', 'Manage Locations')
   .command('direction', 'Query Directions (from saved locations)')
+  .command('status', 'Show status of the app')
 // .parse(process.argv)
 
 program.parse(process.argv)
