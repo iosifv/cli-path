@@ -1,9 +1,6 @@
 import Configstore from 'configstore'
-import fs from 'fs'
-import path from 'path'
 import _ from 'underscore'
-import * as packageJson from './../package.json' assert { type: 'json' }
-export const KEY_NAME_VERSION = 'version' // Reserved key, don't change
+// export const KEY_NAME_VERSION = 'version' // Reserved key, don't change
 export const KEY_NAME_ENGINE = 'setting_engine'
 export const KEY_NAME_ENVIRONMENT = 'application_environment'
 export const KEY_NAME_AUTH0_DEVICE_CODE = 'setting_auth0_device_code'
@@ -12,10 +9,6 @@ export const KEY_NAME_GOOGLE_TOKEN = 'setting_google_api_token'
 export const KEY_NAME_LOCATIONS = 'locations'
 
 const REQUIRED_KEYS = [
-  {
-    name: KEY_NAME_VERSION,
-    default: '0.0.1',
-  },
   {
     name: KEY_NAME_ENGINE,
     default: 'clip',
@@ -48,10 +41,7 @@ let location
 
 export class KeyManager {
   constructor() {
-    this.config = new Configstore(packageJson.default.name, {
-      version: packageJson.default.version,
-    })
-    this.set(KEY_NAME_VERSION, packageJson.default.version)
+    this.config = new Configstore('cli-path', {})
 
     this.validateConfig()
   }

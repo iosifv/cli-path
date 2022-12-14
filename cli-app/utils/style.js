@@ -3,7 +3,6 @@ import table from 'cli-table3'
 
 export const warning = chalk.hex('#FFA500') // Orange color
 const MAX_NAME_LENGTH = 25
-const DISTANCE_DISPLAY_LENGTH = 50
 
 export function line(text) {
   console.log(text ? text : '')
@@ -61,6 +60,13 @@ export function configMessage(question, currentValue) {
 }
 
 export function direction(directionObject) {
+  let interfaceWidth = 50
+  if (directionObject.start.length > interfaceWidth) {
+    interfaceWidth = directionObject.start.length + 5
+  }
+  if (directionObject.end.length > interfaceWidth) {
+    interfaceWidth = directionObject.end.length + 5
+  }
   console.log()
   console.log(
     chalk
@@ -68,7 +74,7 @@ export function direction(directionObject) {
       .underline.yellow(
         '  ' +
           directionObject.start +
-          ' '.repeat(DISTANCE_DISPLAY_LENGTH - directionObject.start.length) +
+          ' '.repeat(interfaceWidth - directionObject.start.length) +
           '    '
       )
   )
@@ -78,21 +84,11 @@ export function direction(directionObject) {
       .yellow(
         chalk.bold('    ↪ ') +
           directionObject.end +
-          ' '.repeat(DISTANCE_DISPLAY_LENGTH - directionObject.end.length)
+          ' '.repeat(interfaceWidth - directionObject.end.length)
       )
   )
 
   value('Summary', directionObject.summary)
   value('Distance', directionObject.distance)
   value('Duration', directionObject.duration)
-
-  // let locationsTable = new table()
-  // locationsTable.push(
-  //   ['start', directionObject.start],
-  //   ['end', directionObject.end],
-  //   ['summary', directionObject.summary],
-  //   ['distance', directionObject.distance],
-  //   ['duration', directionObject.duration]
-  // )
-  // console.log(locationsTable.toString())
 }

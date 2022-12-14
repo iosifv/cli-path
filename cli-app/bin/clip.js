@@ -17,19 +17,22 @@ import {
   KEY_NAME_ENVIRONMENT,
   KEY_NAME_GOOGLE_TOKEN,
   KEY_NAME_LOCATIONS,
-  KEY_NAME_VERSION,
 } from '../lib/KeyManager.js'
 import * as print from '../utils/style.js'
+// import * as packageJson from './../package.json' assert { type: 'json' }
 
 const keyManager = new KeyManager()
 const program = new Command()
-const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
 
 async function printStatus() {
   print.line('🌎')
   print.statement('Startup checks:')
-  print.value('Version', 'v' + keyManager.get(KEY_NAME_VERSION))
-  // print.value('package.json location', packageJsonLocation)
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
+    print.value('Version', 'v' + packageJson.version)
+  } catch (error) {
+    print.value('Version', 'unknown')
+  }
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
   print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)
@@ -105,7 +108,7 @@ if (noArgs()) {
  * We get here if there are arguments provided
  */
 program
-  .version(packageJson.version)
+  // .version(packageJson.version)
   .command('key', 'Manage API Key -- Google Maps')
   .command('location', 'Manage Locations')
   .command('direction', 'Query Directions (from saved locations)')
