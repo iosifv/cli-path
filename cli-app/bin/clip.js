@@ -21,6 +21,9 @@ import {
 import * as print from '../utils/style.js'
 // import * as packageJson from './../package.json' assert { type: 'json' }
 
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
 const keyManager = new KeyManager()
 const program = new Command()
 
@@ -28,10 +31,31 @@ async function printStatus() {
   print.line('🌎')
   print.statement('Startup checks:')
   try {
-    const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf8'))
-    print.value('Version', 'v' + packageJson.version)
+    let pj
+    let locationDescription = ''
+    // Try to find the package.json file if we're in the development git folder
+    const pjLocationDevelopment = path.resolve('./package.json')
+    if (fs.existsSync(pjLocationDevelopment)) {
+      pj = JSON.parse(fs.readFileSync(pjLocationDevelopment, 'utf8'))
+      locationDescription = ' (Git folder)'
+    }
+
+    // Try to find the package.json file if the app is installed and started as a binary
+    if (pj == undefined) {
+      const __dirname = dirname(fileURLToPath(import.meta.url))
+      const pjLocationPackage = path.join(__dirname, '..', 'package.json')
+      if (fs.existsSync(pjLocationPackage)) {
+        pj = JSON.parse(fs.readFileSync(pjLocationPackage, 'utf8'))
+        locationDescription = ' (NPM folder)'
+      }
+    }
+    if (pj == undefined) {
+      throw new Error('Could not find project.json on this machine')
+    }
+    print.value('Version', pj.version + locationDescription)
   } catch (error) {
-    print.value('Version', 'unknown')
+    console.log(error)
+    print.value('Version', `unknown (${error.message})`)
   }
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
   print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')

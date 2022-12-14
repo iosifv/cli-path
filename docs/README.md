@@ -48,6 +48,11 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
   - save number of calls for each user
 - Limit calls globally and per user
 
+### Problems encountered that are worth mentioning
+
+- reading package.json with the purpose of showing the app's version
+  - The actual issue is finding the package.json file when executing the binary from various folders in the user's machine
+
 ### Links that helped me build this
 
 - [Youtube - I created a Command Line Game for you // 5-Minute Node.js CLI Project](https://www.youtube.com/watch?v=_oHByo8tiEY)
