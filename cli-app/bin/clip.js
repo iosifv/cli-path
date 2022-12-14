@@ -9,7 +9,7 @@ import { noArgs } from '../utils/validation.js'
 import * as authenticateCommand from '../commands/authenticate.js'
 import * as directionCommand from '../commands/direction.js'
 import * as locationCommand from '../commands/location.js'
-import * as keyCommand from '../commands/key.js'
+import * as configCommand from '../commands/config.js'
 
 const program = new Command()
 
@@ -52,10 +52,10 @@ if (noArgs()) {
       await locationCommand.dialog()
       break
     case 'Config':
-      await keyCommand.configAll()
+      await configCommand.dialog()
       break
     case 'Authenticate':
-      await authenticateCommand.authenticate()
+      await authenticateCommand.dialog()
       break
 
     default:
@@ -69,11 +69,10 @@ if (noArgs()) {
  * We get here if there are arguments provided
  */
 program
-  // .version(packageJson.version)
-  .command('key', 'Manage API Key -- Google Maps')
+  .version('use status command')
+  .command('direction', 'Query Directions')
   .command('location', 'Manage Locations')
-  .command('direction', 'Query Directions (from saved locations)')
-  .command('status', 'Show status of the app')
-// .parse(process.argv)
+  .command('config', 'Manage configurations')
+  .command('status', 'Show status information')
 
 program.parse(process.argv)

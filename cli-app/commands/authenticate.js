@@ -9,7 +9,7 @@ import * as c from '../utils/constants.js'
 import { line, statement, value } from '../utils/style.js'
 import { getClipUrl } from '../lib/clients/ClipApi.js'
 
-export async function authenticate() {
+export async function dialog() {
   const keyManager = new KeyManager()
 
   // for some reason, if I use axios, I get back an encoded response...

@@ -1,4 +1,3 @@
-import chalk from 'chalk'
 import inquirer from 'inquirer'
 import {
   KeyManager,
@@ -11,13 +10,7 @@ import * as print from '../utils/style.js'
 
 const keyManager = new KeyManager()
 
-export async function configAll() {
-  // Todo:
-  // select environment
-  // select Engine
-  // Set google api token
-  // change file name to "config.js"
-
+export async function dialog() {
   await inquirer
     .prompt([
       {
