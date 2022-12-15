@@ -1,0 +1,25 @@
+{
+  "extension": [
+    ".js"
+  ],
+  "include": [
+    "commands",
+    "lib",
+    "utils"
+  ],
+  "require": [
+  ],
+  "reporter": [
+    "text",
+    "lcov"
+  ],
+  "reporter-dir": "./coverage-cli-app",
+  "all": true,
+  "check-coverage": true,
+  "statements": 70,
+  "branches": 70,
+  "lines": 70,
+  "functions": 70,
+  "sourceMap": true,
+  "instrument": true
+}

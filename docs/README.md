@@ -10,7 +10,8 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 - [website](https://iosifv.github.io/cli-path/) - Github Pages
 - [github](https://github.com/iosifv/cli-path) - Github repository
 - [npm](https://www.npmjs.com/package/cli-path) - NPM Package for the cli app
-- todo: serverless function
+- todo: serverless function dashboard
+- todo: OpenAPI schema
 
 ## Programming Concepts / Technologies used
 
@@ -27,6 +28,7 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
   - [Configstore](https://www.npmjs.com/package/configstore) to save secret dotfile style settings
   - [Chalk](https://www.npmjs.com/package/chalk), [Ora](https://www.npmjs.com/package/ora), [Inquirer](https://www.npmjs.com/package/inquirer) and [cli-table3](https://www.npmjs.com/package/cli-table3) for a nicer interface
   - [Adapter Design Pattern](https://refactoring.guru/design-patterns/adapter) used for managing multiple search engines
+  - [Chai](https://www.chaijs.com/) + [Mocha](https://mochajs.org/) + [Istanbul](https://istanbul.js.org/) for testing and code coverage
 - API implemented with [Serverless Framework](https://www.serverless.com/) written in Typescript
   - [Serverless Offline](https://www.serverless.com/plugins/serverless-offline) used for easy implementation
   - [Serverless Dotenv](https://www.serverless.com/plugins/serverless-dotenv-plugin) used to save secrets in a familiar way
@@ -36,17 +38,18 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 - Insomnia Collections - synced repository, so you only need to point insomnia to this repo and you get all the endpoints
 - [Github Actions](https://github.com/features/actions)
   - A static page is created and deployed for this page you're reading through [Github Pages](https://pages.github.com/) & Actions
-- [OpenAPI](https://www.openapis.org/) specification
+- [OpenAPI](https://www.openapis.org/) specification (Still under construction)
+-
 
 ### List of wants
 
-- [Serverless](https://www.serverless.com/plugins/serverless-prune-plugin)
+- Limit google maps calls globally and per user
+- [Serverless Prune Plugin](https://www.serverless.com/plugins/serverless-prune-plugin)
 - Terraform
 - Create package through Github Actinos
 - Create system for versioning
 - Connect a dynamoDB to SLS
   - save number of calls for each user
-- Limit calls globally and per user
 
 ### Problems encountered that are worth mentioning
 

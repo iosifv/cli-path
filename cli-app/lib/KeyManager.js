@@ -7,6 +7,7 @@ export const KEY_NAME_AUTH0_DEVICE_CODE = 'setting_auth0_device_code'
 export const KEY_NAME_AUTH0_ACCESS_TOKEN = 'setting_auth0_access_token'
 export const KEY_NAME_GOOGLE_TOKEN = 'setting_google_api_token'
 export const KEY_NAME_LOCATIONS = 'locations'
+export const STORE_NAME = 'cli-path'
 
 const REQUIRED_KEYS = [
   {
@@ -40,8 +41,11 @@ export const ERROR_MESSAGE_NO_KEY = 'No API Token Found'
 let location
 
 export class KeyManager {
-  constructor() {
-    this.config = new Configstore('cli-path', {})
+  constructor(storeName) {
+    if (storeName == undefined) {
+      storeName = STORE_NAME
+    }
+    this.config = new Configstore(storeName, {})
 
     this.validateConfig()
   }
@@ -71,6 +75,12 @@ export class KeyManager {
       return loc.name == locationName
     })
     this.config.set(KEY_NAME_LOCATIONS, location)
+  }
+
+  getLocation(locationName) {
+    return _.find(location, function (loc) {
+      return loc.name == locationName
+    })
   }
 
   getLocations() {
@@ -128,10 +138,10 @@ export class KeyManager {
   }
 
   /**
-   * Not used yet
+   * Only used in tests
    */
   purgeAll() {
-    config.clear()
+    this.config.clear()
     return
   }
 }

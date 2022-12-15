@@ -20,6 +20,8 @@
     "set-executable": "chmod 777 ./bin/clip.js && ls -lisa ./bin",
     "npm-reinstall": "npm list -g && npm remove -g cli-path && npm install -g cli-path && npm list -g",
     "npm-publish": "npm version patch && npm publish",
+    "test": "./node_modules/mocha/bin/mocha.js",
+    "coverage": "./node_modules/nyc/bin/nyc.js yarn test",
     "start": "node ./bin/clip.js"
   },
   "dependencies": {
@@ -33,6 +35,9 @@
     "underscore": "^1.13.6"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.7.1"
   }
 }
