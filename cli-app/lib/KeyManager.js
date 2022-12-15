@@ -9,7 +9,7 @@ export const KEY_NAME_GOOGLE_TOKEN = 'setting_google_api_token'
 export const KEY_NAME_LOCATIONS = 'locations'
 export const STORE_NAME = 'cli-path'
 
-const REQUIRED_KEYS = [
+export const REQUIRED_KEYS = [
   {
     name: KEY_NAME_ENGINE,
     default: 'clip',
@@ -35,8 +35,6 @@ const REQUIRED_KEYS = [
     default: [],
   },
 ]
-
-export const ERROR_MESSAGE_NO_KEY = 'No API Token Found'
 
 let location
 
