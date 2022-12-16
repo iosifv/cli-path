@@ -1,7 +1,7 @@
 import type { AWS } from '@serverless/typescript'
 
 import healthcheck from '@functions/healthcheck'
-// import authentication from '@functions/authentication'
+import authentication from '@functions/authentication'
 import direction from '@functions/direction'
 import location from '@functions/location'
 
@@ -25,7 +25,7 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: {
     healthcheck,
-    // authentication,
+    authentication,
     direction,
     location,
   },

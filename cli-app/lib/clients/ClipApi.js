@@ -40,21 +40,22 @@ export class ClipClient {
   async location(query) {
     const options = {
       method: 'POST',
+      url: getClipUrl('location'),
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: query }),
+      data: { query: query },
     }
 
-    return await fetch(getClipUrl('location'), options)
-      .then((response) => response.json())
+    return await axios
+      .request(options)
       .then((response) => {
-        if (response.status_code != 'OK') {
-          console.log(response)
+        if (response.data.status_code != 'OK') {
+          console.error(response.data)
           process.exit(0)
         }
-        return response.formatted_address
+        return response.data.formatted_address
       })
-      .catch((err) => {
-        console.error(err)
+      .catch((error) => {
+        console.error(error)
         process.exit(0)
       })
   }
