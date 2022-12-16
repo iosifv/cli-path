@@ -35,11 +35,11 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 - Authentification provided by [Auth0](https://auth0.com/)
   - Implemented [Device Authorization Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-device-authorization-flow) - so you don't need to authenticate from the CLI, just open a browser
   - Implemented [OAuth](https://auth0.com/docs/authenticate/protocols/oauth) with Github and Google as providers
-- Insomnia Collections - synced repository, so you only need to point insomnia to this repo and you get all the endpoints
+- [Insomnia](https://insomnia.rest/) and [Postman](https://www.postman.com/) for api testing - synced repository, so you only need to point to this repo and you get all the endpoints
 - [Github Actions](https://github.com/features/actions)
   - A static page is created and deployed for this page you're reading through [Github Pages](https://pages.github.com/) & Actions
-- [OpenAPI](https://www.openapis.org/) specification (Still under construction)
--
+- 🚧 [OpenAPI](https://www.openapis.org/) specification
+- 🚧 [VHS](https://github.com/charmbracelet/vhs) for demo-ing the CLI app. Could be used for integration testing
 
 ### List of wants
 

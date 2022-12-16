@@ -1,5 +1,5 @@
 
-Output examples/clip.gif
+Output output/clip.gif
 
 Require echo
 

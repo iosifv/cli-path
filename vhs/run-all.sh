@@ -1,0 +1,1 @@
+vhs < locations.tape

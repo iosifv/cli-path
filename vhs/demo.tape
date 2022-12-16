@@ -44,7 +44,7 @@
 #   Hide                            Hide the subsequent commands from the output
 #   Show                            Show the subsequent commands in the output
 
-Output examples/demo.gif
+Output output/demo.gif
 
 Require echo
 
