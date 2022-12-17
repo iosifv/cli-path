@@ -3,5 +3,5 @@ export default {
   properties: {
     payload: { type: 'string' },
   },
-  required: [],
+  required: ['payload'],
 } as const

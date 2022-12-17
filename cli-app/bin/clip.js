@@ -6,6 +6,7 @@ import { Command } from 'commander'
 
 // Local files
 import { noArgs } from '../utils/validation.js'
+import * as print from '../utils/style.js'
 import * as authenticateCommand from '../commands/authenticate.js'
 import * as directionCommand from '../commands/direction.js'
 import * as locationCommand from '../commands/location.js'
@@ -39,6 +40,7 @@ async function questionInterativeInitial() {
 
 // If we have no args, we enter interactive mode
 if (noArgs()) {
+  print.line('🌎')
   const action = await questionInterativeInitial()
 
   switch (action.desired_action_initial) {

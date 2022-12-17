@@ -6,9 +6,7 @@ import axios from 'axios'
 
 import schema from './schema'
 
-const authentication: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
-> = async (event) => {
+const authentication: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const options = {
     method: 'POST',
     url: AUTH0_URL_USERINFO,

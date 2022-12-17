@@ -43,20 +43,22 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
   - Could be used for integration testing (if the gif looks ok in the final product then all is good)
 -
 
-### List of wants
+### List of todo's
 
-- Limit google maps calls globally and per user
+- Add dynamoDB connection
+  - save number of calls for each user
+  - Limit calls globally and per user
 - [Serverless Prune Plugin](https://www.serverless.com/plugins/serverless-prune-plugin)
 - Terraform
 - Create package through Github Actinos
 - Create system for versioning
-- Connect a dynamoDB to SLS
-  - save number of calls for each user
 
 ### Problems encountered that are worth mentioning
 
 - reading package.json with the purpose of showing the app's version
   - The actual issue is finding the package.json file when executing the binary from various folders in the user's machine
+- Deploying the authentication sls function which works fine locally
+  - Invalid model specified: Validation Result: warnings : [], errors : [Invalid model schema specified]
 
 ### Links that helped me build this
 
