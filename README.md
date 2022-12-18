@@ -19,25 +19,16 @@ First time you use this you'll have to set a Google Maps API token. You'll need 
 
 ## Usage
 
-Start with the interractive session
+### Searching raw text
 
-```$ clip
-? What would you like to do
- (Use arrow keys)
-❯ Quick Path Search
-  New Path Search
-  Show Locations
-  Add Location
-  Set Google API Token
-```
+![](./docs/vhs/direction-blank.gif)
+![](./docs/vhs/direction-blank.mp4)
+![](./docs/vhs/direction-blank.webm)
 
-Standard steps could be
+### Save locations
 
-1. Add your api token
-2. Try "New Path Search"
-3. Add a few Locations like home, office, park, pub
-4. Then use Quick Path Search
+![](./docs/vhs/locations.gif)
 
-## Notes
+### Searching from saved locations
 
-- change permissions of index.js to 777 so that you can run it directly with `./index.js`
+![](./docs/vhs/direction-saved.gif)

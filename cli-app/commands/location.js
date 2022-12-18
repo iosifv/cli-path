@@ -96,6 +96,10 @@ export async function del() {
     })
 }
 
+export function purge() {
+  keyManager.purgeLocations()
+}
+
 export async function dialog() {
   print.line()
   show()

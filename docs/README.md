@@ -13,6 +13,20 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 - todo: serverless function dashboard
 - todo: OpenAPI schema
 
+## Usage
+
+### Searching raw text
+
+![](vhs/direction-blank.gif)
+
+### Save new locations
+
+![](vhs/locations.gif)
+
+### Searching from saved locations
+
+![](vhs/direction-saved.gif)
+
 ## Programming Concepts / Technologies used
 
 The real reason I built this is for training purposes. Since every tutorial out there is trying to teach you how to increase one certain skill vertically, with this project I'm trying to expand vertically by touching as many technologies possible for this humble subject of making a Google Maps API call 🙂

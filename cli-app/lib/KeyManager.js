@@ -85,6 +85,10 @@ export class KeyManager {
     return location
   }
 
+  purgeLocations() {
+    this.config.set(KEY_NAME_LOCATIONS, [])
+  }
+
   set(keyName, keyValue) {
     this.config.set(keyName, keyValue)
     return keyValue
