@@ -89,7 +89,7 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
   - Limit calls globally and per user
 - [Serverless Prune Plugin](https://www.serverless.com/plugins/serverless-prune-plugin)
 - Terraform
-- Create package through Github Actinos
+- Create npm package through Github Actions
 - Create system for versioning
 
 ### Problems encountered that are worth mentioning
