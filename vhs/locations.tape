@@ -1,7 +1,7 @@
 
 Output ./../docs/vhs/locations.gif
-Output ./../docs/vhs/locations.mp4
-Output ./../docs/vhs/locations.webm
+# Output ./../docs/vhs/locations.mp4
+# Output ./../docs/vhs/locations.webm
 
 Require echo
 Require clip

@@ -1,7 +1,7 @@
 
 Output ./../docs/vhs/direction-blank.gif
-Output ./../docs/vhs/direction-blank.mp4
-Output ./../docs/vhs/direction-blank.webm
+# Output ./../docs/vhs/direction-blank.mp4
+# Output ./../docs/vhs/direction-blank.webm
 
 Require echo
 Require clip

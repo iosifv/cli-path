@@ -1,7 +1,7 @@
 
 Output ./../docs/vhs/direction-saved.gif
-Output ./../docs/vhs/direction-saved.mp4
-Output ./../docs/vhs/direction-saved.webm
+# Output ./../docs/vhs/direction-saved.mp4
+# Output ./../docs/vhs/direction-saved.webm
 
 Require echo
 Require clip

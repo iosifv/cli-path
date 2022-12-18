@@ -10,13 +10,33 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 - [website](https://iosifv.github.io/cli-path/) - Github Pages
 - [github](https://github.com/iosifv/cli-path) - Github repository
 - [npm](https://www.npmjs.com/package/cli-path) - NPM Package for the cli app
+- [OpenAPI schema](https://iosifv.github.io/cli-path/swagger/) - View API specs with Swagger UI
 - todo: serverless function dashboard
-- todo: OpenAPI schema
+
+## Installation
+
+```
+npm install -g cli-path
+```
+
+or
+
+```
+yarn add -g cli-path
+```
+
+These will add the global executable `clip`
 
 ## Usage
 
+### Authentication
+
+To use our built in api, select the "Authentication" option from the interactive menu.
+![](media/recorded-auth.gif)
+
 ### Searching raw text
 
+Then you can search for a direction informaiton using free text
 ![](vhs/direction-blank.gif)
 
 ### Save new locations
@@ -26,6 +46,11 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 ### Searching from saved locations
 
 ![](vhs/direction-saved.gif)
+
+### Config
+
+Update application config parameters
+![](vhs/config.gif)
 
 ## Programming Concepts / Technologies used
 
@@ -56,7 +81,6 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 - 👷 🚧 [OpenAPI](https://www.openapis.org/) specification
 - 👷 🚧 [VHS](https://github.com/charmbracelet/vhs) for demo-ing the CLI app.
   - Could be used for integration testing (if the gif looks ok in the final product then all is good)
--
 
 ### List of todo's
 
@@ -74,6 +98,7 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
   - The actual issue is finding the package.json file when executing the binary from various folders in the user's machine
 - Deploying the authentication sls function which works fine locally
   - Invalid model specified: Validation Result: warnings : [], errors : [Invalid model schema specified]
+  - The problem for this was leaving within the schema definition `required: [],` instead of deleting the required field completely
 
 ### Links that helped me build this
 

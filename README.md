@@ -19,11 +19,14 @@ First time you use this you'll have to set a Google Maps API token. You'll need 
 
 ## Usage
 
+### Authentication
+
+To use our built in api, select the "Authentication" option from the interactive menu.
+![](./docs/media/recorded-auth.gif)
+
 ### Searching raw text
 
 ![](./docs/vhs/direction-blank.gif)
-![](./docs/vhs/direction-blank.mp4)
-![](./docs/vhs/direction-blank.webm)
 
 ### Save locations
 
@@ -32,3 +35,8 @@ First time you use this you'll have to set a Google Maps API token. You'll need 
 ### Searching from saved locations
 
 ![](./docs/vhs/direction-saved.gif)
+
+### Config
+
+Update application config parameters
+![](./docs/vhs/config.gif)
