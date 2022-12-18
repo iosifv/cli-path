@@ -7,6 +7,7 @@ export const KEY_NAME_AUTH0_DEVICE_CODE = 'setting_auth0_device_code'
 export const KEY_NAME_AUTH0_ACCESS_TOKEN = 'setting_auth0_access_token'
 export const KEY_NAME_GOOGLE_TOKEN = 'setting_google_api_token'
 export const KEY_NAME_LOCATIONS = 'locations'
+export const KEY_NAME_USERINFO = 'auth0_userinfo'
 export const STORE_NAME = 'cli-path'
 
 export const REQUIRED_KEYS = [
@@ -33,6 +34,11 @@ export const REQUIRED_KEYS = [
   {
     name: KEY_NAME_LOCATIONS,
     default: [],
+  },
+  {
+    // If this is set, Auth0 would have returned at least [sub, name, nickname]
+    name: KEY_NAME_USERINFO,
+    default: null,
   },
 ]
 
@@ -87,6 +93,11 @@ export class KeyManager {
 
   purgeLocations() {
     this.config.set(KEY_NAME_LOCATIONS, [])
+  }
+
+  getUser() {
+    const user = this.get(KEY_NAME_USERINFO)
+    return user.name
   }
 
   set(keyName, keyValue) {

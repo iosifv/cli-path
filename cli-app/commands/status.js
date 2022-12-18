@@ -12,6 +12,7 @@ import {
   KEY_NAME_ENVIRONMENT,
   KEY_NAME_GOOGLE_TOKEN,
   KEY_NAME_LOCATIONS,
+  KEY_NAME_USERINFO,
 } from '../lib/KeyManager.js'
 import * as print from '../utils/style.js'
 
@@ -48,6 +49,7 @@ export async function printStatus() {
     console.log(error)
     print.value('Version', `unknown (${error.message})`)
   }
+  print.value('Username', '{' + keyManager.getUser() + '}')
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
   print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)

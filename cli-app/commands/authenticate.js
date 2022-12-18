@@ -2,6 +2,7 @@ import {
   KeyManager,
   KEY_NAME_AUTH0_ACCESS_TOKEN,
   KEY_NAME_AUTH0_DEVICE_CODE,
+  KEY_NAME_USERINFO,
 } from '../lib/KeyManager.js'
 import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
@@ -21,7 +22,10 @@ export async function dialog() {
       method: 'POST',
       url: c.AUTH0_CLIP_URL_DEVICE_CODE,
       headers: c.AUTH0_CLIP_DEFAULT_HEADERS,
-      data: new URLSearchParams({ client_id: c.AUTH0_CLIP_CLIENT_ID }),
+      data: new URLSearchParams({
+        client_id: c.AUTH0_CLIP_CLIENT_ID,
+        scope: 'openid profile',
+      }),
     })
     .then((response) => {
       keyManager.set(KEY_NAME_AUTH0_DEVICE_CODE, response.data.device_code)
@@ -94,6 +98,7 @@ export async function dialog() {
       spinner.text = 'Authenticated against our own clip-api!'
       spinner.succeed()
       spinner.stop()
+      keyManager.set(KEY_NAME_USERINFO, response.data.data)
     })
     .catch(function (error) {
       spinner.fail()
@@ -101,4 +106,53 @@ export async function dialog() {
 
       console.error(error)
     })
+
+  /**
+   * Github:
+  {
+		"sub": "github|7619809",
+		"nickname": "iosifv",
+		"name": "Iosif",
+		"picture": "https://avatars.githubusercontent.com/u/7619809?v=4",
+		"updated_at": "2022-12-18T18:53:05.378Z"
+	}
+   */
+  /**
+   * Facebook
+   {
+		"sub": "facebook|10226560454891130",
+		"given_name": "Iosif",
+		"family_name": "Vee",
+		"nickname": "Iosif Vee",
+		"name": "Iosif Vee",
+		"picture": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10226560454891130&height=50&width=50&ext=1673985032&hash=AeRZ_C0gwnlYIKb2qp8",
+		"updated_at": "2022-12-18T19:50:32.469Z"
+	}
+   */
+
+  /**
+   * Google
+   {
+		"sub": "google-oauth2|107268393183012825234",
+		"given_name": "iosif",
+		"family_name": "vigh",
+		"nickname": "iosifvigh",
+		"name": "iosif vigh",
+		"picture": "https://lh3.googleusercontent.com/a/AEdFTp52FzFnDaFXPsRmwcCHlcAjcKxUq2p_ejfpbJFY=s96-c",
+		"locale": "en",
+		"updated_at": "2022-12-18T19:51:49.138Z"
+	}
+   */
+
+  /**
+   * Linkedin {
+		"sub": "linkedin|0AuRjLfLL4",
+		"given_name": "Iosif",
+		"family_name": "V.",
+		"nickname": "Iosif V.",
+		"name": "Iosif V.",
+		"picture": "https://media.licdn.com/dms/image/C4E03AQFgC6t7PCM1Yw/profile-displayphoto-shrink_800_800/0/1527760716690?e=1677110400&v=beta&t=Ryn2RS-2C8bOWwTAleDnKwtn1vQ1-BIeXrdpCwhI9h0",
+		"updated_at": "2022-12-18T19:53:12.210Z"
+	}
+   */
 }

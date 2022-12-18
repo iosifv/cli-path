@@ -94,11 +94,15 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 
 ### Problems encountered that are worth mentioning
 
+Just to be clear, these are worth mentioning to my future self so that I don't do these mistakes again
+
 - reading package.json with the purpose of showing the app's version
   - The actual issue is finding the package.json file when executing the binary from various folders in the user's machine
 - Deploying the authentication sls function which works fine locally
   - Invalid model specified: Validation Result: warnings : [], errors : [Invalid model schema specified]
   - The problem for this was leaving within the schema definition `required: [],` instead of deleting the required field completely
+- Forgot to add scope(s) to the request token call
+  - This way, later in the execution, when calling auth0_api/userinfo an empty object is returned
 
 ### Links that helped me build this
 

@@ -11,6 +11,7 @@ import * as authenticateCommand from '../commands/authenticate.js'
 import * as directionCommand from '../commands/direction.js'
 import * as locationCommand from '../commands/location.js'
 import * as configCommand from '../commands/config.js'
+import * as statusCommand from '../commands/status.js'
 
 const program = new Command()
 
@@ -25,6 +26,7 @@ async function questionInterativeInitial() {
     'Locations',
     new inquirer.Separator(),
     'Config',
+    'Status',
     'Authenticate',
   ]
 
@@ -55,6 +57,9 @@ if (noArgs()) {
       break
     case 'Config':
       await configCommand.dialog()
+      break
+    case 'Status':
+      await statusCommand.printStatus()
       break
     case 'Authenticate':
       await authenticateCommand.dialog()
