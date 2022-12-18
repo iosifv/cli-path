@@ -1,11 +1,23 @@
 import { CLIP_SLS_API_URL } from '../../utils/constants.js'
-import { KeyManager, KEY_NAME_ENVIRONMENT } from '../KeyManager.js'
+import { KeyManager, KEY_NAME_AUTH0_ACCESS_TOKEN, KEY_NAME_ENVIRONMENT } from '../KeyManager.js'
 import axios from 'axios'
 
 const keyManager = new KeyManager()
 
-export function getClipUrl(path) {
+function getClipUrl(path) {
   return CLIP_SLS_API_URL[keyManager.get(KEY_NAME_ENVIRONMENT)] + path
+}
+
+export function buildClipOptions(path, data) {
+  return {
+    method: 'POST',
+    url: getClipUrl(path),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + keyManager.get(KEY_NAME_AUTH0_ACCESS_TOKEN),
+    },
+    data: data,
+  }
 }
 
 export class ClipClient {
@@ -14,15 +26,8 @@ export class ClipClient {
   }
 
   async direction(origin, destination) {
-    const options = {
-      method: 'POST',
-      url: getClipUrl('direction'),
-      headers: { 'Content-Type': 'application/json' },
-      data: { origin: origin, destination: destination },
-    }
-
     return await axios
-      .request(options)
+      .request(buildClipOptions('direction', { origin: origin, destination: destination }))
       .then(function (response) {
         // console.log(response)
         if (response.data.status_code != 'OK') {
@@ -38,15 +43,8 @@ export class ClipClient {
   }
 
   async location(query) {
-    const options = {
-      method: 'POST',
-      url: getClipUrl('location'),
-      headers: { 'Content-Type': 'application/json' },
-      data: { query: query },
-    }
-
     return await axios
-      .request(options)
+      .request(buildClipOptions('location', { query: query }))
       .then((response) => {
         if (response.data.status_code != 'OK') {
           console.error(response.data)

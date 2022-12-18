@@ -7,7 +7,7 @@ import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
 import * as c from '../utils/constants.js'
 import { line, statement, value } from '../utils/style.js'
-import { getClipUrl } from '../lib/clients/ClipApi.js'
+import { buildClipOptions } from '../lib/clients/ClipApi.js'
 import axios from 'axios'
 
 export async function dialog() {
@@ -89,17 +89,8 @@ export async function dialog() {
   spinner.start()
 
   await axios
-    .request({
-      method: 'POST',
-      url: getClipUrl('authentication'),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + keyManager.get(KEY_NAME_AUTH0_ACCESS_TOKEN),
-      },
-      data: {},
-    })
+    .request(buildClipOptions('authentication', { payload: 'empty' }))
     .then(function (response) {
-      console.log(response.data)
       spinner.text = 'Authenticated against our own clip-api!'
       spinner.succeed()
       spinner.stop()

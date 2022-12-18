@@ -32,9 +32,10 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 - API implemented with [Serverless Framework](https://www.serverless.com/) written in Typescript
   - [Serverless Offline](https://www.serverless.com/plugins/serverless-offline) used for easy implementation
   - [Serverless Dotenv](https://www.serverless.com/plugins/serverless-dotenv-plugin) used to save secrets in a familiar way
+  - [middy](https://middy.js.org/) used for handling authentication within the middleware layer
 - Authentification provided by [Auth0](https://auth0.com/)
-  - Implemented [Device Authorization Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-device-authorization-flow) - so you don't need to authenticate from the CLI, just open a browser
-  - Implemented [OAuth](https://auth0.com/docs/authenticate/protocols/oauth) with Github and Google as providers
+  - Implemented [Device Authorization Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-device-authorization-flow) - This way, the user just needs to open a link from a browser rather than cumbersome authentication in the CLI
+  - Implemented [OAuth](https://auth0.com/docs/authenticate/protocols/oauth) with Google, Github, Linkedin and Facebook as providers
 - [Insomnia](https://insomnia.rest/) and [Postman](https://www.postman.com/) for api testing - synced repository, so you only need to point to this repo and you get all the endpoints
 - [Github Actions](https://github.com/features/actions)
   - A static page is created and deployed for this page you're reading through [Github Pages](https://pages.github.com/) & Actions
