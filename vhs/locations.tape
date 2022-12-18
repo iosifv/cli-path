@@ -1,13 +1,13 @@
 
 Output ./../docs/vhs/locations.gif
-# Output ./../docs/vhs/locations.mp4
+Output ./../docs/vhs/locations.mp4
 # Output ./../docs/vhs/locations.webm
 
 Require echo
 Require clip
 
 Set FontSize 16
-Set Width 1200
+Set Width 950
 Set Height 600
 Set LoopOffset 0%
 
@@ -42,7 +42,8 @@ Enter Sleep 250ms
 Type "colosseum" Enter Sleep 250ms
 Type "colosseum rome" Enter Sleep 2500ms
 Type "Y" Sleep 250ms
-Enter 
-Sleep 500ms
-Enter 
-Sleep 3s
+Enter Sleep 500ms
+Enter Sleep 1s
+Enter Sleep 200ms
+Type "clip location show"
+Enter Sleep 5s

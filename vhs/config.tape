@@ -7,8 +7,8 @@ Require echo
 Require clip
 
 Set FontSize 16
-Set Width 800
-Set Height 500
+Set Width 850
+Set Height 350
 Set LoopOffset 0%
 
 Sleep 200ms 

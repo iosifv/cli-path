@@ -1,14 +1,14 @@
 
 Output ./../docs/vhs/direction-blank.gif
-# Output ./../docs/vhs/direction-blank.mp4
+Output ./../docs/vhs/direction-blank.mp4
 # Output ./../docs/vhs/direction-blank.webm
 
 Require echo
 Require clip
 
 Set FontSize 16
-Set Width 800
-Set Height 500
+Set Width 850
+Set Height 450
 Set LoopOffset 0%
 
 Sleep 200ms 
