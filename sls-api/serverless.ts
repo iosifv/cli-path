@@ -6,13 +6,13 @@ import direction from '@functions/direction'
 import location from '@functions/location'
 
 const serverlessConfiguration: AWS = {
-  service: 'clip-sls-api',
+  service: 'clip-sls-api-2024',
   frameworkVersion: '3',
   plugins: ['serverless-offline', 'serverless-esbuild', 'serverless-dotenv-plugin'],
   useDotenv: true,
   provider: {
     name: 'aws',
-    runtime: 'nodejs14.x',
+    runtime: 'nodejs18.x',
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,

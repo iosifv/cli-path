@@ -1,3 +1,13 @@
+## Links
+
+- https://manage.auth0.com/dashboard/eu/iosifv/applications
+- https://app.serverless.com/iosifv/metrics?globalAppName=clip-sls-api
+-
+
+## How to run cli-app
+
+`npm run start`
+
 ## Todo list
 
 - [ ] maybe add yarn to the root?

@@ -2,6 +2,9 @@
 node_modules
 jspm_packages
 
+# using yarn, make sure there's no package-lock
+package-lock.json
+
 # Serverless directories
 .serverless
 

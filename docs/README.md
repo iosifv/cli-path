@@ -78,9 +78,9 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 - [Insomnia](https://insomnia.rest/) and [Postman](https://www.postman.com/) for api testing - synced repository, so you only need to point to this repo and you get all the endpoints
 - [Github Actions](https://github.com/features/actions)
   - A static page is created and deployed for this page you're reading through [Github Pages](https://pages.github.com/) & Actions
-- 👷 🚧 [OpenAPI](https://www.openapis.org/) specification
-- 👷 🚧 [VHS](https://github.com/charmbracelet/vhs) for demo-ing the CLI app.
+- [VHS](https://github.com/charmbracelet/vhs) for demo-ing the CLI app.
   - Could be used for integration testing (if the gif looks ok in the final product then all is good)
+- 👷 🚧 [OpenAPI](https://www.openapis.org/) specification
 
 ### List of todo's
 

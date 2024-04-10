@@ -6,5 +6,5 @@ export const AUTH0_CLIP_GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:device_co
 export const AUTH0_CLIP_DEFAULT_HEADERS = { 'Content-Type': 'application/x-www-form-urlencoded' }
 export const CLIP_SLS_API_URL = {
   localhost: 'http://localhost:3000/dev/',
-  slsdev: 'https://ri3kz3u55a.execute-api.us-east-1.amazonaws.com/dev/',
+  slsdev: 'https:////g0bqnk3urf.execute-api.us-east-1.amazonaws.com/dev/',
 }

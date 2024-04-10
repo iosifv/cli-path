@@ -4,8 +4,10 @@
   "description": "Serverless aws-nodejs-typescript app for the cli-path application",
   "main": "serverless.ts",
   "scripts": {
-    "invoke-local-healthcheck": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
-    "invoke-local-direction": "sls invoke local --function=direction --path=src/functions/direction/mock.json"
+    "invoke-local-01-healthcheck": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
+    "invoke-local-02-authentication": "sls invoke local --function=authentication --path=src/functions/authentication/mock.json",
+    "invoke-local-03-location": "sls invoke local --function=location --path=src/functions/location/mock.json",
+    "invoke-local-04-direction": "sls invoke local --function=direction --path=src/functions/direction/mock.json"
   },
   "engines": {
     "node": ">=14.15.0"
