@@ -6,7 +6,19 @@
 
 ## How to run cli-app
 
-`npm run start`
+`yarn start`
+
+## How to run the sls-api
+
+1. Get a new authentication token if required
+2. Make sure that the mock.json files contain the proper authentication
+3. Run all the commands in order to make sure you're not missing anything:
+   1. `yarn invoke-local-01-healthcheck`
+   2. `yarn invoke-local-02-authentication`
+   3. `invoke-local-03-location` - this should show the full location of Amsterdam's Dam Square
+   4. `invoke-local-04-direction`
+
+## Info about google account
 
 ## Todo list
 

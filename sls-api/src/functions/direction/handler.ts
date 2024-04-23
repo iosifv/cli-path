@@ -3,13 +3,34 @@ import { formatJSONResponse } from '@libs/api-gateway'
 import { middyfy } from '@libs/lambda'
 import { Client } from '@googlemaps/google-maps-services-js'
 import * as dotenv from 'dotenv'
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb'
 
 import schema from './schema'
 
 dotenv.config()
+const USERS_TABLE = 'ClipUsageLog'
+const client = new DynamoDBClient()
+const dynamoDbClient = DynamoDBDocumentClient.from(client)
 
 const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const client = new Client({})
+
+  const params = {
+    TableName: USERS_TABLE,
+    Item: {
+      // userId: 100,
+      User: 'test-from-local',
+    },
+  }
+
+  try {
+    await dynamoDbClient.send(new PutCommand(params))
+    // res.json({ userId, name })
+  } catch (error) {
+    console.log(error)
+    // res.status(500).json({ error: 'Could not create user' })
+  }
 
   return await client
     .directions({
@@ -20,6 +41,7 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
       },
       timeout: 1000, // milliseconds
     })
+
     .then((res) => {
       if (res.data.status != 'OK') {
         return formatJSONError({

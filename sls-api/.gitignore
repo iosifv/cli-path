@@ -5,6 +5,9 @@ jspm_packages
 # using yarn, make sure there's no package-lock
 package-lock.json
 
+# yarn boo-boo
+yarn-error.log
+
 # Serverless directories
 .serverless
 
