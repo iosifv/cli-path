@@ -6,15 +6,16 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, GetCommand, PutCommand, ScanCommand } from '@aws-sdk/lib-dynamodb'
 
 import schema from './schema'
+import { TABLE_NAME_USAGE_LOG } from '@utils/constants'
 
 dotenv.config()
-const USERS_TABLE = 'ClipUsageLog'
+
 const client = new DynamoDBClient()
 const dynamoDbClient = DynamoDBDocumentClient.from(client)
 
 const statistics: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const params = {
-    TableName: USERS_TABLE,
+    TableName: TABLE_NAME_USAGE_LOG,
   }
 
   return await dynamoDbClient
@@ -23,7 +24,8 @@ const statistics: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (eve
     .then((res) => {
       return formatJSONResponse({
         message: 'Success!',
-        res: res,
+        count: res.Count,
+        items: res.Items,
       })
     })
 
