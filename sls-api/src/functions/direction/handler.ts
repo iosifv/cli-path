@@ -11,8 +11,8 @@ import schema from './schema'
 import { TABLE_NAME_USAGE_LOG } from '@utils/constants'
 
 dotenv.config()
-const client = new DynamoDBClient()
-const dynamoDbClient = DynamoDBDocumentClient.from(client)
+const dynamoDbClient = new DynamoDBClient()
+const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient)
 
 const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const client = new Client({})
@@ -28,7 +28,7 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
   }
 
   try {
-    await dynamoDbClient.send(new PutCommand(params))
+    await dynamoDbDocumentClient.send(new PutCommand(params))
   } catch (error) {
     console.log(error)
   }
@@ -52,6 +52,9 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
           data: res.data,
         })
       }
+
+      console.log(event)
+
       return formatJSONResponse({
         message: 'Success!',
         status: res.status,
@@ -68,8 +71,9 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
       })
     })
     .catch((e) => {
+      console.log(e)
       return formatJSONError({
-        message: 'Error',
+        message: 'Error in function:direction',
         status: e.status,
         status_code: e.code,
         // error: e,

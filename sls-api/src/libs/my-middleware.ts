@@ -10,9 +10,8 @@ import {
   TABLE_NAME_USAGE_LOG,
 } from '@utils/constants'
 
-import { DynamoDB } from 'aws-sdk'
-// Create DynamoDB service object
-const dynamoDB = new DynamoDB()
+const dynamoDbClient = new DynamoDBClient()
+const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient)
 
 async function getMonthlyCount(): Promise<number> {
   const currentDate = new Date()
@@ -25,7 +24,7 @@ async function getMonthlyCount(): Promise<number> {
     beginFilter = `${currentYear}-${currentMonth}`
   }
 
-  const params: DynamoDB.ScanInput = {
+  const params = {
     TableName: TABLE_NAME_USAGE_LOG,
     FilterExpression: 'begins_with(CreatedAt, :prefix)',
     ExpressionAttributeValues: {
@@ -34,7 +33,7 @@ async function getMonthlyCount(): Promise<number> {
   }
 
   try {
-    const data = await dynamoDB.scan(params).promise()
+    const data = await dynamoDbDocumentClient.send(new ScanCommand(params))
     return data.Count || 0 // Return 0 if Count is undefined
   } catch (error) {
     console.error('Unable to scan the table. Error:', error)
@@ -58,16 +57,22 @@ const myMiddleware = (): middy.MiddlewareObj<APIGatewayProxyEvent> => {
 
     // Check if we have too many requests already
     const monthlyCount = await getMonthlyCount()
+    console.log('DEBUG: Monthly count = ' + monthlyCount)
 
+    // fail instantly if we have too many
     if (monthlyCount > MAXIMUM_ALLOWED_MONTHLY_GOOGLE_DIRECTION_CALLS) {
       return formatJSONError({
-        message: 'This service has reached the free quota for this month.',
+        message:
+          'This service has reached the free quota for this month. Try adding your own Google Directions API key.',
         error: {
           max_calls: MAXIMUM_ALLOWED_MONTHLY_GOOGLE_DIRECTION_CALLS,
           total_calls: monthlyCount,
         },
       })
     }
+
+    // Save the user's information so that we can use it later for analytics
+    Object.assign(request.event, { metadata: { callCount: monthlyCount } })
   }
 
   // const after: middy.MiddlewareFn<APIGatewayProxyEvent, APIGatewayProxyResult> = async (
@@ -78,7 +83,6 @@ const myMiddleware = (): middy.MiddlewareObj<APIGatewayProxyEvent> => {
 
   return {
     before,
-    g,
     // after,
   }
 }

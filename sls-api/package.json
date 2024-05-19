@@ -4,11 +4,16 @@
   "description": "Serverless aws-nodejs-typescript app for the cli-path application",
   "main": "serverless.ts",
   "scripts": {
-    "invoke-local-01-healthcheck": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
-    "invoke-local-02-authentication": "sls invoke local --function=authentication --path=src/functions/authentication/mock.json",
+    "invoke-local-01-health": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
+    "invoke-local-02-auth": "sls invoke local --function=authentication --path=src/functions/authentication/mock.json",
     "invoke-local-03-location": "sls invoke local --function=location --path=src/functions/location/mock.json",
     "invoke-local-04-direction": "sls invoke local --function=direction --path=src/functions/direction/mock.json",
-    "invoke-local-05-statistics": "sls invoke local --function=statistics --path=src/functions/statistics/mock.json"
+    "invoke-local-05-statistics": "sls invoke local --function=statistics --path=src/functions/statistics/mock.json",
+    "invoke-01-health": "sls invoke --function=healthcheck --path=src/functions/healthcheck/mock.json",
+    "invoke-02-auth": "sls invoke --function=authentication --path=src/functions/authentication/mock.json",
+    "invoke-03-location": "sls invoke --function=location --path=src/functions/location/mock.json",
+    "invoke-04-direction": "sls invoke --function=direction --path=src/functions/direction/mock.json",
+    "invoke-05-statistics": "sls invoke --function=statistics --path=src/functions/statistics/mock.json"
   },
   "engines": {
     "node": ">=14.15.0"
