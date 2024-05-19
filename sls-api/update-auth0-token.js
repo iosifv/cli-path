@@ -23,7 +23,7 @@ const authorizationHeaderValue = 'Bearer ' + newToken
 
 // Function to update a single mock.json file
 const updateAuthorizationToken = (filePath) => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
+  fs.readFile(filePath + '.bak', 'utf8', (err, data) => {
     if (err) {
       console.error(`Error reading file at ${filePath}:`, err)
       return

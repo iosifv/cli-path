@@ -52,7 +52,7 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
         })
       }
 
-      console.log(event)
+      // console.log(event)
 
       return formatJSONResponse({
         message: 'Success!',

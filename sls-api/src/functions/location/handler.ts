@@ -21,7 +21,6 @@ const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
       },
     })
     .then((res) => {
-      console.log(res)
       if (res.data.status != 'OK') {
         return formatJSONError({
           message: 'Error',
