@@ -1,8 +1,7 @@
 {
   "headers": {
     "Content-Type": "application/json",
-    "Authorization": "Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9pb3NpZnYuZXUuYXV0aDAuY29tLyJ9.._olX-PXcTyZ2IrCG.2pt3kxAUemOXZf0KbkHxDnDswMk75Pgj5ewP_ig0faHy_Kxc0OvNQg8gdmSLlDweQpos9kyPS612C2hHvf5AvrtQh3s2J4aFDGnOoJ8ozymFtTa4m12qwimpK31DyGYno_SJ89wL12pdcQ71eB-N3K5RjDZbg07UGymGs_bXFSVmv929MX_U0XiVBSIJenOnuXg9cyArkDgJa4E5nDkmrf3fVMwJRI3F7-2bL41Upyaycd5fmpJ-HUbwt3vfgBqXO9ncuEIWQMt3J6-u5dv3nw.RKB1-pYhLxZCQL-CWKyfmg"
+    "Authorization": "Bearer the_token_goes_here"
   },
   "body": "{\"payload\": \"empty\"}"
 }
-

@@ -4,34 +4,33 @@ import { middyfy } from '@libs/lambda'
 import { canPrefetch, getInternal, processCache } from '@middy/util'
 import { Client } from '@googlemaps/google-maps-services-js'
 import * as dotenv from 'dotenv'
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
+// import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+// import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
 
 import schema from './schema'
 import { TABLE_NAME_USAGE_LOG } from '@utils/constants'
 
 dotenv.config()
-const dynamoDbClient = new DynamoDBClient()
-const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient)
+// const dynamoDbDocumentClient = DynamoDBDocumentClient.from(new DynamoDBClient())
 
 const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const client = new Client({})
 
-  const timestamp = new Date().toISOString() // Convert Date to ISO string
-  const params = {
-    TableName: TABLE_NAME_USAGE_LOG,
-    Item: {
-      CreatedAt: timestamp,
-      User: event.user.nickname,
-      Data: event.body,
-    },
-  }
+  // const timestamp = new Date().toISOString() // Convert Date to ISO string
+  // const params = {
+  //   TableName: TABLE_NAME_USAGE_LOG,
+  //   Item: {
+  //     CreatedAt: timestamp,
+  //     User: event.user.nickname,
+  //     Data: event.body,
+  //   },
+  // }
 
-  try {
-    await dynamoDbDocumentClient.send(new PutCommand(params))
-  } catch (error) {
-    console.log(error)
-  }
+  // try {
+  //   await dynamoDbDocumentClient.send(new PutCommand(params))
+  // } catch (error) {
+  //   console.log(error)
+  // }
 
   return await client
     .directions({

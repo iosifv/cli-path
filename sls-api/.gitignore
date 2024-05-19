@@ -16,3 +16,10 @@ yarn-error.log
 
 # environment files
 .env
+
+# json mock files
+src/functions/authentication/mock.json
+src/functions/direction/mock.json
+src/functions/healthcheck/mock.json
+src/functions/location/mock.json
+src/functions/statistics/mock.json

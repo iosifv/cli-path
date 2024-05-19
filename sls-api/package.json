@@ -1,9 +1,11 @@
 {
   "name": "clip-sls-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "author": "Iosifv",
   "description": "Serverless aws-nodejs-typescript app for the cli-path application",
   "main": "serverless.ts",
   "scripts": {
+    "update-auth0-token": "node update-auth0-token.js",
     "invoke-local-01-health": "sls invoke local --function=healthcheck --path=src/functions/healthcheck/mock.json",
     "invoke-local-02-auth": "sls invoke local --function=authentication --path=src/functions/authentication/mock.json",
     "invoke-local-03-location": "sls invoke local --function=location --path=src/functions/location/mock.json",
@@ -41,6 +43,5 @@
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.3"
   },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
 }
