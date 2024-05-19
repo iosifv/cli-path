@@ -1,7 +1,0 @@
-{
-  "headers": {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer the_token_goes_here"
-  },
-  "body": "{\"origin\": \"Amsterdam\",\"destination\": \"Berlin\"}"
-}
