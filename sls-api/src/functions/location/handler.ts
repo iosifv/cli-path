@@ -3,13 +3,15 @@ import { formatJSONResponse } from '@libs/api-gateway'
 import { middyfy } from '@libs/lambda'
 import { Client, PlaceInputType } from '@googlemaps/google-maps-services-js'
 import * as dotenv from 'dotenv'
-
+import { increaseMonthlyCount } from './../../libs/call-counter'
 import schema from './schema'
 
 dotenv.config()
 
 const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const client = new Client({})
+
+  increaseMonthlyCount(event)
 
   return await client
     .findPlaceFromText({

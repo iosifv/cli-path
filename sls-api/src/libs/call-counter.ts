@@ -54,5 +54,4 @@ async function increaseMonthlyCount(event) {
   }
 }
 
-export default getMonthlyCount
-increaseMonthlyCount
+export { getMonthlyCount, increaseMonthlyCount }

@@ -1,11 +1,13 @@
 import { formatJSONError, ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
 import { formatJSONResponse } from '@libs/api-gateway'
 import { middyfy } from '@libs/lambda'
-import { canPrefetch, getInternal, processCache } from '@middy/util'
+// import { canPrefetch, getInternal, processCache } from '@middy/util'
 import { Client } from '@googlemaps/google-maps-services-js'
 import * as dotenv from 'dotenv'
 // import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 // import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
+
+import { increaseMonthlyCount } from './../../libs/call-counter'
 
 import schema from './schema'
 import { TABLE_NAME_USAGE_LOG } from '@utils/constants'
@@ -31,6 +33,8 @@ const direction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
   // } catch (error) {
   //   console.log(error)
   // }
+
+  increaseMonthlyCount(event)
 
   return await client
     .directions({

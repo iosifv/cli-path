@@ -3,7 +3,7 @@ import middy from '@middy/core'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { Auth0Client } from '@libs/client-auth0'
 import { formatJSONError } from './api-gateway'
-import getMonthlyCount from './call-counter'
+import { getMonthlyCount } from './call-counter'
 // import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb'
 // import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import {
