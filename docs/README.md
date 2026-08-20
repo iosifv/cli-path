@@ -11,7 +11,7 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 - [github](https://github.com/iosifv/cli-path) - Github repository
 - [npm](https://www.npmjs.com/package/cli-path) - NPM Package for the cli app
 - [OpenAPI schema](https://iosifv.github.io/cli-path/swagger/) - View API specs with Swagger UI
-- todo: serverless function dashboard
+- todo: api dashboard
 
 ## Installation
 
@@ -58,7 +58,11 @@ The real reason I built this is for training purposes. Since every tutorial out 
 
 ### Architecture
 
-The very zoomed out explanation is: a cli-app will call Google Maps API to view directions information within the terminal. In order to not have the user generate and add his own Google Maps tokens a new API is built which stands in between the cli-app and Google API. This way the user can choose to use our instantly available Clip API or Google Maps API with his own credentials.
+The very zoomed out explanation is: a cli-app will call a maps API to view directions information within the terminal. In order to not have the user generate and add his own map provider tokens, a second API is built which stands in between the cli-app and the map provider. This way the user can choose to use our instantly available Clip API, or query a provider directly with his own credentials.
+
+The CLI picks between the two through an [Adapter](https://refactoring.guru/design-patterns/adapter) (`PathController`), so swapping what sits behind the hosted API doesn't change the client.
+
+> **Note — the API tier is being rebuilt.** The original implementation was AWS Lambda via the Serverless Framework; it is now frozen in [`archived-sls-api/`](https://github.com/iosifv/cli-path/tree/main/archived-sls-api) and no longer deployed. Its replacement is being built on Vercel in `vercel-api/`, moving off Google Maps to an open routing provider. The sections below still describe the archived design where marked.
 
 ### List of implemented things
 
@@ -68,10 +72,12 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
   - [Chalk](https://www.npmjs.com/package/chalk), [Ora](https://www.npmjs.com/package/ora), [Inquirer](https://www.npmjs.com/package/inquirer) and [cli-table3](https://www.npmjs.com/package/cli-table3) for a nicer interface
   - [Adapter Design Pattern](https://refactoring.guru/design-patterns/adapter) used for managing multiple search engines
   - [Chai](https://www.chaijs.com/) + [Mocha](https://mochajs.org/) + [Istanbul](https://istanbul.js.org/) for testing and code coverage
-- API implemented with [Serverless Framework](https://www.serverless.com/) written in Typescript
+- 🗄️ _(archived)_ API implemented with [Serverless Framework](https://www.serverless.com/) written in Typescript
   - [Serverless Offline](https://www.serverless.com/plugins/serverless-offline) used for easy implementation
   - [Serverless Dotenv](https://www.serverless.com/plugins/serverless-dotenv-plugin) used to save secrets in a familiar way
   - [middy](https://middy.js.org/) used for handling authentication within the middleware layer
+  - [DynamoDB](https://aws.amazon.com/dynamodb/) used to count API calls and cap them globally
+- 👷 🚧 API being rebuilt on [Vercel](https://vercel.com/) — see `vercel-api/`
 - Authentification provided by [Auth0](https://auth0.com/)
   - Implemented [Device Authorization Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-device-authorization-flow) - This way, the user just needs to open a link from a browser rather than cumbersome authentication in the CLI
   - Implemented [OAuth](https://auth0.com/docs/authenticate/protocols/oauth) with Google, Github, Linkedin and Facebook as providers
@@ -84,11 +90,8 @@ The very zoomed out explanation is: a cli-app will call Google Maps API to view 
 
 ### List of todo's
 
-- Add dynamoDB connection
-  - save number of calls for each user
-  - Limit calls globally and per user
-- [Serverless Prune Plugin](https://www.serverless.com/plugins/serverless-prune-plugin)
-- Terraform
+- Finish the Vercel API and point the CLI at it
+- Move off Google Maps to an open routing provider
 - Create npm package through Github Actions
 - Create system for versioning
 
