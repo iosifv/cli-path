@@ -48,9 +48,10 @@ async function increaseMonthlyCount(event) {
   }
 
   try {
-    await dynamoDbDocumentClient.send(new PutCommand(params))
+    return await dynamoDbDocumentClient.send(new PutCommand(params))
   } catch (error) {
     console.log(error)
+    return error
   }
 }
 

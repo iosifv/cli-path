@@ -11,7 +11,11 @@ dotenv.config()
 const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const client = new Client({})
 
-  increaseMonthlyCount(event)
+  const counter = increaseMonthlyCount(event)
+  return formatJSONError({
+    message: 'Error',
+    data: counter,
+  })
 
   return await client
     .findPlaceFromText({
@@ -35,6 +39,7 @@ const location: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
         message: 'Success!',
         status: res.status,
         status_code: res.data.status,
+        monthly_call_count: event.metadata.callCount,
         formatted_address: res.data.candidates[0].formatted_address,
       })
     })

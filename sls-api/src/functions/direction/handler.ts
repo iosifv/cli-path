@@ -10,7 +10,7 @@ import * as dotenv from 'dotenv'
 import { increaseMonthlyCount } from './../../libs/call-counter'
 
 import schema from './schema'
-import { TABLE_NAME_USAGE_LOG } from '@utils/constants'
+// import { TABLE_NAME_USAGE_LOG } from '@utils/constants'
 
 dotenv.config()
 // const dynamoDbDocumentClient = DynamoDBDocumentClient.from(new DynamoDBClient())

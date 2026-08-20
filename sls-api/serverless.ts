@@ -34,6 +34,11 @@ const serverlessConfiguration: AWS = {
     iamRoleStatements: [
       {
         Effect: 'Allow',
+        Action: 'dynamodb:Put',
+        Resource: 'arn:aws:dynamodb:us-east-1:193532419724:table/ClipApp-UsageLog',
+      },
+      {
+        Effect: 'Allow',
         Action: 'dynamodb:Scan',
         Resource: 'arn:aws:dynamodb:us-east-1:193532419724:table/ClipApp-UsageLog',
       },
