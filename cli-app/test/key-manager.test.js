@@ -1,5 +1,14 @@
 import { assert } from 'chai'
-import { KeyManager, STORE_NAME, REQUIRED_KEYS, KEY_NAME_LOCATIONS } from '../lib/KeyManager.js'
+import {
+  KeyManager,
+  STORE_NAME,
+  REQUIRED_KEYS,
+  KEY_NAME_LOCATIONS,
+  KEY_NAME_ENVIRONMENT,
+  KEY_NAME_USERINFO,
+  LEGACY_ENVIRONMENTS,
+} from '../lib/KeyManager.js'
+import { CLIP_API_URL } from '../utils/constants.js'
 
 describe('Check KeyManager functionality', function () {
   let keyManager
@@ -18,6 +27,36 @@ describe('Check KeyManager functionality', function () {
         if (key.default != null && key.name != KEY_NAME_LOCATIONS) {
           assert.equal(keyManager.get(key.name), key.default)
         }
+      })
+    })
+  })
+
+  describe('Environment migration', function () {
+    beforeEach(async () => {
+      keyManager = new KeyManager(STORE_NAME + '-test-environment')
+    })
+
+    it('Rewrites a retired environment name onto its replacement', async () => {
+      keyManager.set(KEY_NAME_ENVIRONMENT, 'slsdev')
+
+      // A second construction is what an upgrading user experiences.
+      keyManager = new KeyManager(STORE_NAME + '-test-environment')
+
+      assert.equal(keyManager.get(KEY_NAME_ENVIRONMENT), 'vercel')
+    })
+
+    it('Leaves a current environment name alone', async () => {
+      keyManager.set(KEY_NAME_ENVIRONMENT, 'localhost')
+      keyManager = new KeyManager(STORE_NAME + '-test-environment')
+
+      assert.equal(keyManager.get(KEY_NAME_ENVIRONMENT), 'localhost')
+    })
+
+    it('Resolves every environment name to a defined base URL', async () => {
+      const names = Object.keys(CLIP_API_URL).concat(Object.values(LEGACY_ENVIRONMENTS))
+
+      names.forEach((name) => {
+        assert.isString(CLIP_API_URL[name], `No base URL defined for environment [${name}]`)
       })
     })
   })
@@ -90,6 +129,22 @@ describe('Check KeyManager functionality', function () {
       keyManager.set(random1, randomA)
       keyManager.delete(random1)
       assert.isFalse(keyManager.exists(random1))
+    })
+  })
+
+  describe('User identity', function () {
+    beforeEach(async () => {
+      keyManager = new KeyManager(STORE_NAME + '-test-userinfo')
+    })
+
+    it('Returns null when nobody is signed in', async () => {
+      // `clip status` runs before authentication and must not throw here.
+      assert.isNull(keyManager.getUser())
+    })
+
+    it('Returns the display name once a profile is stored', async () => {
+      keyManager.set(KEY_NAME_USERINFO, { sub: 'github|7619809', name: 'Iosif' })
+      assert.equal(keyManager.getUser(), 'Iosif')
     })
   })
 

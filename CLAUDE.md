@@ -10,13 +10,13 @@ able to get directions without holding map-provider credentials of their own; th
 at the hosted API by default, and a user who prefers their own key can flip an engine setting and
 bypass it entirely.
 
-**The API tier is mid-replacement.** As of 2026-08-21:
+**The API tier was replaced on 2026-08-21:**
 
 | Folder | State |
 | --- | --- |
-| `cli-app/` | **Live.** The npm package. Unchanged by the migration so far. |
+| `cli-app/` | **Live.** The npm package. |
 | `archived-sls-api/` | **Dead.** AWS Lambda + Serverless Framework. Frozen, undeployed, no users. Read `archived-sls-api/ARCHIVED.md` before touching it. |
-| `vercel-api/` | **Not built yet.** Placeholder + README stating the contract it must satisfy. |
+| `vercel-api/` | **Built, not yet deployed.** Vercel Functions + TypeScript, backed by OpenRouteService. Needs `vercel install upstash`, an `ORS_API_KEY`, and a first `vercel deploy --prod`; the deployment URL then goes into `CLIP_API_URL.vercel`. |
 
 Treat anything in `archived-sls-api/` as reference material, never as a live system. It is not
 deployed and there are no clients to preserve compatibility with — this is a clean slate.
@@ -41,7 +41,7 @@ the shape at both ends.
 construction and instantiates one of two clients, which **must be interchangeable**:
 
 - `lib/clients/ClipApi.js` (`'clip'`, the default) — POSTs to the hosted API with the stored Auth0
-  bearer token. Base URL comes from `CLIP_SLS_API_URL[<setting_environment>]` in
+  bearer token. Base URL comes from `CLIP_API_URL[<application_environment>]` in
   `utils/constants.js`.
 - `lib/clients/GoogleApi.js` (`'google'`) — talks to Google Maps directly with the user's own key.
 
@@ -55,23 +55,27 @@ because `utils/style.js`'s `print.direction()` renders exactly those five fields
 which engine produced them. Note these are Google-shaped: `summary` is a road-name string
 ("A10 and A2"), and `distance`/`duration` are pre-formatted human strings ("1 hr 23 min"), not raw
 meters and seconds. **Any new provider's response has to be mapped onto this shape, or the shape has
-to change on both sides at once.**
+to change on both sides at once.** `vercel-api/lib/format.ts` is where OpenRouteService's metres,
+seconds, and step-level road names get bridged onto it — keep that mapping server-side so both
+engines stay visually identical in the terminal.
 
-`ClipApi.js` also branches on `response.data.status_code != 'OK'` rather than on HTTP status — a
-workaround for the archived API returning 401 for every error. A new API is free to use real status
-codes, but the client must be updated in the same change.
+`ClipApi.js` branches on real HTTP status (axios rejects on non-2xx). It used to branch on
+`response.data.status_code != 'OK'`, a workaround for the archived API returning 401 for every
+error; `vercel-api` sends real statuses, so that workaround is gone. `status_code` is still present
+in every response body, but as diagnostics, not control flow.
 
-`CLIP_SLS_API_URL` currently maps `localhost` and `slsdev` keys, both pointing at dead endpoints.
-The `setting_environment` value is **persisted in each user's configstore**, so renaming a key
-without a migration in `KeyManager.validateConfig()` yields `undefined + path` at runtime. With no
-existing users this is currently free to change — but the trap returns once the new API ships.
+`CLIP_API_URL` maps `localhost` and `vercel`. The `application_environment` value is **persisted in
+each user's configstore**, so renaming a key without adding it to `LEGACY_ENVIRONMENTS` in
+`lib/KeyManager.js` yields `undefined + path` at runtime. `KeyManager.migrateEnvironment()` runs on
+every construction and already rewrites the retired `slsdev` value; add to that map rather than
+renaming in place.
 
 ## Repository layout
 
 | Path | Role |
 | --- | --- |
 | `cli-app/` | Client tier. Plain JS, ESM (`"type": "module"`), yarn. |
-| `vercel-api/` | API tier, to be built. |
+| `vercel-api/` | API tier. TypeScript, ESM, Vercel Functions, yarn. |
 | `archived-sls-api/` | Frozen previous API tier. Reference only. |
 | `docs/` | GitHub Pages site (jekyll-theme-midnight): architecture doc, drawio diagrams, swagger UI, demo gifs. |
 | `postman/schemas/index.yaml` | OpenAPI 3.0 spec, rendered at `docs/swagger/`. Its `servers` URL is stale. |
@@ -97,6 +101,23 @@ yarn configstore-watch        # tail ~/.config/configstore/cli-path.json
 ```
 
 Node pinned to 18 by `.nvmrc`; CI matrix covers 16.x and 18.x.
+
+### vercel-api
+
+```bash
+cd vercel-api
+yarn                          # install
+yarn dev                      # vercel dev, serves on :3000
+yarn test                     # vitest, test/*.test.ts
+yarn typecheck                # tsc --noEmit
+yarn deploy-prod              # vercel deploy --prod
+```
+
+Uses `vitest`, not the `mocha` of `cli-app` — mocha needs a loader shim for TypeScript ESM. Tests
+stub only `fetch` and Redis, so `test/api.test.ts` covers the real request path.
+
+Local runs need either an Upstash Redis or an explicit `CLIP_DISABLE_QUOTA=1`; the counter refuses
+to fail open. See `vercel-api/README.md`.
 
 ### archived-sls-api
 

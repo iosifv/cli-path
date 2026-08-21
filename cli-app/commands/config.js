@@ -5,6 +5,7 @@ import {
   KEY_NAME_ENVIRONMENT,
   KEY_NAME_GOOGLE_TOKEN,
 } from '../lib/KeyManager.js'
+import { CLIP_ENVIRONMENTS } from '../utils/constants.js'
 import { isRequired } from '../utils/validation.js'
 import * as print from '../utils/style.js'
 
@@ -20,7 +21,7 @@ export async function dialog() {
           'Switch Enviroment',
           keyManager.getOrNull(KEY_NAME_ENVIRONMENT)
         ),
-        choices: ['Skip', new inquirer.Separator(), 'localhost', 'slsdev'],
+        choices: ['Skip', new inquirer.Separator(), ...CLIP_ENVIRONMENTS],
         filter(val) {
           return val.toLowerCase()
         },
@@ -61,7 +62,7 @@ export async function dialog() {
         await setGoogleToken()
       }
       if (answers.googleToken == 'delete') {
-        deleteGoogleToken
+        deleteGoogleToken()
       }
     })
     .catch((error) => {

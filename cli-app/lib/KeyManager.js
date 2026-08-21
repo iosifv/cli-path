@@ -10,6 +10,18 @@ export const KEY_NAME_LOCATIONS = 'locations'
 export const KEY_NAME_USERINFO = 'auth0_userinfo'
 export const STORE_NAME = 'cli-path'
 
+/**
+ * Environment names that no longer exist, mapped to their replacement.
+ *
+ * The `application_environment` value is persisted in each user's configstore,
+ * so a rename without a migration leaves upgrading users pointing at an
+ * undefined base URL — `undefined + 'direction'` at request time. `slsdev` was
+ * the AWS API Gateway stage, retired when the API moved to Vercel.
+ */
+export const LEGACY_ENVIRONMENTS = {
+  slsdev: 'vercel',
+}
+
 export const REQUIRED_KEYS = [
   {
     name: KEY_NAME_ENGINE,
@@ -17,7 +29,7 @@ export const REQUIRED_KEYS = [
   },
   {
     name: KEY_NAME_ENVIRONMENT,
-    default: 'slsdev',
+    default: 'vercel',
   },
   {
     name: KEY_NAME_AUTH0_DEVICE_CODE,
@@ -61,7 +73,22 @@ export class KeyManager {
         this.config.set(key.name, key.default)
       }
     })
+    this.migrateEnvironment()
     location = this.config.get(KEY_NAME_LOCATIONS)
+  }
+
+  /**
+   * Move a stored environment name onto its replacement. Runs on every
+   * construction, alongside the back-fill above, so an upgrading user is
+   * migrated the first time they invoke the CLI.
+   */
+  migrateEnvironment() {
+    const current = this.config.get(KEY_NAME_ENVIRONMENT)
+    const replacement = LEGACY_ENVIRONMENTS[current]
+
+    if (replacement) {
+      this.config.set(KEY_NAME_ENVIRONMENT, replacement)
+    }
   }
 
   addLocation(locationName, locationAddress) {
@@ -95,8 +122,21 @@ export class KeyManager {
     this.config.set(KEY_NAME_LOCATIONS, [])
   }
 
+  /**
+   * The display name of the signed-in user, or null when nobody is.
+   *
+   * Reads through getOrNull() deliberately: not being authenticated is an
+   * ordinary state that `clip status` exists to report, not an error. Reading
+   * it with get() is what made that command terminate on an uncaught throw for
+   * anyone who had not authenticated yet.
+   */
   getUser() {
-    const user = this.get(KEY_NAME_USERINFO)
+    const user = this.getOrNull(KEY_NAME_USERINFO)
+
+    if (!user) {
+      return null
+    }
+
     return user.name
   }
 

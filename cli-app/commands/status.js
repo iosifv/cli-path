@@ -49,7 +49,8 @@ export async function printStatus() {
     console.log(error)
     print.value('Version', `unknown (${error.message})`)
   }
-  print.value('Username', '{' + keyManager.getUser() + '}')
+  const user = keyManager.getUser()
+  print.status('Signed in as', user != null, user ? user : 'Use the Authenticate option to sign in')
   print.value('Directions Engine', '{' + keyManager.get(KEY_NAME_ENGINE) + '}')
   print.value('Environment', '{' + keyManager.get(KEY_NAME_ENVIRONMENT) + '}')
   print.value('Saved Locations', keyManager.get(KEY_NAME_LOCATIONS).length)

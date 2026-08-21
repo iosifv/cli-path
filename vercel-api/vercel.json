@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/*.ts": {
+      "runtime": "@vercel/node@3.2.24",
+      "maxDuration": 15
+    }
+  }
+}

@@ -8,7 +8,6 @@ import { timeout } from '../utils/timeout.js'
 import ora from 'ora'
 import * as c from '../utils/constants.js'
 import { line, statement, value } from '../utils/style.js'
-import { buildClipOptions } from '../lib/clients/ClipApi.js'
 import axios from 'axios'
 
 export async function dialog() {
@@ -41,6 +40,7 @@ export async function dialog() {
   spinner.spinner = 'bouncingBall'
 
   let authenticated = false
+  let accessToken
   const cycleLength = 5
   let cycle = cycleLength
 
@@ -68,7 +68,8 @@ export async function dialog() {
           spinner.stop()
 
           authenticated = true
-          keyManager.set(KEY_NAME_AUTH0_ACCESS_TOKEN, response.data.access_token)
+          accessToken = response.data.access_token
+          keyManager.set(KEY_NAME_AUTH0_ACCESS_TOKEN, accessToken)
         })
         .catch((err) => {
           // console.error(err.response.data)
@@ -86,25 +87,49 @@ export async function dialog() {
   } while (!authenticated)
 
   /**
-   * After the device was fully authenticated with Auth0,
-   * Simply pefrorm a request to our API with the new bearer token
+   * With the device authorized, ask Auth0 who the token belongs to.
+   *
+   * This used to POST to the clip API's `/authentication` endpoint, which did
+   * nothing but forward the token to Auth0 `/userinfo` and hand back the reply.
+   * That endpoint no longer exists, and the round trip meant a user could not
+   * authenticate at all unless the API happened to be deployed. Asking Auth0
+   * directly removes that coupling — the same endpoint, and the same check on
+   * the result, that vercel-api/lib/auth0.ts performs on every request.
    */
-  spinner.text = 'Validating with clip-api...'
+  spinner.text = 'Fetching your profile...'
   spinner.start()
 
   await axios
-    .request(buildClipOptions('authentication', { payload: 'empty' }))
+    .request({
+      method: 'GET',
+      url: c.AUTH0_CLIP_URL_USERINFO,
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+    })
     .then(function (response) {
-      spinner.text = 'Authenticated against our own clip-api!'
+      const profile = response.data
+
+      // Omitting `scope` on the token request yields a 200 with an empty object
+      // here rather than an error — the gotcha recorded in docs/README.md.
+      // Refuse it at the point of authentication, where the cause is still
+      // visible, instead of failing later on a missing name.
+      if (!profile || !profile.sub) {
+        spinner.text = 'Auth0 returned no identity for this token. Please authenticate again.'
+        spinner.fail()
+        spinner.stop()
+        return
+      }
+
+      spinner.text = 'Signed in as ' + (profile.name || profile.nickname || profile.sub)
       spinner.succeed()
       spinner.stop()
-      keyManager.set(KEY_NAME_USERINFO, response.data.data)
+      keyManager.set(KEY_NAME_USERINFO, profile)
     })
     .catch(function (error) {
+      spinner.text = 'Could not reach Auth0 to fetch your profile: ' + error.message
       spinner.fail()
       spinner.stop()
-
-      console.error(error)
     })
 
   /**
