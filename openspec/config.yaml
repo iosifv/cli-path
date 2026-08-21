@@ -1,0 +1,52 @@
+schema: spec-driven
+
+context: |
+  cli-path is a terminal client (`cli-app/`, published to npm as `cli-path`, binary `clip`)
+  plus an API tier that exists only to serve it. The API's reason for existing is that a user
+  should be able to get directions without holding map-provider credentials of their own.
+
+  Tiers:
+    cli-app/          Client. Plain JS, ESM ("type": "module"), yarn, mocha + chai, node 18.
+    vercel-api/       API. TypeScript, ESM, Vercel Functions, yarn, vitest. Backed by
+                      OpenRouteService. Built 2026-08-21, not yet deployed.
+    archived-sls-api/ Dead AWS Lambda + Serverless Framework tier. Reference only, never deploy.
+    docs/             GitHub Pages (jekyll-theme-midnight) + swagger UI rendering
+                      postman/schemas/index.yaml.
+
+  There is no root package.json — always cd into a sub-project first.
+
+  This repo is a deliberate learning playground. The author's goal is breadth — touching as
+  many technologies as possible around the small subject of making a maps API call — rather
+  than a minimal implementation. Auth0 device flow, quota accounting, an OpenAPI spec, synced
+  Insomnia and Postman collections, VHS-recorded demo gifs, a Jekyll docs site and GitHub
+  Actions all sit behind three or four endpoints. Treat that breadth as intentional; proposals
+  to collapse tiers or drop a redundant-looking tool work against the point of the repo.
+
+  The load-bearing constraint: cli-app/lib/PathController.js is an Adapter that instantiates
+  either ClipApi (hosted, default) or GoogleApi (user's own key). Both expose location(query)
+  and direction(origin, destination), and direction must resolve to exactly
+  { start, end, summary, distance, duration } — pre-formatted strings, because
+  cli-app/utils/style.js print.direction() renders those five fields verbatim regardless of
+  which engine produced them. Any provider's response must be mapped onto that shape, or the
+  shape changes on both sides at once.
+
+  Conventions:
+    - Prettier via the ROOT .prettierrc: no semicolons, single quotes, 2-space indent,
+      100 print width, es5 trailing commas. Note cli-app/.prettierrc is stale (tabWidth 4,
+      no printWidth) and reformats the whole codebase if used — always pass
+      --config ../.prettierrc when formatting inside cli-app.
+    - All CLI output goes through cli-app/utils/style.js, never console.log directly.
+    - The mocha suite is not wired into CI; run yarn test locally.
+    - application_environment is persisted per user in configstore, so renaming an environment
+      key requires a matching entry in LEGACY_ENVIRONMENTS in cli-app/lib/KeyManager.js.
+
+rules:
+  proposal:
+    - State the user-facing problem before the solution.
+    - Include a "Non-goals" section.
+  design:
+    - Record why a decision was made, not just what was decided — the repo exists to learn from.
+    - Call out anti-patterns from archived-sls-api/ARCHIVED.md that the design deliberately avoids.
+  tasks:
+    - Reference concrete file paths.
+    - Separate work that is already complete from work that is still outstanding.
