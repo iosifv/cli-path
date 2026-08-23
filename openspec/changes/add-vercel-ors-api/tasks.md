@@ -90,11 +90,20 @@
 
 ## 6. Closing the loop with the client
 
-- [ ] 6.1 Replace the placeholder hostname in `CLIP_API_URL.vercel` in
+- [x] 6.1 Replace the placeholder hostname in `CLIP_API_URL.vercel` in
       `cli-app/utils/constants.js` with the real deployment URL; verify `clip status` shows the
-      `vercel` environment and a `clip location` lookup returns an address
+      `vercel` environment and a `clip location` lookup returns an address — set to
+      `https://cli-path.vercel.app/api/`; `clip status` reports environment `vercel` and
+      `✅ Signed in as Iosif V.`, and `location('Rijksmuseum')` returns
+      "Rijksmuseum, Amsterdam, NH, Netherlands"
 - [ ] 6.2 Exercise a full `clip direction` against the deployment and compare the rendered output
-      against the `google` engine for the same query; verify both render five populated fields
+      against the `google` engine for the same query; verify both render five populated fields —
+      **half done, and the other half may be unreachable.** The `clip` engine is verified: a live
+      Amsterdam→Utrecht lookup renders through `print.direction()` as `S110 and A2` / `41.6 km` /
+      `47 mins`, five populated fields. The comparison against `google` needs a Google Maps key,
+      which `clip status` reports as unset — and not holding one is the entire reason the hosted
+      engine exists. Either supply a key for a one-off comparison, or narrow this task to the
+      `clip` engine alone
 - [ ] 6.3 Publish a patched `cli-app` to npm and reinstall globally; verify `yarn npm-reinstall`
       followed by `clip status` reports the new version from the NPM folder
 
