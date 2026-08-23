@@ -29,6 +29,12 @@
       `A4 and Nieuwe Haagseweg, A4`, which named the same motorway twice and violated
       `specs/directions-api` — "a route spends most of its distance on two named roads → summary
       names those two roads"
+- [x] 2.5 Classify the ORS `400` responses that mean "no route is possible" as `NOT_FOUND` rather
+      than `PROVIDER_ERROR`, and name both resolved places in the message; verify against live ORS
+      that Las Vegas→Queensland yields `NOT_FOUND`. ORS answers `400` with error code `2004` when a
+      route would exceed its 6000km ceiling — not `404`, the only status the code special-cased — so
+      `specs/directions-api` ("both endpoints resolve but no route exists → `404`") was violated,
+      and the CLI reported an outage for a request the provider had correctly refused
 
 ## 3. Quota and access control
 

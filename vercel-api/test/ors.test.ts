@@ -141,6 +141,40 @@ describe('route', () => {
     await expect(route(origin, destination)).rejects.toMatchObject({ kind: 'NOT_FOUND' })
   })
 
+  it('treats a 400 that means "no route is possible" as NOT_FOUND', async () => {
+    // Verbatim from ORS for Las Vegas -> Queensland: it answers 400, not 404.
+    // Before this was handled, the CLI reported "the routing provider failed",
+    // i.e. an outage, for a request the provider had correctly refused.
+    vi.mocked(fetch).mockResolvedValue(
+      jsonResponse(
+        {
+          error: {
+            code: 2004,
+            message:
+              'Request parameters exceed the server configuration limits. ' +
+              'The approximated route distance must not be greater than 6000000.0 meters.',
+          },
+        },
+        400
+      )
+    )
+
+    await expect(route(origin, destination)).rejects.toMatchObject({ kind: 'NOT_FOUND' })
+  })
+
+  it('names both resolved places so a bad geocode is visible', async () => {
+    vi.mocked(fetch).mockResolvedValue(jsonResponse({ error: { code: 2009 } }, 400))
+
+    await expect(route(origin, destination)).rejects.toThrow(/"Amsterdam".*"Utrecht"/)
+  })
+
+  it('still reports a malformed request as a provider error', async () => {
+    // 2003 is an invalid parameter value — our fault, not "no route exists".
+    vi.mocked(fetch).mockResolvedValue(jsonResponse({ error: { code: 2003 } }, 400))
+
+    await expect(route(origin, destination)).rejects.toMatchObject({ kind: 'PROVIDER_ERROR' })
+  })
+
   it('tolerates the empty summary ORS returns for coincident points', async () => {
     vi.mocked(fetch).mockResolvedValue(jsonResponse({ routes: [{ segments: [] }] }))
 

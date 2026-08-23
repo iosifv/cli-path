@@ -128,13 +128,37 @@ export async function route(
     throw new OrsError('PROVIDER_ERROR', 'Could not reach the routing provider.')
   }
 
-  // ORS answers 404 when no route exists between the two points, e.g. across
-  // an ocean for a driving profile. That's a user-facing miss, not an outage.
-  if (response.status === 404) {
-    throw new OrsError(
-      'NOT_FOUND',
-      `No ${profile} route exists between "${origin.label}" and "${destination.label}".`
-    )
+  // "No route is possible" is a user-facing miss, not an outage — but ORS
+  // signals it in two different ways, and only one of them is a 404.
+  //
+  // A 400 carrying one of the codes below means the request was well-formed
+  // and the answer is simply that no route exists: 2004 the route would exceed
+  // the server's 6000km ceiling, 2009 no route could be found, 2010 an endpoint
+  // could not be snapped to the road network. Any other 400 means *we* sent
+  // something malformed, which is a real fault on this side.
+  const NO_ROUTE_CODES = new Set([2004, 2009, 2010])
+
+  if (response.status === 404 || response.status === 400) {
+    let code: number | undefined
+    try {
+      const problem = (await response.clone().json()) as { error?: { code?: number } }
+      code = problem.error?.code
+    } catch {
+      // Body wasn't JSON; fall through on status alone.
+    }
+
+    if (response.status === 404 || (code !== undefined && NO_ROUTE_CODES.has(code))) {
+      // Name both resolved places. The geocoder picks the single best match for
+      // free text, and "eiffel" resolving to a Las Vegas replica is far easier
+      // to spot when the message says so than when it reports a failure.
+      throw new OrsError(
+        'NOT_FOUND',
+        `No ${profile} route exists between "${origin.label}" and "${destination.label}". ` +
+          `Try more specific place names if those are not the places you meant.`
+      )
+    }
+
+    console.error('ORS rejected the routing request with code', code)
   }
 
   assertOk(response, 'routing')
