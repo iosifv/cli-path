@@ -63,13 +63,24 @@
       gitignored `vercel-api/.env`; limits read from the account's own `x-ratelimit-*` headers
       (geocoding 1000/day, directions 2000/day, ~24h rolling) and recorded in
       `vercel-api/.env.example`; live geocode and route both returned `200`
-- [ ] 5.2 Run `vercel link` and `vercel install upstash --plan free`; verify `KV_REST_API_URL` and
-      `KV_REST_API_TOKEN` appear in the project's environment
-- [ ] 5.3 Set `ORS_API_KEY` via `vercel env add`; verify `vercel env ls` lists it for production
-- [ ] 5.4 Choose a value for `CLIP_MAX_MONTHLY_CALLS` accounting for up to three provider calls per
-      lookup; verify the chosen number against the ORS plan's documented monthly ceiling
-- [ ] 5.5 Run `vercel deploy --prod`; verify `GET /api/healthcheck` on the deployment reports both
-      `routing_provider` and `usage_counter` as configured
+- [x] 5.2 Run `vercel link` and `vercel install upstash --plan free`; verify `KV_REST_API_URL` and
+      `KV_REST_API_TOKEN` appear in the project's environment — done through the Vercel dashboard
+      rather than the CLI (the project is git-linked from `iosifv/cli-path` with root directory
+      `vercel-api`); Upstash reachable, `PING` → `PONG`
+- [x] 5.3 Set `ORS_API_KEY` via `vercel env add`; verify `vercel env ls` lists it for production —
+      set in the dashboard; confirmed live by `/healthcheck` reporting `routing_provider: true`
+- [x] 5.4 Choose a value for `CLIP_MAX_MONTHLY_CALLS` accounting for up to three provider calls per
+      lookup; verify the chosen number against the ORS plan's documented monthly ceiling — set to
+      **500**. ORS quotas are daily, not monthly: 1000 geocodes/day, and one `/direction` spends
+      two, so 500 is the largest value at which spending the entire month's budget in a single day
+      still lands exactly on the daily geocoding allowance and cannot induce a provider `429`
+- [x] 5.5 Run `vercel deploy --prod`; verify `GET /api/healthcheck` on the deployment reports both
+      `routing_provider` and `usage_counter` as configured — live at
+      `https://cli-path-iosifv-projects.vercel.app/api/`, all three `configured` flags true. Two
+      blockers cleared: `vercel.json` pinned `@vercel/node@3.2.24` which caps at Node 20 while the
+      project runs 24.x, and Vercel Authentication was intercepting every request with a 302 to
+      SSO. Guard verified live — 401/400/405 are distinguishable and five rejected requests left
+      `monthly_call_count` at 0
 
 ## 6. Closing the loop with the client
 

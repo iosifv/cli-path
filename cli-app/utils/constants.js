@@ -17,7 +17,7 @@ export const AUTH0_CLIP_DEFAULT_HEADERS = { 'Content-Type': 'application/x-www-f
  */
 export const CLIP_API_URL = {
   localhost: 'http://localhost:3000/api/',
-  vercel: 'https://clip-api.vercel.app/api/',
+  vercel: 'https://cli-path-iosifv-projects.vercel.app/api/',
 }
 
 /** Environment names offered by `clip config`. */
