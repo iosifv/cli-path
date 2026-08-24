@@ -8,6 +8,10 @@
   "redirects": [{ "source": "/docs", "destination": "/docs/", "permanent": false }],
   "rewrites": [
     {
+      "source": "/docs/",
+      "destination": "https://iosifv.github.io/cli-path/swagger/index.html"
+    },
+    {
       "source": "/docs/:path*",
       "destination": "https://iosifv.github.io/cli-path/swagger/:path*"
     }
