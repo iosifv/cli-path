@@ -40,11 +40,19 @@ that costs nothing to leave open.
 
 ## Trying it out
 
-`/docs` on this deployment (e.g. `cli-path.vercel.app/docs`) is a `vercel.json` rewrite to the
-Swagger UI already published at `docs/swagger/` — no separate copy lives here. Its "Authorize"
-button can fetch a bearer token itself via Auth0 (Authorization Code + PKCE against the CLI's
-public `client_id`) instead of one being pasted in manually; see `postman/schemas/index.yaml`'s
-`auth0` security scheme.
+Use **`cli-path.vercel.app/docs`**, not `iosifv.github.io/cli-path/swagger/` — same Swagger UI,
+different origin, and that difference matters here. This API has no CORS headers (it was only
+ever called from the CLI, a non-browser client, so this never came up), so "Try it out" only works
+when the docs page is same-origin with the API. `/docs` on this deployment is a `vercel.json`
+rewrite to the Swagger UI published at `docs/swagger/` — no separate copy lives here — which makes
+it same-origin with `/api/*` on `cli-path.vercel.app` and the requests go through. The GitHub Pages
+copy is cross-origin to the API, so its "Try it out" calls fail in the browser with a CORS error;
+it's fine for reading the spec, just not for calling the live API.
+
+Its "Authorize" button can fetch a bearer token itself via Auth0 (Authorization Code + PKCE against
+the CLI's public `client_id`) instead of one being pasted in manually; see
+`postman/schemas/index.yaml`'s `auth0` security scheme. That part works from either origin — it's
+only the actual `/api/*` calls that require same-origin.
 
 ## The contract, and where it bends
 

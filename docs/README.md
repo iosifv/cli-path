@@ -10,7 +10,7 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 - [website](https://iosifv.github.io/cli-path/) - Github Pages
 - [github](https://github.com/iosifv/cli-path) - Github repository
 - [npm](https://www.npmjs.com/package/cli-path) - NPM Package for the cli app
-- [OpenAPI schema](https://iosifv.github.io/cli-path/swagger/) - View API specs with Swagger UI (also served same-origin at [cli-path.vercel.app/docs](https://cli-path.vercel.app/docs), proxied from this page)
+- [OpenAPI schema, live](https://cli-path.vercel.app/docs) - Swagger UI, same-origin with the API so "Try it out" actually works (this exact page is [also here](https://iosifv.github.io/cli-path/swagger/) on GitHub Pages, but the API has no CORS headers, so "Try it out" fails cross-origin from there — reading the spec still works fine)
 - todo: api dashboard
 
 ## Installation
@@ -92,6 +92,7 @@ The CLI picks between the two through an [Adapter](https://refactoring.guru/desi
 - [OpenAPI](https://www.openapis.org/) specification, rendered with Swagger UI at `docs/swagger/`
   - `vercel-api/vercel.json` rewrites `/docs/*` on the live API to this same page, so it's reachable same-origin at `cli-path.vercel.app/docs` without a second copy
   - Swagger UI's "Authorize" button can fetch a token itself via Auth0 (Authorization Code + PKCE, same public `client_id` as the CLI's device flow) instead of pasting one in manually — see `postman/schemas/index.yaml`'s `auth0` security scheme and `docs/swagger/dist/swagger-initializer.js`'s `initOAuth()` call
+  - The API sends no CORS headers (never needed them — the CLI is a Node client, not a browser), so "Try it out" only works from the `cli-path.vercel.app/docs` copy, which is same-origin with `/api/*`. The GitHub Pages copy is a different origin and gets a CORS error on any actual call; it's still fine for browsing the spec and even for getting a token, just not for calling the live endpoints
 - OpenSpec capability specs under `openspec/specs/` — `cli-command-dispatch`, `cli-device-authentication`, `cli-engine-adapter` and `cli-persistent-config` describe the client tier; `directions-api` and `usage-quota` describe the API once `add-vercel-ors-api` archives
 
 ### List of todo's

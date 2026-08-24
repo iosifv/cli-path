@@ -7,7 +7,7 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 
 ## Website
 
-Check the much nicer [Github Pages generated website](https://iosifv.github.io/cli-path/) for a nicer documentation, or the [OpenAPI schema](https://iosifv.github.io/cli-path/swagger/) to try the API directly
+Check the much nicer [Github Pages generated website](https://iosifv.github.io/cli-path/) for a nicer documentation, or the [OpenAPI schema](https://cli-path.vercel.app/docs) to try the API directly
 
 ## Install
 
