@@ -68,6 +68,7 @@ paths:
       operationId: direction
       security:
         - bearerAuth: []
+        - auth0: [openid, profile]
       requestBody:
         $ref: "#/components/requestBodies/Direction"
       responses:
@@ -115,6 +116,7 @@ paths:
       operationId: location
       security:
         - bearerAuth: []
+        - auth0: [openid, profile]
       requestBody:
         $ref: "#/components/requestBodies/Location"
       responses:
@@ -169,6 +171,18 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Auth0 access token from the CLI's device authorization flow
+    auth0:
+      type: oauth2
+      description: >-
+        Sign in via Auth0 to get a token automatically. Uses the same public client_id as the
+        CLI; the API only forwards the token to Auth0 /userinfo, so any Auth0 grant works.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://iosifv.eu.auth0.com/authorize
+          tokenUrl: https://iosifv.eu.auth0.com/oauth/token
+          scopes:
+            openid: Required for a usable identity token
+            profile: Name/nickname used to identify the caller
   requestBodies:
     Direction:
       content:
@@ -325,3 +339,4 @@ components:
           description: Present on some failures; upstream or validation detail
 security:
   - bearerAuth: []
+  - auth0: [openid, profile]

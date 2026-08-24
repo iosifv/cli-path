@@ -38,6 +38,14 @@ Optional on `/direction`, defaulting to `driving-car`. Accepts any ORS profile â
 `foot-walking`, `wheelchair`, and the rest. The CLI does not send it yet; it is an extension point
 that costs nothing to leave open.
 
+## Trying it out
+
+`/docs` on this deployment (e.g. `cli-path.vercel.app/docs`) is a `vercel.json` rewrite to the
+Swagger UI already published at `docs/swagger/` â€” no separate copy lives here. Its "Authorize"
+button can fetch a bearer token itself via Auth0 (Authorization Code + PKCE against the CLI's
+public `client_id`) instead of one being pasted in manually; see `postman/schemas/index.yaml`'s
+`auth0` security scheme.
+
 ## The contract, and where it bends
 
 `cli-app/lib/clients/ClipApi.js` reads `response.data.direction` and

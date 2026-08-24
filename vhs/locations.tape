@@ -16,31 +16,76 @@ Set LoopOffset 0%
 # Type "clip location purge" Enter Sleep 200ms
 # Show
 
-# Add Eiffel Tower
-Sleep 200ms 
-Type "clip" Sleep 200ms  
-Enter Sleep 2500ms 
+# Add Big Ben
+Sleep 200ms
+Type "clip" Sleep 200ms
+Enter Sleep 2500ms
 Down Sleep 250ms
 Down Sleep 250ms
 Enter Sleep 250ms
 Enter Sleep 250ms
-Type "eiffel" Enter Sleep 250ms
-Type "eiffel tower" Enter Sleep 2500ms
+Type "bigben" Enter Sleep 250ms
+Type "big ben, london" Enter Sleep 2500ms
 Type "Y" Sleep 250ms
-Enter 
+Enter
 Sleep 500ms
-Enter 
+Enter
 Sleep 500ms
 
-# Add Colloseum
-Type "clip" Sleep 200ms  
-Enter Sleep 2500ms 
+# Add Sagrada Familia
+Type "clip" Sleep 200ms
+Enter Sleep 2500ms
 Down Sleep 250ms
 Down Sleep 250ms
 Enter Sleep 250ms
 Enter Sleep 250ms
-Type "colosseum" Enter Sleep 250ms
-Type "colosseum rome" Enter Sleep 2500ms
+Type "sagrada" Enter Sleep 250ms
+Type "sagrada familia, barcelona" Enter Sleep 2500ms
+Type "Y" Sleep 250ms
+Enter
+Sleep 500ms
+Enter
+Sleep 500ms
+
+# Add Acropolis
+Type "clip" Sleep 200ms
+Enter Sleep 2500ms
+Down Sleep 250ms
+Down Sleep 250ms
+Enter Sleep 250ms
+Enter Sleep 250ms
+Type "acropolis" Enter Sleep 250ms
+Type "acropolis, athens" Enter Sleep 2500ms
+Type "Y" Sleep 250ms
+Enter
+Sleep 500ms
+Enter
+Sleep 500ms
+
+# Add Trevi Fountain
+Type "clip" Sleep 200ms
+Enter Sleep 2500ms
+Down Sleep 250ms
+Down Sleep 250ms
+Enter Sleep 250ms
+Enter Sleep 250ms
+Type "trevi" Enter Sleep 250ms
+Type "trevi fountain, rome" Enter Sleep 2500ms
+Type "Y" Sleep 250ms
+Enter
+Sleep 500ms
+Enter
+Sleep 500ms
+
+# Add Charles Bridge
+Type "clip" Sleep 200ms
+Enter Sleep 2500ms
+Down Sleep 250ms
+Down Sleep 250ms
+Enter Sleep 250ms
+Enter Sleep 250ms
+Type "charlesbridge" Enter Sleep 250ms
+Type "charles bridge, prague" Enter Sleep 2500ms
 Type "Y" Sleep 250ms
 Enter Sleep 500ms
 Enter Sleep 1s

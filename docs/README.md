@@ -10,7 +10,7 @@ A simple CLI tool to search paths on google maps. The intent is to use this on y
 - [website](https://iosifv.github.io/cli-path/) - Github Pages
 - [github](https://github.com/iosifv/cli-path) - Github repository
 - [npm](https://www.npmjs.com/package/cli-path) - NPM Package for the cli app
-- [OpenAPI schema](https://iosifv.github.io/cli-path/swagger/) - View API specs with Swagger UI
+- [OpenAPI schema](https://iosifv.github.io/cli-path/swagger/) - View API specs with Swagger UI (also served same-origin at [cli-path.vercel.app/docs](https://cli-path.vercel.app/docs), proxied from this page)
 - todo: api dashboard
 
 ## Installation
@@ -90,6 +90,8 @@ The CLI picks between the two through an [Adapter](https://refactoring.guru/desi
 - [VHS](https://github.com/charmbracelet/vhs) for demo-ing the CLI app.
   - Could be used for integration testing (if the gif looks ok in the final product then all is good)
 - [OpenAPI](https://www.openapis.org/) specification, rendered with Swagger UI at `docs/swagger/`
+  - `vercel-api/vercel.json` rewrites `/docs/*` on the live API to this same page, so it's reachable same-origin at `cli-path.vercel.app/docs` without a second copy
+  - Swagger UI's "Authorize" button can fetch a token itself via Auth0 (Authorization Code + PKCE, same public `client_id` as the CLI's device flow) instead of pasting one in manually — see `postman/schemas/index.yaml`'s `auth0` security scheme and `docs/swagger/dist/swagger-initializer.js`'s `initOAuth()` call
 - OpenSpec capability specs under `openspec/specs/` — `cli-command-dispatch`, `cli-device-authentication`, `cli-engine-adapter` and `cli-persistent-config` describe the client tier; `directions-api` and `usage-quota` describe the API once `add-vercel-ors-api` archives
 
 ### List of todo's

@@ -16,6 +16,6 @@ Type "clip" Sleep 200ms
 Enter Sleep 1500ms 
 Down Sleep 750ms
 Enter Sleep 250ms
-Type "liverpool street" Enter Sleep 1250ms
-Type "trafalgar square" Enter Sleep 1250ms
+Type "liverpool street, london" Enter Sleep 1250ms
+Type "trafalgar square, london" Enter Sleep 1250ms
 Sleep 3s
