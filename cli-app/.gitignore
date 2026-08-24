@@ -21,10 +21,14 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
+
+# c8's own default output dir, and the nyc-compat temp dir it falls back to when it discovers
+# config via a .nycrc.json rather than its native .c8rc.json — neither should appear under normal
+# use (reports-dir in .c8rc.json points at coverage-cli-app below), kept defensively
 .nyc_output
 
-# nyc test coverage
-.nyc_output
+# c8 coverage output — reports-dir in .c8rc.json, including its nested tmp/ raw V8 data
+coverage-cli-app
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt

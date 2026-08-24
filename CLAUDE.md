@@ -94,13 +94,19 @@ yarn                          # install
 yarn start                    # node ./bin/clip.js — no args enters interactive mode
 yarn test                     # mocha, test/*.test.js
 yarn test --grep "Location"   # single suite/test by name
-yarn coverage                 # nyc; .nycrc.json enforces 70% statements/branches/lines/functions
+yarn coverage                 # c8; .c8rc.json gates at the measured baseline (19% stmts/lines,
+                               # 53% functions, 65% branches) — see cli-app/.c8rc.json's "//" note
 yarn npm-publish              # npm version patch && npm publish
 yarn npm-reinstall            # reinstall the published global package to smoke-test it
 yarn configstore-watch        # tail ~/.config/configstore/cli-path.json
 ```
 
-Node pinned to 18 by `.nvmrc`; CI matrix covers 16.x and 18.x.
+Node pinned to 18 by `cli-app/.nvmrc`; CI matrix covers 16.x and 18.x. `c8` is pinned to `9.1.0`
+in `devDependencies` rather than its current major, because `c8@12`+ requires Node 20+ and this
+project's floor is 16. Whoever modernises the runtime off the 16.x/18.x matrix should unpin `c8`
+in the same change — the archived `fix-esm-coverage-reporting` OpenSpec change (declares
+`skip_specs: true`, so it left no capability spec — look under `openspec/changes/archive/`) has
+the reasoning.
 
 ### vercel-api
 
@@ -167,8 +173,10 @@ This half is provider-agnostic and is expected to survive the API rebuild unchan
   indent, 100 print width, es5 trailing commas.
 - All CLI output goes through `cli-app/utils/style.js` (`line`, `statement`, `value`, `status`,
   `error`, `direction`, `locationTable`) — don't `console.log` formatted output directly.
-- CI (`.github/workflows/`) runs `yarn start --help` and a global-install smoke test on pushes to
-  `main`. **The mocha suite is not wired into CI** — run `yarn test` locally.
+- CI (`.github/workflows/`) runs on pushes to `main`, split across two workflow files:
+  `cli-app-test-build.yaml` installs `cli-app`'s dependencies, runs the mocha suite, runs the
+  `c8` coverage gate, then `yarn start --help`; `cli-app-install.yaml` does the global npm-install
+  smoke test (`npm install -g cli-path && clip --help`). Both run on the `[16.x, 18.x]` matrix.
   `sls-api-test.yaml.archived` is disabled by its extension and will not run.
 - VHS gifs double as informal integration tests: if the recorded run still looks right, the flow
   works end to end.

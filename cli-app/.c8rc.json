@@ -1,0 +1,22 @@
+{
+  "extension": [
+    ".js"
+  ],
+  "include": [
+    "commands",
+    "lib",
+    "utils"
+  ],
+  "reporter": [
+    "text",
+    "lcov"
+  ],
+  "reports-dir": "./coverage-cli-app",
+  "all": true,
+  "check-coverage": true,
+  "statements": 19,
+  "branches": 65,
+  "functions": 53,
+  "lines": 19,
+  "//": "Thresholds are the measured baseline from fix-esm-coverage-reporting, not an aspirational target — raise them only when coverage genuinely improves. See design.md."
+}

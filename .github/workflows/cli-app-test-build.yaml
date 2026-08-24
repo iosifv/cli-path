@@ -9,6 +9,11 @@ jobs:
       matrix:
         # Set to the former tested version. Should probably update this
         # to reflect the release schedule. https://nodejs.org/en/about/releases/
+        #
+        # Coverage runs on the whole matrix, not just one entry: the two Node versions produced
+        # identical figures when fix-esm-coverage-reporting measured the baseline, but running on
+        # both costs nothing extra here and catches a future version-dependent gap immediately
+        # rather than by luck of which entry happens to be checked.
         node-version: [16.x, 18.x]
     steps:
       - uses: actions/checkout@v3.2.0
@@ -19,6 +24,10 @@ jobs:
           cache: 'yarn'
       - name: Yarn Install
         run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn
+      - name: Run tests
+        run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn test
+      - name: Check coverage
+        run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn coverage
       # - name: Display cli-app version
       #   run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn start --version
       - name: Display cli-app help
