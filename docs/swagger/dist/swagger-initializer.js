@@ -33,31 +33,53 @@ window.onload = function () {
   // visitor's first click anywhere on the page (expanding an endpoint counts).
   // If they already have an Auth0 session in this browser (e.g. from the
   // CLI's device flow), the popup completes silently with no login screen.
+  //
+  // The inner "Authorize" button (the one that actually calls window.open)
+  // has to be clicked from within the *same* user-gesture task as the click
+  // that triggered this, or the popup gets silently blocked. Chrome extends
+  // that window across a short setTimeout/setInterval; Firefox does not - a
+  // poll that finds the button 100ms later already runs outside a trusted
+  // gesture there and window.open() is dropped with no error at all. A
+  // MutationObserver's callback still runs inside the same task the DOM
+  // mutation happened in, so it stays inside the gesture window everywhere.
+  function findAuth0AuthorizeButton() {
+    var blocks = document.querySelectorAll('.dialog-ux .auth-container')
+    for (var i = 0; i < blocks.length; i++) {
+      var heading = blocks[i].querySelector('h4')
+      if (heading && /\bauth0\b/i.test(heading.textContent || '')) {
+        return blocks[i].querySelector('button.btn.authorize')
+      }
+    }
+    return null
+  }
+
   document.addEventListener(
     'click',
     function autoAuthorize() {
       var topButton = document.querySelector('.auth-wrapper .btn.authorize')
       if (!topButton) return
-      topButton.click()
 
-      // The modal renders async; poll briefly for the auth0 scheme's own
-      // "Authorize" button rather than the bearerAuth tab's.
-      var attempts = 0
-      var poll = setInterval(function () {
-        attempts++
-        var blocks = document.querySelectorAll('.dialog-ux .auth-container')
-        for (var i = 0; i < blocks.length; i++) {
-          if (/\bauth0\b/i.test(blocks[i].querySelector('h4, .oauth2-name')?.textContent || '')) {
-            var scopeBtn = blocks[i].querySelector('button.btn.authorize, button.modal-btn')
-            if (scopeBtn) {
-              scopeBtn.click()
-              clearInterval(poll)
-              return
-            }
-          }
+      var already = findAuth0AuthorizeButton()
+      if (already) {
+        already.click()
+        return
+      }
+
+      var observer = new MutationObserver(function () {
+        var scopeBtn = findAuth0AuthorizeButton()
+        if (scopeBtn) {
+          observer.disconnect()
+          scopeBtn.click()
         }
-        if (attempts > 20) clearInterval(poll)
-      }, 100)
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      // Belt and suspenders: stop watching even if the modal never renders
+      // (e.g. spec failed to load), so this doesn't run forever.
+      setTimeout(function () {
+        observer.disconnect()
+      }, 5000)
+
+      topButton.click()
     },
     { once: true }
   )
