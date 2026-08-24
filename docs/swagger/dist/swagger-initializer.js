@@ -55,7 +55,7 @@ window.onload = function () {
 
   document.addEventListener(
     'click',
-    function autoAuthorize() {
+    function autoAuthorize(event) {
       var topButton = document.querySelector('.auth-wrapper .btn.authorize')
       if (!topButton) return
 
@@ -79,7 +79,15 @@ window.onload = function () {
         observer.disconnect()
       }, 5000)
 
-      topButton.click()
+      // If the visitor's click already landed on this exact button, its own
+      // (React) click handler is already opening the modal as part of this
+      // same native event - clicking it again here would double-fire that
+      // handler, which toggles rather than just opens, closing the modal it
+      // just opened before it's ever seen. Only synthesize the click when
+      // the real click happened somewhere else on the page.
+      if (!topButton.contains(event.target)) {
+        topButton.click()
+      }
     },
     { once: true }
   )
