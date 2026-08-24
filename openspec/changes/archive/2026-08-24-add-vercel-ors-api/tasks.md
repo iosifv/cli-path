@@ -105,8 +105,15 @@
       lookup through the deployed `vercel` environment renders through `print.direction()` as
       `S110 and A2` / `41.6 km` / `47 mins` — five populated fields, matching the
       `directions-api` spec's route-lookup requirement.
-- [ ] 6.3 Publish a patched `cli-app` to npm and reinstall globally; verify `yarn npm-reinstall`
+- [x] 6.3 Publish a patched `cli-app` to npm and reinstall globally; verify `yarn npm-reinstall`
       followed by `clip status` reports the new version from the NPM folder
+      Published `cli-path@0.3.0` (bumped from `0.2.20` — a minor bump per the user's call, not
+      `yarn npm-publish`'s default patch bump). `yarn npm-reinstall` from `cli-app/` then
+      `clip status` from `/tmp`: `0.3.0 (NPM folder)`. This also confirms the global binary now
+      carries the `document-cli-contracts` identity-capture and status fixes — `clip status` now
+      shows `✅ Signed in as Iosif V.`, a line the old `0.2.20` global install didn't have at all.
+      Confirms the fix for 7.4's blocker too: `/opt/homebrew/lib/node_modules/cli-path/utils/
+      constants.js` now has the `vercel` key in `CLIP_API_URL`.
 
 ## 7. Documentation refresh
 
@@ -149,8 +156,20 @@
       (`.insomnia/ApiSpec/spc_1e70833c80c94e2489d123f9d978c14f.yml`) embeds its own full copy of the
       old OpenAPI spec inline, and a `cli-request-code`-style request still targets the retired
       `/authentication` endpoint. Both are leftover content, not URLs, and worth a follow-up.
-- [ ] 7.4 Re-record the VHS demo gifs against the live API; verify `cd vhs && ./run-all.sh`
+- [x] 7.4 Re-record the VHS demo gifs against the live API; verify `cd vhs && ./run-all.sh`
       regenerates `docs/vhs/*.gif` and the recorded runs still look correct
+      Done after 6.3 landed. All four tapes now record correctly end to end against the live
+      deployment: `locations.tape` adds "eiffel tower" (resolves to a real, if amusingly
+      ambiguous, "Eiffel Tower Lane, Paris, TN, USA") and "colosseum rome" and shows both in the
+      table; `direction-blank.tape` and `direction-saved.tape` complete their route lookups;
+      `config.tape` is unchanged from the earlier successful run. Verified by extracting and
+      visually inspecting mid-recording frames from each `.mp4`, not just file size — the first
+      post-6.3 attempt looked fine by size/duration alone but several frames turned out blank,
+      so a size check alone isn't trusted here. One more instance of the `purgeLocations()`
+      module-state bug (noted above) surfaced restoring locations afterward — same-process
+      purge-then-add duplicated entries; fixed by doing the purge and the adds in separate
+      process invocations.
+
       **Blocked on 6.3.** `run-all.sh` regenerates against the *globally installed* `clip`, by
       design — that's what a real user runs. But the global install is still the pre-rebuild
       `cli-path@0.2.20`: its `utils/constants.js` has the old `CLIP_SLS_API_URL` object
