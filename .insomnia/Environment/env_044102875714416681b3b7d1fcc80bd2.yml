@@ -5,7 +5,7 @@ modified: 1670678116867
 created: 1669851841292
 name: localhost-dev
 data:
-  url: http://localhost:3000/dev/
+  url: http://localhost:3000/api/
   auth0:
     client_id: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
     device_code: ""

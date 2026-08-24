@@ -3,9 +3,9 @@ type: Environment
 parentId: env_1a35c2c824e04ff890b9e3b33f9cd09e3655148c
 modified: 1670720913217
 created: 1669995808016
-name: aws-dev
+name: vercel-prod
 data:
-  url: https://ri3kz3u55a.execute-api.us-east-1.amazonaws.com/dev/
+  url: https://cli-path.vercel.app/api/
   auth0:
     client_id: CQYXLlHw2nZyrh61Z6srAkDO1Zi21tUS
     device_code: ""

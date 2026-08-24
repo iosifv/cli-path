@@ -96,25 +96,86 @@
       `https://cli-path.vercel.app/api/`; `clip status` reports environment `vercel` and
       `✅ Signed in as Iosif V.`, and `location('Rijksmuseum')` returns
       "Rijksmuseum, Amsterdam, NH, Netherlands"
-- [ ] 6.2 Exercise a full `clip direction` against the deployment and compare the rendered output
-      against the `google` engine for the same query; verify both render five populated fields —
-      **half done, and the other half may be unreachable.** The `clip` engine is verified: a live
-      Amsterdam→Utrecht lookup renders through `print.direction()` as `S110 and A2` / `41.6 km` /
-      `47 mins`, five populated fields. The comparison against `google` needs a Google Maps key,
-      which `clip status` reports as unset — and not holding one is the entire reason the hosted
-      engine exists. Either supply a key for a one-off comparison, or narrow this task to the
-      `clip` engine alone
+- [x] 6.2 Exercise a full `clip direction` against the deployment; verify the `clip` engine renders
+      five populated fields
+      Narrowed on the user's decision: comparing against the `google` engine would need a Google
+      Maps key, which `clip status` reports as unset — and not holding one is the entire reason the
+      hosted engine exists, so the comparison is out of reach without deliberately provisioning a
+      key nobody otherwise needs. Verified instead as originally recorded: a live Amsterdam→Utrecht
+      lookup through the deployed `vercel` environment renders through `print.direction()` as
+      `S110 and A2` / `41.6 km` / `47 mins` — five populated fields, matching the
+      `directions-api` spec's route-lookup requirement.
 - [ ] 6.3 Publish a patched `cli-app` to npm and reinstall globally; verify `yarn npm-reinstall`
       followed by `clip status` reports the new version from the NPM folder
 
 ## 7. Documentation refresh
 
-- [ ] 7.1 Rewrite `postman/schemas/index.yaml` to describe the deployed API — correct `servers`,
+- [x] 7.1 Rewrite `postman/schemas/index.yaml` to describe the deployed API — correct `servers`,
       the three current endpoints, the real status codes, and the response shapes; verify
       `docs/swagger/` renders it without validation errors
-- [ ] 7.2 Update the architecture section of `docs/README.md` and regenerate
+      Rewritten against `vercel-api/{api,lib,schemas}/*.ts`: `servers` now lists the production
+      deployment and `http://localhost:3000/api/`; `/authentication` and the old `/heathcheck` typo
+      are gone; `/healthcheck` is `GET|POST`, unauthenticated (`security: []`); `/direction` and
+      `/location` require `bearerAuth` and enumerate `400/401/404/429/502` per `lib/respond.ts`'s
+      `STATUS` map; request/response schemas match `schemas/{direction,location}.ts` (including the
+      `profile` enum from `ORS_PROFILES`) and `lib/respond.ts`'s envelope (`message`, `status_code`,
+      `monthly_call_count`, `monthly_call_limit`). Verified with `npx @apidevtools/swagger-cli
+      validate postman/schemas/index.yaml` → `is valid`, plus a manual `$ref` resolution check.
+- [x] 7.2 Update the architecture section of `docs/README.md` and regenerate
       `docs/clip-overview.drawio`; verify the described tiers match the repository
-- [ ] 7.3 Refresh the `.insomnia/` and `.postman/` environment URLs; verify a request from each
+      `docs/README.md`: the "being rebuilt" note now says the API is live, names the deployment
+      URL and OpenRouteService, and explains the `429`-vs-billing reason for the swap;
+      "List of implemented things" moves the Serverless-Framework/DynamoDB entry under
+      _(archived, frozen, no longer deployed)_, adds the live Vercel/OpenRouteService/Upstash/
+      Ajv/Vitest stack, and adds the OpenSpec capability specs; "List of todo's" drops the two
+      items this change already finished (deploying the API, moving off Google Maps) and now
+      lists what's actually left (`6.3`, `7.4`). `docs/clip-overview.drawio`: the "serverless" box
+      is relabelled `vercel-api (Vercel Functions)`, the now-dropped `/authentication` Lambda icon
+      is removed (three endpoints left: `direction`, `location`, `healthcheck`), and the Google
+      Maps API image cell is replaced with an OpenRouteService box — verified well-formed with
+      `python3 -m xml.etree.ElementTree`.
+- [x] 7.3 Refresh the `.insomnia/` and `.postman/` environment URLs; verify a request from each
       collection succeeds against the deployment
+      `.insomnia/`: `localhost-dev` and `Base Environment` now point at `http://localhost:3000/api/`
+      (was `/dev/`, the old Serverless Offline path); `aws-dev` — pointed at the retired API Gateway
+      URL — retargeted to the live deployment and renamed `vercel-prod`
+      (`https://cli-path.vercel.app/api/`). Requests build their URL as `{{ _.url }}<endpoint>`, so
+      correcting `url` alone fixes every request in the workspace; verified with
+      `curl https://cli-path.vercel.app/api/healthcheck` → `200 {"status_code":"OK",...}`, the same
+      shape the `healthcheck` request expects. `.postman/api` only points at
+      `postman/schemas/index.yaml` (fixed in 7.1) and an empty `postman/collections/` — nothing
+      else to refresh there.
+      Left alone, out of scope for "environment URLs": the `ApiSpec` entry
+      (`.insomnia/ApiSpec/spc_1e70833c80c94e2489d123f9d978c14f.yml`) embeds its own full copy of the
+      old OpenAPI spec inline, and a `cli-request-code`-style request still targets the retired
+      `/authentication` endpoint. Both are leftover content, not URLs, and worth a follow-up.
 - [ ] 7.4 Re-record the VHS demo gifs against the live API; verify `cd vhs && ./run-all.sh`
       regenerates `docs/vhs/*.gif` and the recorded runs still look correct
+      **Blocked on 6.3.** `run-all.sh` regenerates against the *globally installed* `clip`, by
+      design — that's what a real user runs. But the global install is still the pre-rebuild
+      `cli-path@0.2.20`: its `utils/constants.js` has the old `CLIP_SLS_API_URL` object
+      (`{localhost, slsdev}`, no `vercel` key), while the shared configstore now correctly holds
+      `application_environment: "vercel"`. `CLIP_SLS_API_URL['vercel']` is `undefined`, so
+      `getClipUrl()` builds the URL `undefined + 'location'` → axios rejects it with
+      `ERR_INVALID_URL`. Reproduced live: the recording of `locations.tape` shows exactly that
+      stack trace crashing the "add location" flow, confirmed on a re-run after fixing two
+      unrelated environment issues first (see below). `direction-blank.tape` and
+      `direction-saved.tape` fail the same way. Only `config.tape` doesn't call the API, so it's
+      the one tape that legitimately succeeded — `docs/vhs/config.gif`/`.mp4` are freshly
+      re-recorded and correct; `locations`, `direction-blank` and `direction-saved` were restored
+      from `docs/vhs-backup-2022/` (the user's manual backup) rather than left as crash
+      recordings. Sequencing: 6.3 must land first so the global binary matches the local
+      checkout, then this task can be redone end to end.
+
+      Two unrelated, real environment problems surfaced and were fixed getting this far, worth
+      recording since they'll bite anyone else running `vhs` on this machine: `ttyd` was broken
+      (built against a `libwebsockets` Cellar path Homebrew had since upgraded past — fixed with
+      `brew reinstall ttyd`, which itself needed an unrelated `ca-certificates` link conflict
+      resolved first), and `vhs` itself was badly outdated (`0.2.0` from Dec 2022 vs. current
+      `0.11.0`, from an untrusted tap — fixed with `brew trust charmbracelet/tap` then
+      `brew upgrade vhs`). Also: `run-all.sh`'s leading `clip location purge` purges real saved
+      locations unconditionally, not just tape-recording scratch state — it ran three times
+      during this troubleshooting (twice against a broken recorder that produced blank output,
+      once against the real one), and the user's 4 saved locations were restored from a
+      configstore backup each time. Worth fixing in `run-all.sh` itself at some point (a purge
+      that isn't gated on confirmation is surprising), but out of scope for this change.

@@ -62,7 +62,7 @@ The very zoomed out explanation is: a cli-app will call a maps API to view direc
 
 The CLI picks between the two through an [Adapter](https://refactoring.guru/design-patterns/adapter) (`PathController`), so swapping what sits behind the hosted API doesn't change the client.
 
-> **Note — the API tier is being rebuilt.** The original implementation was AWS Lambda via the Serverless Framework; it is now frozen in [`archived-sls-api/`](https://github.com/iosifv/cli-path/tree/main/archived-sls-api) and no longer deployed. Its replacement is being built on Vercel in `vercel-api/`, moving off Google Maps to an open routing provider. The sections below still describe the archived design where marked.
+> **Note — the API tier was rebuilt.** The original implementation was AWS Lambda via the Serverless Framework; it is now frozen in [`archived-sls-api/`](https://github.com/iosifv/cli-path/tree/main/archived-sls-api) and no longer deployed. Its replacement, `vercel-api/`, is live on Vercel Functions at `https://cli-path.vercel.app/api/`, backed by [OpenRouteService](https://openrouteservice.org/) instead of Google Maps — chosen because it hard-fails with `429` past its free tier rather than billing, which the Google-backed archived API could not guarantee. The CLI's default `clip` engine points at it.
 
 ### List of implemented things
 
@@ -72,12 +72,15 @@ The CLI picks between the two through an [Adapter](https://refactoring.guru/desi
   - [Chalk](https://www.npmjs.com/package/chalk), [Ora](https://www.npmjs.com/package/ora), [Inquirer](https://www.npmjs.com/package/inquirer) and [cli-table3](https://www.npmjs.com/package/cli-table3) for a nicer interface
   - [Adapter Design Pattern](https://refactoring.guru/design-patterns/adapter) used for managing multiple search engines
   - [Chai](https://www.chaijs.com/) + [Mocha](https://mochajs.org/) + [Istanbul](https://istanbul.js.org/) for testing and code coverage
-- 🗄️ _(archived)_ API implemented with [Serverless Framework](https://www.serverless.com/) written in Typescript
+- 🗄️ _(archived, frozen, no longer deployed)_ API implemented with [Serverless Framework](https://www.serverless.com/) written in Typescript — see [`archived-sls-api/ARCHIVED.md`](https://github.com/iosifv/cli-path/tree/main/archived-sls-api)
   - [Serverless Offline](https://www.serverless.com/plugins/serverless-offline) used for easy implementation
   - [Serverless Dotenv](https://www.serverless.com/plugins/serverless-dotenv-plugin) used to save secrets in a familiar way
   - [middy](https://middy.js.org/) used for handling authentication within the middleware layer
-  - [DynamoDB](https://aws.amazon.com/dynamodb/) used to count API calls and cap them globally
-- 👷 🚧 API being rebuilt on [Vercel](https://vercel.com/) — see `vercel-api/`
+  - [DynamoDB](https://aws.amazon.com/dynamodb/) used to count API calls and cap them globally — replaced by an atomic Redis counter in the live API, since a full-table `Scan` on every request doesn't scale
+- API live on [Vercel](https://vercel.com/) Functions, written in Typescript — see `vercel-api/`
+  - Backed by [OpenRouteService](https://openrouteservice.org/) for geocoding and routing, reached through [Upstash Redis](https://upstash.com/) (via the Vercel Marketplace) for an atomic monthly call counter
+  - [Ajv](https://ajv.js.org/) validates each request body against a JSON Schema before it reaches a provider
+  - [Vitest](https://vitest.dev/) for testing (the client tier uses Mocha instead — see below)
 - Authentification provided by [Auth0](https://auth0.com/)
   - Implemented [Device Authorization Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-device-authorization-flow) - This way, the user just needs to open a link from a browser rather than cumbersome authentication in the CLI
   - Implemented [OAuth](https://auth0.com/docs/authenticate/protocols/oauth) with Google, Github, Linkedin and Facebook as providers
@@ -86,13 +89,13 @@ The CLI picks between the two through an [Adapter](https://refactoring.guru/desi
   - A static page is created and deployed for this page you're reading through [Github Pages](https://pages.github.com/) & Actions
 - [VHS](https://github.com/charmbracelet/vhs) for demo-ing the CLI app.
   - Could be used for integration testing (if the gif looks ok in the final product then all is good)
-- 👷 🚧 [OpenAPI](https://www.openapis.org/) specification
+- [OpenAPI](https://www.openapis.org/) specification, rendered with Swagger UI at `docs/swagger/`
+- OpenSpec capability specs under `openspec/specs/` — `cli-command-dispatch`, `cli-device-authentication`, `cli-engine-adapter` and `cli-persistent-config` describe the client tier; `directions-api` and `usage-quota` describe the API once `add-vercel-ors-api` archives
 
 ### List of todo's
 
-- Finish the Vercel API and point the CLI at it
-- Move off Google Maps to an open routing provider
-- Create npm package through Github Actions
+- Publish a patched `cli-app` to npm now that the live API is pointed at correctly
+- Re-record the VHS demo gifs against the live API
 - Create system for versioning
 
 ### Problems encountered that are worth mentioning

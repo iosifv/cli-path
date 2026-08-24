@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  description: "Serverless API used by cli-path application"
-  version: 0.1.14
+  description: "Hosted API behind the cli-path terminal client, backed by OpenRouteService and deployed as Vercel Functions"
+  version: 0.2.0
   title: Cli-Path
   contact:
     email: dev@iosifv.com
@@ -9,129 +9,212 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags:
-  - name: Authentication
-    description: Authentication Test
   - name: Healthcheck
-    description: Check application 
+    description: Unauthenticated, unmetered liveness and quota status
   - name: PathSearch
     description: Fuzzy address search
   - name: Directions
-    description: Find the path from origin to destination
+    description: Find the route from an origin to a destination
 paths:
-  /authentication:
-    post:
-      tags:
-        - Authentication
-      summary: Authenticates a user
-      description: ""
-      operationId: auth
-      responses:
-        "200":
-          description: Successfull operation
-        "403":
-          description: Forbidden
-  /heathcheck:
-    post:
+  /healthcheck:
+    get:
       tags:
         - Healthcheck
-      summary: Healthcheck API
-      description: Healthcheck description
-      operationId: heatlhcheck
-      requestBody:
-        $ref: "#/components/requestBodies/Name"
+      summary: Reports configuration and current quota usage
+      description: Requires no bearer token and does not consume monthly quota.
+      operationId: healthcheckGet
+      security: []
       responses:
         "200":
-          description: OK
+          description: Service reachable
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthcheckResponse"
-        "400":
-          description: Invalid status value
+        "503":
+          description: Usage accounting is unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags:
+        - Healthcheck
+      summary: Reports configuration and current quota usage
+      description: Identical to GET /healthcheck; accepted on either method.
+      operationId: healthcheckPost
+      security: []
+      responses:
+        "200":
+          description: Service reachable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthcheckResponse"
+        "503":
+          description: Usage accounting is unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /direction:
     post:
       tags:
         - Directions
-      summary: Provides a direction for a user
-      description: ""
+      summary: Resolves a route between two free-text places
+      description: >-
+        Geocodes the origin and destination, then routes between them. Costs one unit of the
+        monthly quota regardless of how many upstream provider calls that takes.
       operationId: direction
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: "#/components/requestBodies/Direction"
       responses:
         "200":
-          description: successful operation
+          description: A route was found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DirectionResponse'
-        "403":
-          description: Forbidden
+                $ref: "#/components/schemas/DirectionResponse"
+        "400":
+          description: Malformed request, or an unsupported travel mode
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Bearer token missing, invalid, or carrying no identity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: The origin or destination did not resolve, or no route connects them
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: The monthly quota has been reached
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: The routing provider failed or timed out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /location:
     post:
       tags:
         - PathSearch
-      summary: Provides a location for a user
-      description: ""
+      summary: Resolves a free-text query to a formatted address
       operationId: location
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: "#/components/requestBodies/Location"
       responses:
         "200":
-          description: succesful operation
-        "403":
-          description: Forbidden
+          description: A place was found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationResponse"
+        "400":
+          description: Malformed request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Bearer token missing, invalid, or carrying no identity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: The query resolved to no place
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: The monthly quota has been reached
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: The geocoding provider failed or timed out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 externalDocs:
   description: Find out more about Cli-Path on GitHub
   url: https://github.com/iosifv/cli-path
 servers:
-  - url: https://ri3kz3u55a.execute-api.us-east-1.amazonaws.com/dev/
-    description: AWS Server for Development
-  - url: http://localhost:3000/
-    description: Local development Server
+  - url: https://cli-path.vercel.app/api/
+    description: Production (Vercel)
+  - url: http://localhost:3000/api/
+    description: Local development (vercel dev)
 components:
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
+    bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+      bearerFormat: JWT
+      description: Auth0 access token from the CLI's device authorization flow
   requestBodies:
-    Name:
-     content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Name"
-     description: The request body contains the name as a JSON object
     Direction:
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Direction"
-      description: Direction object description here
+      description: Origin and destination to route between, with an optional travel mode
       required: true
-    Location: 
+    Location:
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Location"
-      description: Location object description here
+      description: Free-text place query to resolve
       required: true
   schemas:
-    Name:
-      type: object
-      properties: 
-        name:
-          type: string
-          description: The user's greeting name
-          example: Iosif
     Direction:
       type: object
+      required:
+        - origin
+        - destination
       properties:
         origin:
           type: string
+          minLength: 1
+          maxLength: 200
           example: Amsterdam
         destination:
           type: string
+          minLength: 1
+          maxLength: 200
           example: Berlin
+        profile:
+          type: string
+          description: Travel mode; defaults to driving when omitted
+          enum:
+            - driving-car
+            - driving-hgv
+            - cycling-regular
+            - cycling-road
+            - cycling-mountain
+            - cycling-electric
+            - foot-walking
+            - foot-hiking
+            - wheelchair
+      additionalProperties: false
       xml:
         name: Direction
     Location:
@@ -141,39 +224,104 @@ components:
       properties:
         query:
           type: string
-          example: eroilor cluj
-          description: a location on a map 
+          minLength: 1
+          maxLength: 200
+          example: Rijksmuseum
+          description: A free-text place query
+      additionalProperties: false
       xml:
         name: Location
-    HealthcheckResponse: 
+    Quota:
       type: object
-      properties: 
+      properties:
+        monthly_call_count:
+          type: integer
+          description: Lookups performed so far this calendar month
+          example: 42
+        monthly_call_limit:
+          type: integer
+          description: The configured monthly cap
+          example: 1000
+    HealthcheckResponse:
+      type: object
+      properties:
         message:
           type: string
-          example: Hello Iosif, welcome to the exciting clip App!
-        event: 
-          type: object
-          description: an object containing information relevant for the users context
-    DirectionResponse: 
-      type: object
-      properties: 
-        message: 
+          example: Success!
+        status_code:
           type: string
-          example: Succes!
-        data: 
+          example: OK
+        configured:
           type: object
-          properties: 
-            start:
-               type: string
-            end: 
+          properties:
+            routing_provider:
+              type: boolean
+              description: Whether an OpenRouteService key is configured
+            usage_counter:
+              type: boolean
+              description: Whether the Redis usage store is configured
+            quota_enforced:
+              type: boolean
+              description: False only when quota enforcement is explicitly disabled
+        monthly_call_count:
+          type: integer
+        monthly_call_limit:
+          type: integer
+    DirectionResponse:
+      allOf:
+        - $ref: "#/components/schemas/Quota"
+        - type: object
+          properties:
+            message:
               type: string
-            summary: 
+              example: Success!
+            status_code:
               type: string
-            distance: 
+              example: OK
+            direction:
+              type: object
+              description: The five fields cli-app/utils/style.js print.direction() renders verbatim
+              properties:
+                start:
+                  type: string
+                  example: Amsterdam, Netherlands
+                end:
+                  type: string
+                  example: Berlin, Germany
+                summary:
+                  type: string
+                  example: A10 and A2
+                distance:
+                  type: string
+                  example: 649 km
+                duration:
+                  type: string
+                  example: 6 hr 12 min
+    LocationResponse:
+      allOf:
+        - $ref: "#/components/schemas/Quota"
+        - type: object
+          properties:
+            message:
               type: string
-            duration: 
+              example: Success!
+            status_code:
               type: string
+              example: OK
+            formatted_address:
+              type: string
+              example: Rijksmuseum, Amsterdam, NH, Netherlands
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: That place could not be found.
+        status_code:
+          type: string
+          description: Machine-readable outcome; diagnostic only, never the sole way to detect failure
+          example: NOT_FOUND
+        error:
+          description: Present on some failures; upstream or validation detail
 security:
-  - bearerAuth: []  
-
-  
+  - bearerAuth: []
