@@ -178,15 +178,17 @@
       2.1). Blocked until the change is pushed and GitHub re-scans the lockfiles.
       — **Done, and the dedupe took.** Measured after push and rescan:
 
-      | Manifest | Before | After | Δ |
-      | --- | --- | --- | --- |
-      | `cli-app/yarn.lock` | 37 | **9** | −28 |
-      | `vercel-api/yarn.lock` | 23 | **11** | −12 |
-      | `archived-sls-api/yarn.lock` | 127 | **127** | 0 (as predicted in 3.1) |
-      | **total** | **187** | **147** | **−40** |
+      | Manifest | Before | After bumps | After 3.3 | Δ |
+      | --- | --- | --- | --- | --- |
+      | `cli-app/yarn.lock` | 37 | **9** | 9 | −28 |
+      | `vercel-api/yarn.lock` | 23 | **11** | 11 | −12 |
+      | `archived-sls-api/yarn.lock` | 127 | **127** | **0** | −127 |
+      | **total** | **187** | **147** | **20** | **−167** |
 
-      −40 matches the "~40 actionable" estimate almost exactly. The archived tier is unchanged,
-      confirming 3.1's finding that `dependabot.yml` cannot touch alerts.
+      The −40 from the bumps themselves matches the "~40 actionable" estimate almost exactly. The
+      archived tier was unchanged by the bumps, confirming 3.1's finding that `dependabot.yml`
+      cannot touch alerts — it was cleared separately in 3.3, which is what actually delivered this
+      change's third goal ("make the repo's Dependabot count mean something").
       **The 20 that remain in the live tiers are almost all owned by the sibling changes**, which
       is a tidy result rather than a gap in this one:
       - `vercel-api` (11): `undici` ×10 + `esbuild` ×1 — all inside `@vercel/node`, unfixable and
@@ -204,6 +206,33 @@
         only reachable through URL signing, which `GoogleApi.js` never invokes, so exposure is
         latent rather than active. Flagged for a decision of its own; see the note added to
         `design.md — Open Questions`.
+
+- [x] 3.3 **(Added during implementation.)** Clear the archived tier's 127 un-actionable alerts,
+      which 3.1 established `dependabot.yml` cannot do. Two steps, because the first alone is not
+      sufficient — and that insufficiency was **measured, not assumed**:
+      1. **Renamed the manifests out of the dependency graph.**
+         `archived-sls-api/package.json` → `package.json.backup` and `yarn.lock` →
+         `yarn.lock.backup` (`git mv`, both `R100`, contents byte-identical). GitHub identifies npm
+         manifests by filename, so the tier leaves the graph while staying fully readable in the
+         tree — the same mechanism as `.github/workflows/sls-api-test.yaml.archived`. Renaming both
+         was necessary: `package.json` alone would have kept generating alerts for its 19 direct
+         deps (`serverless`, `esbuild@0.14`, `@aws-cdk/aws-dynamodb@1`, …).
+         `archived-sls-api/package-lock.json` needed nothing — it is gitignored and was never in
+         the graph.
+      2. **Dismissed the 127 existing alerts** (`PATCH .../dependabot/alerts/{n}`,
+         `dismissed_reason: not_used`, comment pointing at `ARCHIVED.md`). One was dismissed first
+         and inspected before the remaining 126; 126 succeeded, 0 failed, and a post-check
+         confirmed **every** dismissed alert belongs to `archived-sls-api` — no live-tier alert was
+         touched.
+      **The finding worth keeping: removing a manifest does not retroactively close its alerts.**
+      Verified directly rather than inferred — after the rename, GitHub's SBOM no longer contained
+      `serverless`/`aws-sdk`/`aws-cdk`/`middy` (graph demonstrably rebuilt) while `axios`,
+      `inquirer`, `vitest` and `commander` remained, yet all 127 alerts were still `open`. GitHub's
+      own docs do not describe auto-close semantics for this case, and the observed behaviour is
+      that there are none. Explicit dismissal is required. Dismissals are reversible if the tier is
+      ever un-frozen.
+      Documented in `archived-sls-api/ARCHIVED.md` and `CLAUDE.md` so the `.backup` suffix is not
+      later "fixed" as an oversight.
 
 ## 4. Correct the documentation
 

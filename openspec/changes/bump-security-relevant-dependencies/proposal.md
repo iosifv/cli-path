@@ -23,8 +23,15 @@ repo's open alerts, a large share sit in `archived-sls-api/yarn.lock` — a tier
 declares frozen, undeployed, and never to be touched. *(Counted precisely during implementation:
 **187 open**, of which **127** are the archived tier, 37 `cli-app`, 23 `vercel-api` — the "~198 /
 ~90" figures here were estimated from a partial sample and are superseded.)* They can never be
-actioned, and they drown
-the ~40 that can. GitHub is told to stop scanning that lockfile rather than the tier being edited.
+actioned, and they drown the ~40 that can. GitHub is told to stop scanning that lockfile rather
+than the tier being edited.
+
+*(How this was actually solved differs from the sentence above, and the difference is the
+interesting part — see `tasks.md` 3.1 and 3.3. `dependabot.yml` cannot "tell GitHub to stop
+scanning" for alert purposes at all. Renaming the tier's manifests to `.backup` does remove it
+from the dependency graph, but — measured, not assumed — that does **not** retroactively close
+alerts that already exist. Both steps were needed: the rename to stop new ones, and an explicit
+bulk dismissal (`not_used`) to clear the 127. Final state: **187 → 20 open alerts**, all 20 real.)*
 
 ## What Changes
 
