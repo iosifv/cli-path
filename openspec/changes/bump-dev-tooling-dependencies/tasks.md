@@ -69,25 +69,48 @@
       `export const noArgs = () => (process.argv.length === 2 ? true : false)` — so this makes the
       file self-consistent rather than introducing anything new. Cleared deliberately, not waived:
       one hunk, read in full.
-- [ ] 1.5 Run `cd cli-app && yarn test` and `cd vercel-api && yarn test && yarn typecheck`; verify
+- [x] 1.5 Run `cd cli-app && yarn test` and `cd vercel-api && yarn test && yarn typecheck`; verify
       all pass. **Commit here** — this is the "fix the config bug" commit
+      — **Done.** All three exit `0`. Committed as `5b169e7`, commit 1 of the 3 this change
+      requires.
 
 ## 2. Bump Prettier to 3 and reformat again
 
-- [ ] 2.1 Bump `prettier` from `^2.7.1` to `^3.x` in **both** `cli-app/package.json` and
+- [x] 2.1 Bump `prettier` from `^2.7.1` to `^3.x` in **both** `cli-app/package.json` and
       `vercel-api/package.json`; run `yarn install` in each and verify `npx prettier --version`
       reports 3.x in both tiers
-- [ ] 2.2 Reformat both tiers again with Prettier 3 and verify with
+      — **Done.** `^3.9.6` in both; both resolve to `prettier@3.9.6`.
+- [x] 2.2 Reformat both tiers again with Prettier 3 and verify with
       `git diff --ignore-all-space --ignore-blank-lines` that the result is **empty** — i.e.
       Prettier 3 changed only whitespace relative to Prettier 2's output. If it is non-empty,
       read every hunk: `trailingComma` is explicitly `es5` in the root config so the well-known
       v3 default change should *not* appear, and its presence would mean the config is not being
       picked up
-- [ ] 2.3 Run `cd cli-app && yarn coverage` and record the new figures. Update `.c8rc.json`'s
+      — **Done, and the result is the strongest possible: Prettier 3 changed nothing at all.**
+      Reformatting all 38 source files with `prettier@3.9.6` produced **zero** changes to any `.js`
+      or `.ts` file — its output is byte-identical to Prettier 2's for this codebase. The
+      `--ignore-all-space` check does come back non-empty, but every hunk in it is the
+      `package.json`/`yarn.lock` version bump from 2.1, i.e. my own dependency edit, not
+      formatting. Scoped to source files only, the diff is empty.
+      The `trailingComma` v3 default change did **not** appear, exactly as predicted — the root
+      config sets `es5` explicitly, so the default is inert. Zero trailing-comma lines changed,
+      which also confirms the root config is being picked up after 1.2's deletions.
+- [x] 2.3 Run `cd cli-app && yarn coverage` and record the new figures. Update `.c8rc.json`'s
       `statements`/`branches`/`functions`/`lines` to the **measured** values — reformatting moves
       physical line counts, so a shift of a point or two is expected and correct. Verify the gate
       passes at the new numbers. Do **not** add tests to hold an old number, and do not leave a
       number that now fails (`design.md — Decisions`)
+      — **Measured; no edit needed, deliberately.** New figures: **19.48 / 65.11 / 53.84 / 19.48**
+      (was 19.47 / 65.11 / 53.84 / 19.47). Only statements/lines moved, by 0.01, and only because
+      group 1's single unwrapped line in `utils/validation.js` changed the denominator — branches
+      and functions are untouched, and no test changed. Prettier 3 itself moved nothing (2.2).
+      `.c8rc.json` is left as `19 / 65 / 53 / 19`. Those are **floored integers of the measured
+      baseline**, which is the convention `fix-esm-coverage-reporting` established (it measured
+      19.47/65.11/53.84/19.47 and recorded 19/65/53/19). 19.48 still floors to 19, so the file
+      already records the measured baseline and the gate passes at `exit 0`. Writing the exact
+      decimals instead would make the gate fail on any 0.01 fluctuation for no benefit, and the
+      file's own note says thresholds should rise only when coverage *genuinely* improves — a line
+      unwrapping is not that.
 - [ ] 2.4 Run `cd cli-app && yarn test` and `cd vercel-api && yarn test && yarn typecheck`; verify
       all pass. **Commit here** — this is the "Prettier 3" commit, with no version bumps other
       than Prettier in it
