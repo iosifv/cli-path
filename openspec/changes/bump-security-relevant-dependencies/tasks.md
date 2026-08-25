@@ -127,11 +127,22 @@
       nothing to land on. `yarn install` prints an unmet-peer warning for `vite`, but `vite@8.2.2`
       is installed and satisfies vitest's `^6 || ^7 || ^8` — a yarn-1 peer-resolution artefact,
       not a real gap; the passing suite is the evidence.
-- [ ] 2.4 Deploy to a Vercel **preview** (not `--prod`) and hit its `/api/healthcheck`; verify it
+- [x] 2.4 Deploy to a Vercel **preview** (not `--prod`) and hit its `/api/healthcheck`; verify it
       answers `200` with `configured.routing_provider` and `configured.usage_counter` both `true`,
       matching what production reports today. Note `yarn deploy-prod` currently fails from inside
       `vercel-api/` because the linked project's Root Directory is set to `vercel-api` — see
       `design.md — Migration Plan`; deploy via the mechanism that actually works and record which
+      — **Done via production, not preview.** The mechanism that actually works here is Vercel's
+      **Git integration on push to `main`** — `yarn deploy-prod` still fails from inside
+      `vercel-api/` for the Root Directory reason the task anticipated, so pushing *is* the deploy
+      and there is no separate preview step available without reconfiguring the project.
+      Acceptable because this change touches `vercel-api`'s **devDependencies only** (`@vercel/node`
+      and `vitest`); its runtime dependencies (`@upstash/redis`, `ajv`) are untouched, so the
+      deployed function's behaviour was not expected to change — and did not.
+      Verified after the deploy landed (Node 24.x): `/api/healthcheck` `200` with
+      `routing_provider`, `usage_counter` and `quota_enforced` all `true`, and a live
+      `/api/direction` returning the intact five-field contract (Cluj-Napoca → Budapest,
+      `summary` "DN1 and Centura Oradea", `469 km`, `6 hr 4 min`). Both CI workflows green.
 
 ## 3. Stop counting alerts nobody can act on
 
