@@ -181,7 +181,26 @@
       `print.error` correctly, which is incidental evidence from the failed call.
       **Remaining gap:** no successful live API response was rendered through `print.direction`
       end to end. Closing it needs a browser re-auth (`clip` → Authenticate).
-- [ ] 5.3 Verify the commit history reads as three separable commits (config fix → Prettier 3 →
+- [x] 5.3 Verify the commit history reads as three separable commits (config fix → Prettier 3 →
       runner/compiler bumps), and that reverting the middle one alone leaves a working repo
-- [ ] 5.4 Run `openspec validate bump-dev-tooling-dependencies --type change --strict`; verify it
+      — **Structure verified; the revert half needs a caveat.** The history reads exactly as
+      designed, and each commit carries only its own concern:
+      | Commit | Contents |
+      | --- | --- |
+      | `5b169e7` config fix | `.prettierignore`, both `.prettierrc` deletions, the one source line |
+      | `218f2d2` Prettier 3 | `prettier` version + locks only — **no source files** |
+      | `c8d4dc8` runners | `mocha`/`chai`/`typescript` + locks only — **no source files** |
+      The separation the design cared about holds: "the config was wrong" and "Prettier 3 changed
+      its mind" are in different commits, and the second is provably empty of source changes.
+      **Reverting `218f2d2` alone does *not* apply cleanly** — it conflicts in
+      `cli-app/package.json` and `vercel-api/package.json`. This is ordinary git behaviour, not a
+      structural failure: commit 3 edited the adjacent `devDependencies` lines in the same files,
+      so a reverse-apply of commit 2's hunk no longer matches context. `yarn.lock` auto-merged
+      fine. A real revert would be a trivial manual resolution (put `prettier` back to `^2.7.1`,
+      leave `mocha`/`chai`/`typescript` alone), and the *semantic* independence the design wanted
+      is intact. Worth recording that the task's phrasing implied a cleaner property than
+      sequential edits to one file can offer.
+      The trial revert was backed out and the repo verified recovered: no conflict markers, all
+      task records intact, correct versions, `yarn test` and `yarn typecheck` both exit `0`.
+- [x] 5.4 Run `openspec validate bump-dev-tooling-dependencies --type change --strict`; verify it
       passes with `specs` reported as skipped rather than missing
