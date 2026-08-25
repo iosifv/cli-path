@@ -207,8 +207,12 @@ This half is provider-agnostic and is expected to survive the API rebuild unchan
   `archived-sls-api/` is intentional, not an oversight — that tier is frozen and undeployed (see
   `archived-sls-api/ARCHIVED.md`), so an update PR against it could never be merged on its merits.
   Note this scopes update **PRs** only: Dependabot *alerts* come from the dependency graph and
-  cannot be filtered by directory, so the archived tier's advisories still count toward the repo
-  total (127 of 187 when last measured). Reducing those needs dismissal or removal, not config.
+  cannot be filtered by directory.
+- The archived tier's manifests are checked in as **`package.json.backup`** and
+  **`yarn.lock.backup`** — deliberately, to keep them out of the dependency graph. They were
+  generating 127 un-actionable alerts (of 147 total) against a tier nobody may change, drowning
+  the ~20 real ones. Same trick as `sls-api-test.yaml.archived`. Contents are untouched; renaming
+  them back restores the alerts. Reasoning is in `archived-sls-api/ARCHIVED.md`.
 - VHS gifs double as informal integration tests: if the recorded run still looks right, the flow
   works end to end.
 

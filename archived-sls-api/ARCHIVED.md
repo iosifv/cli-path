@@ -8,6 +8,24 @@ Google key. It is kept in the repo as a reference implementation and a record of
 
 Its replacement lives in [`../vercel-api/`](../vercel-api/).
 
+## Why the manifests end in `.backup`
+
+`package.json` and `yarn.lock` are checked in as **`package.json.backup`** and
+**`yarn.lock.backup`**. This is deliberate — do not rename them back.
+
+GitHub's dependency graph identifies npm manifests by filename, and it generated **127 Dependabot
+alerts** against this tier: every one un-actionable, because the freeze above forbids upgrading
+anything here, and unreachable, because nothing runs. They drowned the ~20 real alerts on the two
+live tiers. `.github/dependabot.yml` cannot suppress them — it scopes update *pull requests*, not
+alerts, which have no per-directory exclusion.
+
+Renaming takes the files out of the dependency graph while keeping their contents verbatim in the
+tree, so the record of what this tier declared *and* what it actually resolved to is preserved.
+It is the same trick as `.github/workflows/sls-api-test.yaml.archived`, disabled by its extension.
+
+To read them, or to resurrect this tier, rename them back — but note that doing so restores all
+127 alerts.
+
 ## What it was
 
 | | |
