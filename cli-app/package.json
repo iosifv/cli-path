@@ -28,8 +28,8 @@
     "start": "node ./bin/clip.js"
   },
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.3.16",
-    "axios": "^0.27.2",
+    "@googlemaps/google-maps-services-js": "^3.4.2",
+    "axios": "^1.19.0",
     "chalk": "^5.2.0",
     "cli-table3": "^0.6.3",
     "commander": "^9.4.1",

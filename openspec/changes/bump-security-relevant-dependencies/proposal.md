@@ -3,8 +3,15 @@
 `cli-app` ships `axios@0.27.2`, which carries **22 open Dependabot alerts (10 high, 12 medium)**
 against the one tier real users install globally from npm, plus 3 more on `follow-redirects`
 underneath it. `vercel-api` carries another 18 (undici, tar, vite) — all transitive through
-`@vercel/node@3` and `vitest@2`, so they clear by bumping those two rather than by touching
+`@vercel/node@3` and `vitest@2`, so they are addressed by bumping those two rather than by touching
 anything the API's own code calls.
+
+*(Measured during implementation: bumping clears `tar` and `vite`, but **not** `undici`.
+`@vercel/node@7` is the newest release and pins `undici: 5.28.4` exactly, while the advisories need
+`>=6.24` — there is nothing to bump to. Those 14, plus `path-to-regexp`, `ajv` and `esbuild` from
+`@vercel/node@7`'s changed subtree, all sit inside a **devDependency consumed only via `import
+type`**, so they are erased at compile time and never reach the deployed function. Accepted rather
+than forced; see `tasks.md` 2.1.)*
 
 Nothing here is a feature request; it is the security debt on the two tiers that are actually
 deployed and installed. It is separated from the broader dependency modernisation (see
@@ -12,8 +19,11 @@ deployed and installed. It is separated from the broader dependency modernisatio
 land, and be reverted, on its own.
 
 A second, unrelated problem shares this change because it is measured in the same number: of the
-repo's ~198 open alerts, **roughly 90 sit in `archived-sls-api/yarn.lock`** — a tier `CLAUDE.md`
-declares frozen, undeployed, and never to be touched. They can never be actioned, and they drown
+repo's open alerts, a large share sit in `archived-sls-api/yarn.lock` — a tier `CLAUDE.md`
+declares frozen, undeployed, and never to be touched. *(Counted precisely during implementation:
+**187 open**, of which **127** are the archived tier, 37 `cli-app`, 23 `vercel-api` — the "~198 /
+~90" figures here were estimated from a partial sample and are superseded.)* They can never be
+actioned, and they drown
 the ~40 that can. GitHub is told to stop scanning that lockfile rather than the tier being edited.
 
 ## What Changes
@@ -33,10 +43,15 @@ the ~40 that can. GitHub is told to stop scanning that lockfile rather than the 
     not an edge case. If 1.x changes when a body is parsed, authentication breaks outright.
   - `lib/clients/GoogleApi.js:49,70` — reads `e.response.data` from the Google client's axios.
 - `vercel-api`'s `@vercel/node` moves `3.x` → `7.x` and `vitest` `2.x` → `4.x`, clearing the
-  undici/tar/vite alerts. Only type imports (`VercelRequest`, `VercelResponse`) are consumed from
-  `@vercel/node`, across six files.
+  tar/vite alerts (**not** undici — see the note under *Why*). Only type imports (`VercelRequest`,
+  `VercelResponse`) are consumed from `@vercel/node`, across six files, which is what keeps the
+  residual advisories out of the deployed function.
 - A new `.github/dependabot.yml` declares the ecosystems Dependabot should watch and **excludes
-  `archived-sls-api/`**, so the alert count reflects tiers that can actually act on it.
+  `archived-sls-api/`**, so no update PR is ever opened against a tier that may not change.
+  *(Measured during implementation: this does **not** reduce the alert count. `dependabot.yml`
+  governs update PRs only — alerts come from the dependency graph and are configured in repo
+  Settings, with no per-directory exclusion. The paragraph below about ~90 un-actionable alerts
+  describes a real problem this file does not solve; see `tasks.md` 3.1.)*
 - `CLAUDE.md`'s dependency notes are corrected to match what this change lands.
 
 ## Non-goals

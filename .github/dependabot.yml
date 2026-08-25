@@ -1,0 +1,28 @@
+version: 2
+
+# Scopes Dependabot's *update pull requests* to the two tiers that are actually live.
+#
+# `archived-sls-api/` is deliberately absent. It is frozen and undeployed (see
+# `archived-sls-api/ARCHIVED.md`), so a PR bumping a dependency there could never be merged on
+# its merits — it would only ever be noise against a tier nobody is allowed to change.
+#
+# Note what this does NOT do: it does not silence Dependabot *alerts*. Alerts are generated from
+# the repository's dependency graph and configured in repo Settings; `dependabot.yml` only governs
+# version-update and security-update PRs, and its `directory` key merely tells Dependabot where to
+# look in order to open them. The archived tier's advisories will keep being counted regardless of
+# this file — suppressing those needs a different mechanism (dismissing them, or removing the tier).
+#
+# There is no root `package.json`, so each tier is declared separately.
+
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/cli-app'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: 'npm'
+    directory: '/vercel-api'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5

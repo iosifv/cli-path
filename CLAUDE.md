@@ -64,6 +64,14 @@ engines stay visually identical in the terminal.
 error; `vercel-api` sends real statuses, so that workaround is gone. `status_code` is still present
 in every response body, but as diagnostics, not control flow.
 
+`axios` is on `1.x`. It and `@googlemaps/google-maps-services-js` must move **together**: the
+Google client declares its own axios range and dedupes onto `cli-app`'s copy, so bumping one alone
+leaves a second, older axios installed beneath it and clears nothing. Three places read
+`error.response.data` off a rejected request — `ClipApi.js`'s `reportAndExit()`,
+`commands/authenticate.js`'s device-flow poll (where a rejection is the *normal* state on every
+cycle, so an unparsed body would break sign-in outright), and `GoogleApi.js`'s two `.catch()`
+blocks. Re-verify those three after any future axios bump; no test covers them.
+
 `CLIP_API_URL` maps `localhost` and `vercel`. The `application_environment` value is **persisted in
 each user's configstore**, so renaming a key without adding it to `LEGACY_ENVIRONMENTS` in
 `lib/KeyManager.js` yields `undefined + path` at runtime. `KeyManager.migrateEnvironment()` runs on
@@ -195,6 +203,12 @@ This half is provider-agnostic and is expected to survive the API rebuild unchan
   `c8` coverage gate, then `yarn start --help`; `cli-app-install.yaml` does the global npm-install
   smoke test (`npm install -g cli-path && clip --help`). Both run on the `[22.x, 24.x]` matrix.
   `sls-api-test.yaml.archived` is disabled by its extension and will not run.
+- `.github/dependabot.yml` deliberately lists only `/cli-app` and `/vercel-api`. Omitting
+  `archived-sls-api/` is intentional, not an oversight — that tier is frozen and undeployed (see
+  `archived-sls-api/ARCHIVED.md`), so an update PR against it could never be merged on its merits.
+  Note this scopes update **PRs** only: Dependabot *alerts* come from the dependency graph and
+  cannot be filtered by directory, so the archived tier's advisories still count toward the repo
+  total (127 of 187 when last measured). Reducing those needs dismissal or removal, not config.
 - VHS gifs double as informal integration tests: if the recorded run still looks right, the flow
   works end to end.
 

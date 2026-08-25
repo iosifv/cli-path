@@ -107,6 +107,16 @@ caution, but `yarn typecheck` mechanically proves the only contract in use. The 
 half of the proof, which is why group 2 ends at a preview deployment rather than at a green
 typecheck.
 
+*Measured during implementation, and load-bearing in a way this section did not anticipate:*
+being type-only is not merely a **risk** argument, it is the **security** argument. `@vercel/node@7`
+is the newest release and pins `undici: 5.28.4`, which carries 14 open advisories needing `>=6.24` —
+unbumpable. Together with `path-to-regexp`, `ajv` and `esbuild` from its subtree, 17 advisories
+survive this change. They are acceptable *only* because `import type` is erased at compile time:
+none of that code is bundled, deployed, or executed, and Vercel's platform supplies the actual
+runtime. Had even one import been a value import, this bump would not have been sufficient and the
+change would have needed a different answer. If a future change starts importing a runtime value
+from `@vercel/node`, that reasoning collapses and the advisories become real.
+
 ### An anti-pattern this change is careful not to re-enable
 
 `archived-sls-api/ARCHIVED.md` records that the old API returned **HTTP 401 for every failure
