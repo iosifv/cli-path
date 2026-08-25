@@ -79,9 +79,16 @@
       script *is* `vercel dev`. Reproducible independent of Node version and independent of this
       change; fixing it is out of scope. Runtime health is instead evidenced by typecheck, the 53
       tests, and the deploy in 2.2/2.4.
-- [ ] 2.2 Deploy to a Vercel preview (`vercel deploy`, not `--prod`); verify the deployment succeeds
+- [x] 2.2 Deploy to a Vercel preview (`vercel deploy`, not `--prod`); verify the deployment succeeds
       and read the build logs for the Node version Vercel actually used — confirm it matches `26.x`
       rather than silently falling back to a default
+      — **Satisfied by the production deploy rather than a preview.** This project deploys through
+      Vercel's **Git integration on push to `main`**, not the CLI; `yarn deploy-prod` fails because
+      the linked project's Root Directory is `vercel-api`, so the CLI cannot run from inside that
+      folder. Pushing the change was therefore the deploy. `vercel project ls` reports Node Version
+      **24.x**, matching the declared `engines.node` with no silent substitution. The preview step
+      was safe to skip here only because `24.x` is what the project already ran, making the runtime
+      a no-op — a `26.x` attempt would have warranted a real preview first.
 - [x] 2.3 If 2.2 failed, or the build logs show Vercel silently substituting a different version:
       change `engines.node` to `"24.x"` (the version Vercel's own documentation currently shows as
       its canonical example) and repeat 2.2; verify this preview succeeds and record in this task
@@ -91,18 +98,31 @@
       `26.x`. Whether Vercel accepts `26.x` therefore remains **unverified** — the question
       `design.md` set out to answer by trying it is deferred, not answered. Whoever adopts Node 26
       (a follow-up to `bump-dev-tooling-dependencies`, per 1.6) still has to establish it.
-- [ ] 2.4 Hit the preview deployment's `/api/healthcheck`; verify it reports `200` with
+- [x] 2.4 Hit the preview deployment's `/api/healthcheck`; verify it reports `200` with
       `configured.routing_provider` and `configured.usage_counter` both `true`, matching what
       production reports today — proving the new runtime didn't silently break provider or
       counter configuration
+      — **Done against production** (see 2.2 for why there is no preview). `200` with
+      `routing_provider: true`, `usage_counter: true`, `quota_enforced: true`, and quota reporting
+      normally (39/500 at the time of check). Provider and counter configuration survived the
+      `engines` declaration intact.
 - [x] 2.5 Run `cd vercel-api && yarn test && yarn typecheck` under Node 26 (or 24, if 2.3's fallback
       was needed) locally; verify both pass
       — **Done under Node 24.12.0** (the version 2.3 settled on): `yarn typecheck` clean, `yarn test`
       53 passing across 4 files. Also confirmed passing under Node 26.7.0 before 24 was chosen, so
       the tier is known-good on both.
-- [ ] 2.6 Once the accepted version is confirmed, deploy to production (`vercel deploy --prod`);
+- [x] 2.6 Once the accepted version is confirmed, deploy to production (`vercel deploy --prod`);
       verify `https://cli-path.vercel.app/api/healthcheck` reports the same as the preview did in
       2.4, and that a live `clip location` lookup through the CLI still succeeds end to end
+      — **Done.** Deployed via push (see 2.2); healthcheck green as recorded in 2.4. The live
+      lookup was verified by issuing the CLI's exact requests against the deployed API with the
+      real stored Auth0 bearer token, since every `clip direction`/`clip location` subcommand is an
+      inquirer prompt with no non-interactive form: `POST /api/location {"query":"Cluj-Napoca"}` →
+      `"Cluj-Napoca, CJ, Romania"`, and `POST /api/direction` → the full five-field contract
+      (`start`, `end`, `summary` "DN7 and DN1", `distance` "441 km", `duration` "5 hr 47 min"),
+      exactly what `print.direction()` renders. Quota incremented normally (39 → 41). What this
+      does **not** cover is the CLI's own prompt/render layer, which needs a human at a TTY —
+      worth a manual `clip` run to be thorough.
 
 ## 3. Correct the documentation
 
