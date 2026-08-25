@@ -12,24 +12,63 @@
 
 ## 1. Fix the Prettier config bug (still on Prettier 2)
 
-- [ ] 1.1 Establish what Prettier currently reaches before changing anything: run
+- [x] 1.1 Establish what Prettier currently reaches before changing anything: run
       `npx prettier --check .` from the repo root and read the file list. Verify whether it reaches
       `docs/swagger/dist/*.js` (~1MB of vendored minified bundles, plus our customised
       `swagger-initializer.js`) — **there is no `.prettierignore` anywhere in the repo**. If it
       does, create one covering at minimum `docs/swagger/dist/` and re-check before proceeding;
       this resolves `design.md`'s open question and must happen before any `--write`
-- [ ] 1.2 Delete `cli-app/.prettierrc` (`tabWidth: 4`, no `printWidth` — contradicts root) **and**
+      — **Done; the open question resolves to "yes, and worse than expected."** `prettier --check .`
+      from the root reached **122 files**, not the 38 this change is about — including every file
+      in `docs/swagger/dist/` (8.2MB of vendored minified bundles, *plus* the customised
+      `swagger-initializer.js` whose OAuth wiring is deliberately shaped), the whole frozen
+      `archived-sls-api/` tier, tool-managed `.insomnia/`/`.postman/`/`.claude/`, and all of
+      `openspec/` including the archive of past changes.
+      Created `.prettierignore` covering the vendored bundle, the archived tier, tool-managed
+      directories, OpenSpec artifacts, and generated output. Re-checked: **122 → 28 files**, and
+      `docs/swagger/dist` and `archived-sls-api` are confirmed excluded. Running `--write` before
+      this would have expanded minified bundles into millions of lines and rewritten a historical
+      archive.
+- [x] 1.2 Delete `cli-app/.prettierrc` (`tabWidth: 4`, no `printWidth` — contradicts root) **and**
       `vercel-api/.prettierrc` (currently identical to root, removed to prevent the same drift).
       Verify with `npx prettier --find-config-path cli-app/lib/KeyManager.js` and the same for a
       `vercel-api` `.ts` file that both now resolve to the **root** `.prettierrc`
-- [ ] 1.3 Reformat both tiers with the **currently installed Prettier 2**:
+      — **Done.** Before: `cli-app/.prettierrc` and `vercel-api/.prettierrc` respectively. After
+      `git rm` of both: each resolves to the root `.prettierrc`.
+- [x] 1.3 Reformat both tiers with the **currently installed Prettier 2**:
       `npx prettier --write "cli-app/**/*.js" "vercel-api/**/*.ts"`. Verify
       `git diff --stat` shows changes concentrated in `cli-app/` (the tier whose config was wrong)
       and little or nothing in `vercel-api/` (whose config already matched root) — a large
       `vercel-api` diff means 1.2 resolved config differently than expected
-- [ ] 1.4 Verify this reformat is whitespace-only:
+      — **Done, and the config bug turns out to have been almost entirely latent.** `vercel-api`:
+      **zero** changes, as predicted. `cli-app`: **one file, one line** —
+      `utils/validation.js` — not the substantial diff `design.md` expected from a `tabWidth: 4`
+      vs `2` mismatch.
+      The reason: the code was already written and maintained at 2-space indentation matching the
+      **root** config, so `cli-app/.prettierrc` had never actually been applied to it. The single
+      line that did change is a `printWidth` effect, not indentation — it had been wrapped to fit
+      80 columns (the implicit default of a config with no `printWidth`) and now fits root's 100
+      on one line. So the stale config was a real trap, but a loaded one that had barely been
+      sprung; deleting it prevents a future accident rather than undoing a past one. The "38-file
+      reformat" this change was largely scoped around does not exist.
+- [x] 1.4 Verify this reformat is whitespace-only:
       `git diff --ignore-all-space --ignore-blank-lines` must come back **empty**. Anything it
       surfaces is not whitespace and must be read line by line before continuing
+      — **Came back NON-empty; read line by line and cleared.** The single surfaced hunk is
+      `cli-app/utils/validation.js`:
+      ```
+      -export const isRequired = (input) =>
+      -  input === '' ? 'This value is required' : true
+      +export const isRequired = (input) => (input === '' ? 'This value is required' : true)
+      ```
+      The non-whitespace part is the **added parentheses** around the ternary, which is why the
+      check did not come back clean. Prettier wraps a ternary used as an arrow-function body in
+      parens as a matter of style; the expression is semantically identical with or without them.
+      Confirming it is a style convention and not a semantic change: the **next line of the same
+      file** already carries that exact shape —
+      `export const noArgs = () => (process.argv.length === 2 ? true : false)` — so this makes the
+      file self-consistent rather than introducing anything new. Cleared deliberately, not waived:
+      one hunk, read in full.
 - [ ] 1.5 Run `cd cli-app && yarn test` and `cd vercel-api && yarn test && yarn typecheck`; verify
       all pass. **Commit here** — this is the "fix the config bug" commit
 

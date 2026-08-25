@@ -1,0 +1,26 @@
+# Vendored swagger-ui-dist build (~8MB). Prettier would happily expand the minified bundles into
+# millions of lines, and would also reformat our customised `swagger-initializer.js` — the OAuth
+# wiring in there is deliberately shaped and shouldn't churn on a formatter bump. Nothing here is
+# authored in this repo except `swagger-initializer.js`, which is edited by hand and left alone.
+docs/swagger/dist/
+
+# Frozen, undeployed reference tier — see archived-sls-api/ARCHIVED.md. Reformatting it would
+# create a large diff against code nobody may change, and destroy the "this is exactly what was
+# deployed" property the archive exists for.
+archived-sls-api/
+
+# Tool-managed, not hand-authored. Reformatting these fights the tool that regenerates them.
+.insomnia/
+.postman/
+.claude/
+
+# OpenSpec planning artifacts, including the archive of past changes. Reformatting archived
+# changes would rewrite the historical record; reformatting active ones fights the CLI.
+openspec/
+
+# Generated / binary-ish
+coverage-cli-app/
+docs/vhs/
+node_modules/
+yarn.lock
+*.tape
