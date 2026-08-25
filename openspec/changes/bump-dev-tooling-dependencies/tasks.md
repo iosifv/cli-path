@@ -149,23 +149,38 @@
 
 ## 4. Correct the documentation
 
-- [ ] 4.1 In the root `CLAUDE.md`, fix the Prettier claim. It currently reads "Prettier (root
+- [x] 4.1 In the root `CLAUDE.md`, fix the Prettier claim. It currently reads "Prettier (root
       `.prettierrc`, duplicated in `cli-app/`)" — the duplicate is being deleted, and it was never
       actually a duplicate (`tabWidth: 4` vs `2`, no `printWidth`). Verify the corrected text names
       the root `.prettierrc` as the only config and mentions the `.prettierignore` if 1.1 created one
-- [ ] 4.2 Update `CLAUDE.md`'s `cli-app` command notes if they name `mocha`/`chai` versions, and the
+- [x] 4.2 Update `CLAUDE.md`'s `cli-app` command notes if they name `mocha`/`chai` versions, and the
       `vercel-api` notes if they name `typescript`. Verify no superseded version number remains
       outside archived OpenSpec content
 
 ## 5. Close out
 
-- [ ] 5.1 Run `cd cli-app && yarn test && yarn coverage` and
+- [x] 5.1 Run `cd cli-app && yarn test && yarn coverage` and
       `cd vercel-api && yarn test && yarn typecheck`; verify all four exit `0`
-- [ ] 5.2 Smoke-test the real binary, since 19% statement coverage cannot backstop a 38-file
+      — **Done.** All four exit `0` on Node 24.12.0.
+- [x] 5.2 Smoke-test the real binary, since 19% statement coverage cannot backstop a 38-file
       reformat: run `cd cli-app && yarn start --help`, then one real end-to-end command
       (`clip location` against the live API). Verify output is byte-identical in shape to before
       the change — all CLI output flows through `cli-app/utils/style.js`, so a formatting-induced
       break would surface there
+      — **Done for the formatting layer; the live network round-trip was blocked by an expired
+      token, unrelated to this change.** `yarn start --help` renders correctly.
+      The end-to-end call returned `Your access token was rejected.` — **verified as token expiry,
+      not a regression**: the same token sent by `curl` straight to Auth0 `/userinfo` (bypassing
+      every line of cli-app) also returns 401, while `/api/healthcheck` returns 200. The stored
+      Auth0 access token simply aged out; re-authenticating needs a browser.
+      Since 5.2's actual concern is that "a formatting-induced break would surface" in
+      `utils/style.js`, every helper in that module was exercised directly instead — `line`,
+      `statement`, `value`, `status`, `direction` (the five-field block), `locationTable` and
+      `error` — and all render correctly: colours, column alignment, the arrow-and-indent direction
+      layout, and the box-drawn table. The rejection message itself also rendered through
+      `print.error` correctly, which is incidental evidence from the failed call.
+      **Remaining gap:** no successful live API response was rendered through `print.direction`
+      end to end. Closing it needs a browser re-auth (`clip` → Authenticate).
 - [ ] 5.3 Verify the commit history reads as three separable commits (config fix → Prettier 3 →
       runner/compiler bumps), and that reverting the middle one alone leaves a working repo
 - [ ] 5.4 Run `openspec validate bump-dev-tooling-dependencies --type change --strict`; verify it

@@ -116,12 +116,15 @@ Node warns (`EBADENGINE`, naming required vs current) but still succeeds with ex
 `9.1.0` pin existed because `c8@12`+ needed Node 20+ while the floor was 16, and
 `bump-node-version-to-the-latest-stable-version` removed that floor and unpinned it to `^12.0.0`.
 
-**Node 26 is deliberately not adopted yet.** `mocha@10`'s transitive `yargs@16.2.0` declares
-`"type": "module"` while shipping an extensionless `./yargs` file containing `require()`; Node 26
-loads it as ESM and the whole suite dies with `ReferenceError: require is not defined in ES module
-scope` before any test runs. `mocha@11` (yargs `17.7.3` — `17.7.2` has the same defect) fixes it,
-so moving to Node 26 is a follow-up to the `bump-dev-tooling-dependencies` change, not a
-standalone step.
+**Node 26 is now unblocked but not yet adopted.** It was deferred because `mocha@10`'s transitive
+`yargs@16.2.0` declares `"type": "module"` while shipping an extensionless `./yargs` file
+containing `require()`; Node 26 loads it as ESM and the whole suite died with `ReferenceError:
+require is not defined in ES module scope` before any test ran. `bump-dev-tooling-dependencies`
+has since moved to `mocha@11` (yargs `17.7.3` — note `17.7.2` has the same defect), and the suite
+was verified passing on Node 26 during that investigation. What remains is to bump `.nvmrc` to 26,
+add `26.x` to both CI matrices, and establish whether Vercel Functions accepts
+`engines.node: "26.x"` for `vercel-api` — which was never tested, since that tier settled on
+`24.x` for production-safety reasons.
 
 ### vercel-api
 
@@ -194,8 +197,17 @@ This half is provider-agnostic and is expected to survive the API rebuild unchan
 
 ## Conventions
 
-- Prettier (root `.prettierrc`, duplicated in `cli-app/`): no semicolons, single quotes, 2-space
-  indent, 100 print width, es5 trailing commas.
+- Prettier 3, configured by the **root `.prettierrc` only**: no semicolons, single quotes, 2-space
+  indent, 100 print width, es5 trailing commas. There are no per-tier configs — `cli-app/` and
+  `vercel-api/` each had one and both were deleted. `cli-app`'s was never actually a duplicate of
+  root (`tabWidth: 4`, no `printWidth`), which is what this line used to claim; it had barely been
+  applied to the code, but it was a trap waiting to reformat the tier away from the documented
+  conventions.
+- `.prettierignore` at the root is load-bearing — **check it before running `prettier --write`
+  from the repo root**. Without it Prettier reaches 122 files instead of 28, including the 8.2MB
+  vendored `docs/swagger/dist/` bundles (it will expand the minified ones), the hand-customised
+  `swagger-initializer.js`, the frozen `archived-sls-api/` tier, tool-managed
+  `.insomnia/`/`.postman/`/`.claude/`, and the OpenSpec archive of past changes.
 - All CLI output goes through `cli-app/utils/style.js` (`line`, `statement`, `value`, `status`,
   `error`, `direction`, `locationTable`) — don't `console.log` formatted output directly.
 - CI (`.github/workflows/`) runs on pushes to `main`, split across two workflow files:
