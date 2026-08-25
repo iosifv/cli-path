@@ -36,6 +36,14 @@ everything anyway and the two diffs would otherwise be impossible to tell apart.
   ESM-only and dropped the `chai.expect` CommonJS default export; `cli-app` is already
   `"type": "module"`, so this is expected to be cheap, but the suite's import style has to be
   checked rather than assumed.
+- **The `mocha` bump is what unblocks Node 26**, which raises this change's priority above
+  "tidy-up". `bump-node-version-to-the-latest-stable-version` set out to target Node 26 and had to
+  retarget to 24, because `mocha@10`'s transitive `yargs@16.2.0` declares `"type": "module"` while
+  shipping an extensionless `./yargs` file containing `require()` — Node 26 loads it as ESM and the
+  suite dies with `ReferenceError: require is not defined in ES module scope` before running a
+  single test. Verified during that change: `mocha@11.8.0` (transitive `yargs@17.7.3`) fixes it,
+  16 passing on Node 26. Note `yargs@17.7.2` has the **same** defect — only the `17.7.3` patch is
+  good, so this must be re-measured rather than assumed at implementation time.
 - `typescript` moves `^5.6.3` → `^7.x` in `vercel-api`.
 - `cli-app`'s `.c8rc.json` coverage baseline is re-measured, not re-asserted: reformatting changes
   line counts, so the recorded statement/line percentages will move even though no logic did.
@@ -73,9 +81,15 @@ compiler maintenance. `.openspec.yaml` sets `skip_specs: true`, matching
 ## Impact
 
 **Sequencing** — depends on `bump-node-version-to-the-latest-stable-version` (the Node 16 floor
-blocks `mocha@11` and `chai@6`). Independent of `bump-security-relevant-dependencies`; either may
-land first. Best done *before* `bump-interactive-surface-dependencies`, so that change's diff is
-its own rewrites rather than reformatting noise on top of them.
+blocked `mocha@11` and `chai@6`; that change has landed a `[22.x, 24.x]` matrix, so the floor is
+gone). Independent of `bump-security-relevant-dependencies`; either may land first. Best done
+*before* `bump-interactive-surface-dependencies`, so that change's diff is its own rewrites rather
+than reformatting noise on top of them.
+
+**Unblocks Node 26.** Once `mocha@11` lands, `.nvmrc` and both CI matrices can add `26.x` — the
+step `bump-node-version-to-the-latest-stable-version` deliberately deferred. That follow-up also
+still has to establish whether Vercel Functions accepts `engines.node: "26.x"` for `vercel-api`,
+which was left unverified because that tier settled on `24.x` for production-safety reasons.
 
 **Modified** — `cli-app/.prettierrc` (corrected or deleted), `cli-app/package.json`,
 `vercel-api/package.json`, both `yarn.lock` files, `cli-app/.c8rc.json` (re-measured baseline),

@@ -71,9 +71,10 @@ the same reason.
 ## Impact
 
 **Sequencing** — depends on `bump-node-version-to-the-latest-stable-version` landing first.
-`vitest@4` declares `engines.node ^20.0.0 || ^22.0.0 || >=24.0.0`; the current `[16.x, 18.x]` CI
-matrix satisfies none of it. `axios@1.x` itself has no such constraint, so the `cli-app` half is
-technically independent — but it is kept in sequence so a CI failure has one candidate cause.
+`vitest@4` declares `engines.node ^20.0.0 || ^22.0.0 || >=24.0.0`, which the old `[16.x, 18.x]` CI
+matrix satisfied at no point; that change has since landed `[22.x, 24.x]`, satisfying it at every
+entry. `axios@1.x` itself has no such constraint, so the `cli-app` half is technically
+independent — but it is kept in sequence so a CI failure has one candidate cause.
 
 **Modified** — `cli-app/package.json` (`axios`, `@googlemaps/google-maps-services-js`) and
 `cli-app/yarn.lock`; `vercel-api/package.json` (`@vercel/node`, `vitest`) and `vercel-api/yarn.lock`;

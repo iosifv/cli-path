@@ -1,6 +1,7 @@
 > **Sequenced after `bump-node-version-to-the-latest-stable-version`.** `vitest@4` requires
-> Node `^20 || ^22 || >=24`, which the current `[16.x, 18.x]` CI matrix satisfies at no point. Do
-> not start group 2 until that change has landed and CI is green on the new matrix.
+> Node `^20 || ^22 || >=24`, which the old `[16.x, 18.x]` CI matrix satisfied at no point. That
+> change has since landed a `[22.x, 24.x]` matrix, which satisfies it at every entry — so this
+> prerequisite is **met**, provided CI is green on the new matrix before group 2 starts.
 >
 > Nothing in this change is already complete — all groups are outstanding.
 >

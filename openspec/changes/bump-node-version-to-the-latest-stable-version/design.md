@@ -42,6 +42,8 @@ Three numbers doing different jobs:
   matrix entry (22) drops genuinely end-of-life versions (16, 18) without demanding anyone
   immediately be on the newest release the way CI is. This is a lower bar than CI tests, and that
   gap is deliberate: CI proves the newest version works, `engines` only promises the floor does.
+  Note this *declares* a floor rather than enforcing one — see `Risks / Trade-offs` for what npm
+  actually does with it.
 
 *Alternative considered:* pinning `cli-app`'s `engines.node` to `26.x` outright, matching the
 newest release everywhere. Rejected — for a published CLI, that's a compatibility break for any
@@ -96,11 +98,20 @@ version-dependent regression at push time instead of discovery in the wild) is w
 extra minutes for a project of this size.
 
 **Dropping Node 16/18 from `cli-app`'s CI matrix means those versions are no longer verified,
-even though nothing in `engines.node` (`>=22`) permits installing on them going forward.** → That's
-the point: 16 and 18 are past or near end-of-life, and continuing to test dead runtime versions
-buys nothing. A user still on 16 or 18 installing an old published version is unaffected; installing
-a version published after this change fails at `npm install` time with a clear engines mismatch
-rather than a confusing runtime error later.
+even though `engines.node` (`>=22`) declares them unsupported going forward.** → That's the point:
+16 and 18 are past or near end-of-life, and continuing to test dead runtime versions buys nothing.
+A user still on 16 or 18 installing an old published version is unaffected.
+
+**`engines` warns; it does not block.** Measured during implementation (task 1.3): installing under
+Node 18.20.8 and 20.19.6 *succeeds* with exit 0, emitting only
+`npm warn EBADENGINE ... required: { node: '>=22' }, current: { node: 'v18.20.8' }`. npm hard-fails
+on an engines mismatch only when the **installing user** sets `engine-strict=true` in their own
+config — a published package cannot impose that on its consumers. So the value `engines` delivers
+here is a clear, early, self-explanatory warning naming both the required and actual version, not
+prevention. That is still worth having, and it is the mechanism every npm-published CLI uses, but
+this design should not be read as promising that an under-floor install is stopped. The only way to
+actually stop one is a runtime check in `bin/clip.js`, which is deliberately **not** part of this
+change.
 
 ## Migration Plan
 

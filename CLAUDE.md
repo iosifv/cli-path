@@ -101,12 +101,19 @@ yarn npm-reinstall            # reinstall the published global package to smoke-
 yarn configstore-watch        # tail ~/.config/configstore/cli-path.json
 ```
 
-Node pinned to 18 by `cli-app/.nvmrc`; CI matrix covers 16.x and 18.x. `c8` is pinned to `9.1.0`
-in `devDependencies` rather than its current major, because `c8@12`+ requires Node 20+ and this
-project's floor is 16. Whoever modernises the runtime off the 16.x/18.x matrix should unpin `c8`
-in the same change — the archived `fix-esm-coverage-reporting` OpenSpec change (declares
-`skip_specs: true`, so it left no capability spec — look under `openspec/changes/archive/`) has
-the reasoning.
+Node pinned to 24 by `cli-app/.nvmrc`; CI matrix covers 22.x and 24.x. `package.json` declares
+`engines.node: ">=22"` — note that npm treats `engines` as **advisory**: installing under an older
+Node warns (`EBADENGINE`, naming required vs current) but still succeeds with exit 0, because
+`engine-strict` is a setting only the installing user can turn on. `c8` is no longer pinned; the
+`9.1.0` pin existed because `c8@12`+ needed Node 20+ while the floor was 16, and
+`bump-node-version-to-the-latest-stable-version` removed that floor and unpinned it to `^12.0.0`.
+
+**Node 26 is deliberately not adopted yet.** `mocha@10`'s transitive `yargs@16.2.0` declares
+`"type": "module"` while shipping an extensionless `./yargs` file containing `require()`; Node 26
+loads it as ESM and the whole suite dies with `ReferenceError: require is not defined in ES module
+scope` before any test runs. `mocha@11` (yargs `17.7.3` — `17.7.2` has the same defect) fixes it,
+so moving to Node 26 is a follow-up to the `bump-dev-tooling-dependencies` change, not a
+standalone step.
 
 ### vercel-api
 
@@ -121,6 +128,16 @@ yarn deploy-prod              # vercel deploy --prod
 
 Uses `vitest`, not the `mocha` of `cli-app` — mocha needs a loader shim for TypeScript ESM. Tests
 stub only `fetch` and Redis, so `test/api.test.ts` covers the real request path.
+
+`package.json` declares `engines.node: "24.x"`, matching the version the Vercel project already
+runs, so the declaration documents the runtime rather than changing it. Before
+`bump-node-version-to-the-latest-stable-version` there was no `engines` field at all and the
+runtime was whatever Vercel's platform default happened to be. This tier is *not* blocked on Node
+26 the way `cli-app` is (it has no mocha); typecheck and all tests pass under 26 locally. Whether
+Vercel Functions accepts `engines.node: "26.x"` is still unverified.
+
+`yarn dev` (`vercel dev`) currently fails with "must not recursively invoke itself" — Vercel reads
+the `dev` script, which is itself `vercel dev`. Pre-existing and unrelated to any runtime change.
 
 Local runs need either an Upstash Redis or an explicit `CLIP_DISABLE_QUOTA=1`; the counter refuses
 to fail open. See `vercel-api/README.md`.
@@ -176,7 +193,7 @@ This half is provider-agnostic and is expected to survive the API rebuild unchan
 - CI (`.github/workflows/`) runs on pushes to `main`, split across two workflow files:
   `cli-app-test-build.yaml` installs `cli-app`'s dependencies, runs the mocha suite, runs the
   `c8` coverage gate, then `yarn start --help`; `cli-app-install.yaml` does the global npm-install
-  smoke test (`npm install -g cli-path && clip --help`). Both run on the `[16.x, 18.x]` matrix.
+  smoke test (`npm install -g cli-path && clip --help`). Both run on the `[22.x, 24.x]` matrix.
   `sls-api-test.yaml.archived` is disabled by its extension and will not run.
 - VHS gifs double as informal integration tests: if the recorded run still looks right, the flow
   works end to end.

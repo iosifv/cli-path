@@ -6,6 +6,9 @@
   "license": "MIT",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vercel dev",
     "deploy": "vercel deploy",

@@ -7,14 +7,20 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        # Set to the former tested version. Should probably update this
-        # to reflect the release schedule. https://nodejs.org/en/about/releases/
+        # Per the release schedule: https://nodejs.org/en/about/releases/
+        # 22.x is in maintenance and 24.x is Active LTS.
         #
-        # Coverage runs on the whole matrix, not just one entry: the two Node versions produced
-        # identical figures when fix-esm-coverage-reporting measured the baseline, but running on
-        # both costs nothing extra here and catches a future version-dependent gap immediately
-        # rather than by luck of which entry happens to be checked.
-        node-version: [16.x, 18.x]
+        # 26.x is deliberately NOT here yet. mocha@10's yargs (16.2.0) declares "type": "module"
+        # while shipping an extensionless ./yargs file containing require(), which Node 26 loads
+        # as ESM — the suite dies with "require is not defined in ES module scope" before running
+        # a single test. mocha@11 (yargs 17.7.3) fixes it; adding 26.x is blocked on that bump,
+        # tracked in the bump-dev-tooling-dependencies change.
+        #
+        # Coverage runs on the whole matrix, not just one entry: every matrix entry produced
+        # identical figures when fix-esm-coverage-reporting measured the baseline, and running on
+        # all of them costs nothing extra here while catching a future version-dependent gap
+        # immediately rather than by luck of which entry happens to be checked.
+        node-version: [22.x, 24.x]
     steps:
       - uses: actions/checkout@v3.2.0
       - name: Use Node.js ${{ matrix.node-version }}

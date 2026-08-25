@@ -7,9 +7,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        # Set to the former tested version. Should probably update this
-        # to reflect the release schedule. https://nodejs.org/en/about/releases/
-        node-version: [16.x, 18.x]
+        # Per the release schedule: https://nodejs.org/en/about/releases/
+        # 22.x is in maintenance and 24.x is Active LTS. Kept in step with
+        # cli-app-test-build.yaml's matrix — see the note there on why 26.x is not included yet.
+        node-version: [22.x, 24.x]
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
