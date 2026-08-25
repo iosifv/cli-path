@@ -111,28 +111,41 @@
       decimals instead would make the gate fail on any 0.01 fluctuation for no benefit, and the
       file's own note says thresholds should rise only when coverage *genuinely* improves — a line
       unwrapping is not that.
-- [ ] 2.4 Run `cd cli-app && yarn test` and `cd vercel-api && yarn test && yarn typecheck`; verify
+- [x] 2.4 Run `cd cli-app && yarn test` and `cd vercel-api && yarn test && yarn typecheck`; verify
       all pass. **Commit here** — this is the "Prettier 3" commit, with no version bumps other
       than Prettier in it
+      — **Done.** All three exit `0`. Committed as `218f2d2`, commit 2 of 3, containing only the
+      Prettier bump and its lockfile entries — no other version change and no source file.
 
 ## 3. Bump the test runner, assertion library and compiler
 
-- [ ] 3.1 Bump `mocha` (`^10.2.0` → `^11.x`) and `chai` (`^4.3.7` → `^6.x`) in
+- [x] 3.1 Bump `mocha` (`^10.2.0` → `^11.x`) and `chai` (`^4.3.7` → `^6.x`) in
       `cli-app/package.json`; run `yarn install`, then `yarn test`. Verify the single suite
       `cli-app/test/key-manager.test.js` passes unchanged — it uses `import { assert } from 'chai'`
       (a named ESM import) across 22 assertions, which is the form Chai 5+'s ESM-only rewrite
       keeps, so **no test edit is expected**. If one *is* needed, record what and why here
-- [ ] 3.2 Confirm no Mocha configuration surface was missed: there is no `.mocharc.*` in the repo
+      — **Done, no test edit needed — the prediction held exactly.** `mocha@11.8.0` and
+      `chai@6.2.2`; all 16 tests pass unchanged. The named `import { assert } from 'chai'` is
+      indeed the form Chai's ESM-only rewrite kept, so a two-major jump cost nothing.
+- [x] 3.2 Confirm no Mocha configuration surface was missed: there is no `.mocharc.*` in the repo
       and `cli-app`'s `test` script invokes `./node_modules/mocha/bin/mocha.js` with no flags.
       Verify that still resolves and runs under Mocha 11 (the binary path is an implementation
       detail of the package layout and is the one thing a major bump could move)
-- [ ] 3.3 Bump `typescript` (`^5.6.3` → `^7.x`) in `vercel-api/package.json`; run `yarn install`
+      — **Done.** No `.mocharc.*` exists anywhere in the repo, so Mocha 11's config-related
+      breaking changes had no surface to land on. The `test` script's hardcoded
+      `./node_modules/mocha/bin/mocha.js` still resolves and reports `11.8.0` when invoked
+      directly — the one thing that could have broken did not.
+- [x] 3.3 Bump `typescript` (`^5.6.3` → `^7.x`) in `vercel-api/package.json`; run `yarn install`
       then `yarn typecheck`. Verify it exits `0`. If v7 rejects something v5 accepted, pin to the
       latest v6 instead and record the rejection and the fallback here — the same
       "try newer, record the fallback" shape `bump-node-version-to-the-latest-stable-version` uses
       for Vercel's Node support
-- [ ] 3.4 Run `cd vercel-api && yarn test`; verify all suites still pass under the new compiler.
+      — **Done; no fallback needed.** `typescript@7.0.2` installed and `tsc --noEmit` exits `0`
+      with no source edits. The recorded v6 fallback was not required.
+- [x] 3.4 Run `cd vercel-api && yarn test`; verify all suites still pass under the new compiler.
       **Commit here** — this commit contains no formatting changes at all
+      — **Done.** 4 files, 53 tests passing under `typescript@7.0.2`. Verified zero source-file
+      changes across the whole group, so this commit genuinely carries no formatting.
 
 ## 4. Correct the documentation
 
