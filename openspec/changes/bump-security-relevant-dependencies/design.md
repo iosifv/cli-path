@@ -182,3 +182,16 @@ from the Vercel dashboard.
 - **Does the `[22.x, 24.x, 26.x]` matrix the Node change introduces stay valid for `vitest@4`?**
   Its `engines` (`^20.0.0 || ^22.0.0 || >=24.0.0`) is satisfied by all three today. Worth
   re-checking at implementation time rather than trusting a number recorded here.
+  *(Answered: that change landed `[22.x, 24.x]`, not three entries — Node 26 was deferred. Both
+  remaining entries satisfy `vitest@4`, and CI is green on both.)*
+- **What to do about `crypto-js@4.1.1` (severity `critical`), surfaced by task 3.2?** It arrives
+  through `@googlemaps/google-maps-services-js > @googlemaps/url-signature`, and the Google client
+  is *already at its newest release* — so, like `undici`, there is nothing to bump to. Unlike
+  `undici` it is **not** shielded by being a type-only devDependency: the Google client is a
+  runtime `dependencies` entry, so this ships to everyone who installs `cli-path`. Mitigating it:
+  the vulnerability is in PBKDF2 key derivation, reachable only via URL signing, which
+  `GoogleApi.js` never calls — exposure is latent, not active. The options are a `yarn
+  resolutions` override forcing `crypto-js >=4.2.0`, dropping the Google client for direct
+  `fetch` calls, or accepting and documenting it. This change deliberately does **not** decide;
+  it was scoped to packages it could actually move, and a critical-severity call on the published
+  package deserves its own deliberation rather than being folded in at the end of another change.

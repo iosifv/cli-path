@@ -168,7 +168,7 @@
       **Baseline captured for 3.2** (pre-push): **187 open alerts** — `archived-sls-api/yarn.lock`
       **127**, `cli-app/yarn.lock` **37**, `vercel-api/yarn.lock` **23**. Note the archived tier is
       127, not the ~90 this change estimated from a partial sample.
-- [ ] 3.2 Re-read the total open alert count after 1.1 and 2.1 have landed; verify it dropped by
+- [x] 3.2 Re-read the total open alert count after 1.1 and 2.1 have landed; verify it dropped by
       roughly the 40 actionable ones plus the ~90 archived ones, and record the actual
       before/after numbers here. A count that barely moved means the dedupe in 1.1 did not take
       — **Expectation corrected before running this.** The archived tier's alerts will **not**
@@ -176,6 +176,34 @@
       187 will remain untouched. What should drop is `cli-app`'s **37** (the axios dedupe from 1.1)
       and part of `vercel-api`'s **23** (`tar` and `vite` cleared, `undici`'s 14 remaining per
       2.1). Blocked until the change is pushed and GitHub re-scans the lockfiles.
+      — **Done, and the dedupe took.** Measured after push and rescan:
+
+      | Manifest | Before | After | Δ |
+      | --- | --- | --- | --- |
+      | `cli-app/yarn.lock` | 37 | **9** | −28 |
+      | `vercel-api/yarn.lock` | 23 | **11** | −12 |
+      | `archived-sls-api/yarn.lock` | 127 | **127** | 0 (as predicted in 3.1) |
+      | **total** | **187** | **147** | **−40** |
+
+      −40 matches the "~40 actionable" estimate almost exactly. The archived tier is unchanged,
+      confirming 3.1's finding that `dependabot.yml` cannot touch alerts.
+      **The 20 that remain in the live tiers are almost all owned by the sibling changes**, which
+      is a tidy result rather than a gap in this one:
+      - `vercel-api` (11): `undici` ×10 + `esbuild` ×1 — all inside `@vercel/node`, unfixable and
+        accepted per 2.1 (devDependency, `import type` only, never deployed).
+      - `cli-app` (9): `lodash` ×3 and `tmp` ×2 come via `inquirer@9.1.4`
+        (→ `bump-interactive-surface-dependencies`); `serialize-javascript` ×2 via `mocha@10.8.2`
+        (→ `bump-dev-tooling-dependencies`); `underscore` ×1 **high** is a *direct* dependency at
+        `^1.13.6` with `1.13.8` available (→ also `bump-interactive-surface-dependencies`, which
+        already lists it as a straggler).
+      - **One is not owned by any change and cannot be bumped away: `crypto-js@4.1.1`, severity
+        `critical`**, reached via `@googlemaps/google-maps-services-js@3.4.2 >
+        @googlemaps/url-signature@1.0.28`. The Google client is already at its newest release and
+        still pins it. Unlike the `@vercel/node` residue this is a **runtime `dependencies` entry
+        that ships to anyone installing `cli-path`** — the type-only argument does not apply. It is
+        only reachable through URL signing, which `GoogleApi.js` never invokes, so exposure is
+        latent rather than active. Flagged for a decision of its own; see the note added to
+        `design.md — Open Questions`.
 
 ## 4. Correct the documentation
 
