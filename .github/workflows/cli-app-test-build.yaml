@@ -28,6 +28,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
+          # Required: there is no root package.json or yarn.lock in this repo — each tier has its
+          # own. Without this, setup-node looks for a lockfile at the repo root, fails with
+          # "Dependencies lock file is not found", and the job dies before installing anything.
+          # That is what happened on every run from 2026-08-20 (when `cache: 'yarn'` was enabled)
+          # until this line was added: the mocha suite and the c8 coverage gate below had never
+          # once actually executed in CI.
+          cache-dependency-path: cli-app/yarn.lock
       - name: Yarn Install
         run: cd /home/runner/work/cli-path/cli-path/cli-app && yarn
       - name: Run tests

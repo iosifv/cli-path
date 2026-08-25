@@ -151,6 +151,18 @@
       --strict`; verify it passes with `specs` reported as skipped rather than missing
       — **Done.** Reports "is valid"; `openspec status` shows `specs` as
       `skipped: change declares skip_specs`, not missing.
+- [x] 4.4 **(Added during implementation.)** Fix `cli-app-test-build.yaml`, which had been failing
+      on **every** push since 2026-08-20 — a pre-existing bug this change did not cause but could
+      not verify around. `actions/setup-node`'s `cache: 'yarn'` (enabled in `8a91939 "update
+      actions"`) resolves the lockfile from the **repo root**, and this repo has no root
+      `package.json`/`yarn.lock`; the job died at the setup step with "Dependencies lock file is
+      not found" before installing anything. Consequence: the mocha suite and the `c8` coverage
+      gate `fix-esm-coverage-reporting` wired in had **never actually run in CI** — 19 of 19 runs
+      red, which is the "first real confirmation happens on the next push" thread that change left
+      open. `cli-app-install.yaml` was unaffected because it does not use `cache`. Fixed by adding
+      `cache-dependency-path: cli-app/yarn.lock`; verify the workflow goes green on both `22.x`
+      and `24.x`, which also finally exercises the coverage gate on real CI.
+
 - [x] 4.3 Confirm `fix-esm-coverage-reporting`'s archived `design.md`/`CLAUDE.md` note about the
       `c8` pin still reads correctly now that it's been acted on — it should read as history
       ("was pinned because...") not as a live constraint; no edit needed to an archived file if it
